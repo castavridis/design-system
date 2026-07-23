@@ -1,0 +1,11 @@
+{
+	"name": "pmndrs-design-tokens",
+	"version": "0.1.0",
+	"description": "Framework-agnostic design tokens for pmndrs, built with design-book and emitted as plain CSS, JSON and W3C Design Tokens.",
+	"type": "module",
+	"license": "MIT",
+	"packageManager": "pnpm@10.34.5",
+	"devDependencies": {
+		"design-book": "^0.5.0",
+	}
+}
