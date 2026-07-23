@@ -1,0 +1,409 @@
+/*
+ * Demo styles. Every colour, font, space and radius here is a token reference —
+ * there are no literal brand values in this file. Layout-only numbers (grid
+ * breakpoints, line heights) stay local, since they aren't design decisions the
+ * token system owns.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--brand-dark);
+  color: var(--brand-light);
+  font-family: var(--fonts-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font-family: var(--fonts-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: calc(var(--brand-radius) / 4);
+  background: color-mix(in oklab, var(--brand-light) 12%, transparent);
+  color: var(--brand-teal);
+}
+
+a {
+  color: var(--brand-teal);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  max-width: 68ch;
+  margin-inline: auto;
+  padding: calc(var(--brand-space) * 5) var(--brand-space)
+    calc(var(--brand-space) * 3);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--fonts-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-orange);
+}
+
+.hero h1 {
+  font-family: var(--fonts-serif);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  line-height: 1.05;
+  margin: calc(var(--brand-space) * 0.75) 0;
+  background: linear-gradient(
+    100deg,
+    var(--brand-yellow),
+    var(--brand-teal) 40%,
+    var(--brand-purple)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  margin: 0 auto;
+  max-width: 56ch;
+  color: color-mix(in oklab, var(--brand-light) 78%, var(--brand-dark));
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--brand-space);
+  justify-content: center;
+  margin-top: calc(var(--brand-space) * 1.75);
+}
+
+.button {
+  display: inline-block;
+  padding: calc(var(--brand-space) * 0.6) calc(var(--brand-space) * 1.25);
+  border: 1px solid color-mix(in oklab, var(--brand-light) 35%, transparent);
+  border-radius: var(--brand-radius);
+  background: transparent;
+  color: var(--brand-light);
+  font-family: var(--fonts-sans);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  background: color-mix(in oklab, var(--brand-light) 10%, transparent);
+}
+
+.button-primary {
+  background: var(--brand-purple);
+  border-color: var(--brand-purple);
+  color: var(--brand-dark);
+}
+
+.button-primary:hover {
+  background: color-mix(in oklab, var(--brand-purple) 85%, var(--brand-light));
+}
+
+/* ---------- sections ---------- */
+
+main {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--brand-space);
+}
+
+section {
+  padding-block: calc(var(--brand-space) * 3);
+  border-top: 1px solid color-mix(in oklab, var(--brand-light) 15%, transparent);
+}
+
+section h2 {
+  font-family: var(--fonts-serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 0 0 calc(var(--brand-space) * 0.5);
+  color: var(--brand-light);
+}
+
+.section-note {
+  margin: 0 0 calc(var(--brand-space) * 1.5);
+  max-width: 62ch;
+  color: color-mix(in oklab, var(--brand-light) 72%, var(--brand-dark));
+}
+
+/* ---------- palette ---------- */
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--brand-space);
+}
+
+.swatch {
+  border: 0;
+  padding: 0;
+  border-radius: var(--brand-radius);
+  overflow: hidden;
+  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 120ms ease;
+}
+
+.swatch:hover {
+  transform: translateY(-3px);
+}
+
+.swatch-chip {
+  display: block;
+  aspect-ratio: 3 / 2;
+  background: var(--swatch);
+}
+
+.swatch-meta {
+  display: block;
+  padding: calc(var(--brand-space) * 0.6);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.swatch-path {
+  display: block;
+  color: var(--brand-light);
+}
+
+.swatch-value {
+  display: block;
+  color: color-mix(in oklab, var(--brand-light) 60%, var(--brand-dark));
+  /* oklch() values are long — let them wrap rather than clip the chip. */
+  overflow-wrap: anywhere;
+}
+
+.swatch[data-copied] .swatch-value::after {
+  content: " copied";
+  color: var(--brand-green);
+}
+
+/* ---------- gradient generator ---------- */
+
+.gradient-preview {
+  height: clamp(7rem, 18vw, 11rem);
+  border-radius: var(--brand-radius);
+  /* Set by demo.js — the fallback keeps the box visible before first render. */
+  background-image: linear-gradient(
+    90deg,
+    var(--brand-purple) 16%,
+    var(--brand-teal) 50%,
+    var(--brand-orange) 84%
+  );
+}
+
+.gradient-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--brand-space);
+  margin-top: var(--brand-space);
+}
+
+.gradient-field {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--brand-space) * 0.35);
+}
+
+.gradient-field-label {
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  color: color-mix(in oklab, var(--brand-light) 65%, var(--brand-dark));
+}
+
+.gradient-select {
+  padding: calc(var(--brand-space) * 0.5) calc(var(--brand-space) * 0.6);
+  border: 1px solid color-mix(in oklab, var(--brand-light) 25%, transparent);
+  border-radius: calc(var(--brand-radius) / 2);
+  background: var(--brand-dark);
+  color: var(--brand-light);
+  font-family: var(--fonts-mono);
+  font-size: 0.85rem;
+}
+
+.gradient-select:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+/* Options that would collide with an adjacent stop. */
+.gradient-select option:disabled {
+  color: color-mix(in oklab, var(--brand-light) 35%, var(--brand-dark));
+}
+
+.gradient-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--brand-space) * 0.75);
+  margin-top: var(--brand-space);
+}
+
+.gradient-output {
+  margin-top: var(--brand-space);
+}
+
+/* ---------- typography ---------- */
+
+.specimens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--brand-space);
+}
+
+.specimen {
+  margin: 0;
+  padding: calc(var(--brand-space) * 1.25);
+  border-radius: var(--brand-radius);
+  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+}
+
+.specimen-sample {
+  margin: 0 0 calc(var(--brand-space) * 0.5);
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.specimen figcaption {
+  color: color-mix(in oklab, var(--brand-light) 60%, var(--brand-dark));
+  font-size: 0.85rem;
+}
+
+.font-serif {
+  font-family: var(--fonts-serif);
+  color: var(--brand-yellow);
+}
+.font-sans {
+  font-family: var(--fonts-sans);
+  color: var(--brand-teal);
+}
+.font-mono {
+  font-family: var(--fonts-mono);
+  color: var(--brand-blue);
+}
+
+/* ---------- live control ---------- */
+
+.control {
+  margin-bottom: calc(var(--brand-space) * 1.5);
+}
+
+.control label {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.5);
+  font-family: var(--fonts-mono);
+  font-size: 0.85rem;
+  margin-bottom: calc(var(--brand-space) * 0.5);
+}
+
+.control output {
+  color: var(--brand-orange);
+}
+
+.control input[type="range"] {
+  width: min(100%, 26rem);
+  accent-color: var(--brand-purple);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--brand-space);
+}
+
+.card {
+  padding: calc(var(--brand-space) * 1.25);
+  border: 1px solid color-mix(in oklab, var(--brand-light) 20%, transparent);
+  border-radius: var(--brand-radius);
+  background: color-mix(in oklab, var(--brand-light) 6%, transparent);
+}
+
+.card h3 {
+  margin: 0 0 calc(var(--brand-space) * 0.4);
+  font-family: var(--fonts-sans);
+  color: var(--brand-green);
+}
+
+.card p {
+  margin: 0;
+  color: color-mix(in oklab, var(--brand-light) 75%, var(--brand-dark));
+}
+
+/* ---------- snippets ---------- */
+
+.snippets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: var(--brand-space);
+}
+
+.snippet {
+  margin: 0;
+  border-radius: var(--brand-radius);
+  overflow: hidden;
+  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+}
+
+.snippet figcaption {
+  padding: calc(var(--brand-space) * 0.6) calc(var(--brand-space) * 0.9);
+  font-size: 0.8rem;
+  font-family: var(--fonts-mono);
+  color: var(--brand-orange);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--brand-light) 15%, transparent);
+}
+
+.snippet pre {
+  margin: 0;
+  padding: calc(var(--brand-space) * 0.9);
+  overflow-x: auto;
+}
+
+.snippet code {
+  background: none;
+  padding: 0;
+  color: var(--brand-light);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: calc(var(--brand-space) * 2) var(--brand-space)
+    calc(var(--brand-space) * 4);
+  border-top: 1px solid color-mix(in oklab, var(--brand-light) 15%, transparent);
+  font-family: var(--fonts-mono);
+  font-size: 0.8rem;
+  color: color-mix(in oklab, var(--brand-light) 55%, var(--brand-dark));
+}
+
+footer p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

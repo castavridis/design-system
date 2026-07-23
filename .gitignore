@@ -1,0 +1,6 @@
+node_modules/
+.pnpm-store/
+.tsc-out/
+dist/
+*.tsbuildinfo
+.DS_Store

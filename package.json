@@ -5,7 +5,56 @@
 	"type": "module",
 	"license": "MIT",
 	"packageManager": "pnpm@10.34.5",
+	"engines": {
+		"node": ">=20.11"
+	},
+	"sideEffects": [
+		"*.css"
+	],
+	"main": "./dist/tokens.js",
+	"module": "./dist/tokens.js",
+	"types": "./dist/tokens.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/tokens.d.ts",
+			"default": "./dist/tokens.js"
+		},
+		"./css": "./dist/tokens.css",
+		"./tokens.css": "./dist/tokens.css",
+		"./fonts": "./dist/fonts.css",
+		"./fonts.css": "./dist/fonts.css",
+		"./json": "./dist/tokens.json",
+		"./w3c": "./dist/tokens.w3c.json",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsx scripts/build.ts",
+		"demo": "tsx scripts/build.ts && tsx scripts/serve.ts",
+		"watch": "tsx watch --include src --include scripts scripts/build.ts",
+		"typecheck": "tsc --noEmit",
+		"clean": "node --input-type=module -e \"import{rm}from'node:fs/promises';await rm('dist',{recursive:true,force:true})\"",
+		"prepack": "pnpm run build"
+	},
+	"keywords": [
+		"design-tokens",
+		"design-system",
+		"css-variables",
+		"w3c-design-tokens",
+		"pmndrs",
+		"framework-agnostic"
+	],
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	},
 	"devDependencies": {
+		"@types/node": "^22.10.2",
 		"design-book": "^0.5.0",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.3"
 	}
 }
