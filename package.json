@@ -32,10 +32,12 @@
 	],
 	"scripts": {
 		"build": "tsx scripts/build.ts",
+		"build:site": "tsx scripts/build.ts && tsx scripts/site.ts",
 		"demo": "tsx scripts/build.ts && tsx scripts/serve.ts",
+		"preview": "pnpm run build:site && tsx scripts/serve.ts public",
 		"watch": "tsx watch --include src --include scripts scripts/build.ts",
 		"typecheck": "tsc --noEmit",
-		"clean": "node --input-type=module -e \"import{rm}from'node:fs/promises';await rm('dist',{recursive:true,force:true})\"",
+		"clean": "node --input-type=module -e \"import{rm}from'node:fs/promises';for(const d of ['dist','public'])await rm(d,{recursive:true,force:true})\"",
 		"prepack": "pnpm run build"
 	},
 	"keywords": [

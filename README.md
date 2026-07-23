@@ -15,9 +15,11 @@ dependency only.
 | --- | --- |
 | `src/pmndrs-design-book.ts` | Source of truth — the token definitions |
 | `scripts/build.ts` | Node build; renders the book into `dist/` |
+| `scripts/site.ts` | Assembles the deployable site into `public/` |
 | `scripts/serve.ts` | Dependency-free static server for the demo |
 | `demo/` | Landing page that consumes the build output |
-| `dist/` | Generated artifacts (git-ignored, published) |
+| `dist/` | Generated artifacts (git-ignored, published to npm) |
+| `public/` | Assembled static site (git-ignored, deployed) |
 
 ## Usage
 
@@ -25,9 +27,31 @@ dependency only.
 pnpm install
 pnpm build      # render dist/
 pnpm demo       # build, then serve the demo at http://localhost:5173
+pnpm preview    # assemble public/ and serve it exactly as the host will
 pnpm watch      # re-render on change
 pnpm typecheck
 ```
+
+## Deploying
+
+The repo deploys to Vercel with no configuration beyond the committed
+`vercel.json`: import it and accept the defaults.
+
+```
+buildCommand    pnpm run build:site
+outputDirectory public
+framework       none (static)
+```
+
+`build:site` renders the tokens and then assembles `public/` — `index.html` at
+the root, with `/demo/` and `/dist/` beneath it. The demo's asset paths are
+root-absolute, so nothing is rewritten during assembly and the deployed site is
+byte-identical to what `pnpm preview` serves locally. Only that assembled
+directory is published, so `src/`, `scripts/` and `node_modules/` never leave
+your machine.
+
+Both `dist/` and `public/` are git-ignored and regenerated on every deploy, so
+a fresh clone builds the same site from `src/` alone.
 
 ## Demo
 

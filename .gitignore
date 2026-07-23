@@ -2,5 +2,7 @@ node_modules/
 .pnpm-store/
 .tsc-out/
 dist/
+public/
+.vercel/
 *.tsbuildinfo
 .DS_Store
