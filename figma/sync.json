@@ -676,6 +676,19 @@
 			"contract": "pmndrs-badge",
 			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale",
 			"boundTo": "theme/* (mode-aware)"
+		},
+		"Code": {
+			"id": "109:43",
+			"type": "COMPONENT_SET",
+			"variantProps": {
+				"lang": [
+					"tsx",
+					"diff"
+				]
+			},
+			"contract": "pmndrs-code",
+			"boundTo": "theme/* (mode-aware, including per-range syntax fills)",
+			"note": "syntax colours use setRangeFills on one text node per line; line numbers are a separate gutter column"
 		}
 	}
 }
