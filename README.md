@@ -20,6 +20,13 @@ dependency only.
 | `demo/` | Landing page that consumes the build output |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
+| `og/` | [OG image generator](og/README.md) — a separate workspace package |
+
+The token package at the root stays dependency-light: a contributor who only
+touches `src/` should not have to install React, three.js and a headless
+browser. The OG generator therefore lives in its own workspace package and
+consumes the tokens as `pmndrs-design-tokens: workspace:*` — through exactly
+the entry points an outside consumer would use.
 
 ## Usage
 
@@ -30,6 +37,14 @@ pnpm demo       # build, then serve the demo at http://localhost:5173
 pnpm preview    # assemble public/ and serve it exactly as the host will
 pnpm watch      # re-render on change
 pnpm typecheck
+```
+
+Open Graph images are rendered from the same tokens — a live three.js scene, a
+video sampled at a timestamp, or an image. See [`og/README.md`](og/README.md).
+
+```bash
+pnpm og -- specs/site.json --manifest   # render a set of cards
+pnpm og:studio                          # live preview
 ```
 
 ## Deploying

@@ -1,0 +1,166 @@
+# @pmndrs/og
+
+Programmatic Open Graph images. A card is described by a JSON spec and rendered
+by a headless browser: a live three.js scene, a video sampled at a timestamp,
+or an image — all through the same camera, the same effect chain and the same
+design tokens.
+
+Every colour and measurement comes from `pmndrs-design-tokens`, pulled in as a
+workspace dependency through the same entry points an outside consumer would
+use. Re-seed a ramp in `src/pmndrs-design-book.ts` and every card changes on
+the next render.
+
+```bash
+pnpm og -- specs/react-three-fiber.json --out out/r3f.png
+pnpm og -- specs/site.json --manifest
+pnpm og -- --title "Postprocessing" --accent teal --scene prism
+pnpm og:studio          # live preview; scrub the timeline, edit props
+```
+
+Run from the repo root. `pnpm og` builds the tokens first, so a card is never
+rendered against a stale palette.
+
+## What it is built on
+
+| | |
+| --- | --- |
+| [`@react-three/fiber`](https://github.com/pmndrs/react-three-fiber) | the scenes |
+| [`@react-three/drei`](https://github.com/pmndrs/drei) | `<Environment>`, `<Lightformer>`, `<Text>` |
+| [`@react-three/postprocessing`](https://github.com/pmndrs/react-postprocessing) + [`postprocessing`](https://github.com/pmndrs/postprocessing) | bloom, fringing, vignette |
+| [`troika-three-text`](https://github.com/protectwise/troika) via drei's `<Text>` | the 3D wordmark |
+| [Remotion](https://remotion.dev) | the frame clock, the video decode, the capture |
+
+## The spec
+
+Only `title` is required. `src/lib/spec.ts` holds the defaults and is the one
+place they live.
+
+```jsonc
+{
+  "title": "React Three Fiber",
+  "eyebrow": "pmndrs",              // small tracked line above the title
+  "subtitle": "A React renderer…",  // one clause, below it
+  "meta": "github.com/pmndrs/…",    // chip, top right
+  "accent": "purple",               // any ramp: purple red orange yellow green teal blue dark light
+  "theme": "dark",                  // which neutral ramp is the ground
+  "size": "og",                     // og (1200×630) | square (1200×1200) | wide (1920×1080)
+  "wordmark": "…",                  // 3D type in the scene; "" for none
+  "seed": 1,                        // fixes every random placement
+  "atSeconds": 2.4,                 // where on the timeline the card is sampled
+  "source": { "kind": "scene", "name": "ramp-orbit" },
+  "effects": { "bloom": 0.9, "chromaticAberration": 0.0016, "noise": 0.045, "vignette": 0.5 }
+}
+```
+
+`width` and `height` override `size` when you need an exact box.
+
+### Sources
+
+```jsonc
+{ "kind": "scene", "name": "ramp-orbit" }        // ramp-orbit | token-grid | prism
+{ "kind": "image", "src": "shot.png",  "fit": "cover" }
+{ "kind": "video", "src": "demo.mp4",  "fit": "cover" }
+```
+
+A `src` that names a file on disk is copied into the served directory
+automatically, so `--image ~/Desktop/shot.png` works. Anything that is already
+a URL is left alone; anything else resolves against `og/public/`.
+
+Media is drawn as a textured plate *inside* the scene rather than composited
+behind the canvas, so a photo card takes the same grade as a generated one.
+
+### Manifests
+
+A manifest renders many cards from one bundle and one browser, which is most of
+the wall clock — five cards take about as long as one.
+
+```jsonc
+{ "outDir": "../out", "cards": [ { "out": "drei.png", "title": "Drei", … } ] }
+```
+
+`outDir` is relative to the manifest. A card without `out` is named from its
+title.
+
+## Scenes
+
+| | |
+| --- | --- |
+| `ramp-orbit` | solids circling a lit core, one ramp step each |
+| `token-grid` | a travelling wave; height picks the ramp step |
+| `prism` | polished slabs, mostly reflections — the quietest of the three |
+
+A scene is plain React Three Fiber and imports nothing from Remotion. It
+receives `{ time, palette, seed }` and must be a pure function of them.
+
+**That is a hard rule, not a style preference.** A still is produced by seeking
+straight to one frame, with no frames rendered before it. Anything that
+accumulates — `useFrame` deltas, a `THREE.Clock`, drei's `<Float>`,
+`Math.random()` — has no history to accumulate from and will render differently
+every time. Derive motion from `time` and jitter from `mulberry32(seed)`.
+
+Verified: the same spec rendered twice is byte-identical.
+
+## Adding a scene
+
+Write the component, then add one line to `src/scenes/registry.ts`. The
+registry is the source of both the `SceneName` type and the list a bad spec is
+validated against, so nothing else needs touching.
+
+## Things that will bite you
+
+Four failures cost real time to find and none of them announce themselves.
+
+**Fonts must be WOFF, not WOFF2.** The 3D wordmark is typeset by troika, which
+parses the file itself instead of handing it to the browser, and its parser
+only understands WOFF — the bundled `woff2otf` is a *WOFF*-to-OTF converter
+with no Brotli decoder. Given a `.woff2` it logs `Failure loading font`, never
+calls its callback, and the render hangs until `delayRender` times out 28
+seconds later. `scripts/fonts.ts` copies `.woff` for this reason.
+
+**Instance transforms must be written in a layout effect.** drei's
+`<Instances>` uploads its matrices from a `useFrame`, but `<ThreeCanvas>` draws
+the captured frame from a passive effect — and React runs every layout effect
+before any passive one. The draw therefore happens while the instance buffer is
+still zero-filled, every instance collapses to zero scale, and the card renders
+empty with no error. `src/three/InstancedBodies.tsx` writes the buffer during
+layout instead.
+
+**Late content needs a redraw.** With `frameloop="never"` the canvas is drawn
+once. A video frame or texture that resolves after that updates React state but
+never reaches the framebuffer. `<Settle>` holds a `delayRender` handle from
+mount and redraws on every animation frame for a bounded window. Watching for
+React commits does *not* work: the texture is state inside the plate component,
+so a sibling never re-renders.
+
+**`preserveDrawingBuffer` is required.** The screenshot happens on its own
+schedule after the draw; without it the browser may have discarded the buffer,
+and the card comes out black.
+
+## Rendering environment
+
+- **WebGL** runs on SwiftShader behind ANGLE (`gl: 'swangle'`). A GPU-less
+  machine otherwise produces a blank canvas rather than an error.
+- **Chromium** is reused if one is already on the machine — `$OG_BROWSER_EXECUTABLE`
+  first, then a Playwright cache, then the usual system paths — and only
+  downloaded if none is found. Renders work offline once a browser and the
+  fonts are in place.
+- **Video** is decoded by Remotion's compositor rather than a `<video>` element,
+  because the rendering Chromium ships without proprietary codecs and would
+  decode nothing for H.264. In the Studio, where your own browser has the
+  codecs, a real `<video>` element is used instead.
+- `og/public/` and `og/out/` are generated and git-ignored.
+
+## Licensing
+
+`@react-three/*`, `postprocessing`, `troika-three-text` and `@fontsource/*` are
+MIT/OFL. **Remotion is not** — it is source-available under the
+[Remotion License](https://remotion.dev/license), free for individuals and
+companies of up to three people and requiring a paid company licence beyond
+that. It is a development dependency of this package only: it renders the
+cards, and nothing it provides is redistributed in the token package this repo
+publishes.
+
+The scene layer is deliberately Remotion-free — scenes are plain R3F components
+that take `{ time, palette, seed }` — so the renderer underneath is replaceable
+if that licence is a problem. `<Settle>`, `<BrandFonts>` and the media plates
+are the only files that import from `remotion`.

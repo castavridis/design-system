@@ -1,0 +1,10 @@
+{
+	"eyebrow": "pmndrs",
+	"title": "React Three Fiber",
+	"subtitle": "A React renderer for three.js. Build your scene declaratively, with re-usable components.",
+	"meta": "github.com/pmndrs/react-three-fiber",
+	"accent": "purple",
+	"theme": "dark",
+	"source": { "kind": "scene", "name": "ramp-orbit" },
+	"atSeconds": 2.4
+}
