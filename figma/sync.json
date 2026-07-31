@@ -689,6 +689,13 @@
 			"contract": "pmndrs-code",
 			"boundTo": "theme/* (mode-aware, including per-range syntax fills)",
 			"note": "syntax colours use setRangeFills on one text node per line; line numbers are a separate gutter column"
+		},
+		"Header": {
+			"id": "113:2",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-header",
+			"boundTo": "theme/* (mode-aware); brand gradient mark is fixed: by design"
 		}
 	}
 }

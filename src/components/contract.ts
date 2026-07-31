@@ -92,7 +92,7 @@ const gha: ComponentSpec = {
 		WARNING: { tint: 'tint-orange', accent: 'accent-orange', body: 'text-strong' },
 		CAUTION: { tint: 'tint-red', accent: 'accent-red', body: 'text-strong' },
 		/* Applies to every keyword — see fonts.legible in the design book. */
-		'*': { font: 'fonts.legible' },
+		'*': { font: 'fixed:fonts.legible' },
 	},
 }
 
@@ -196,15 +196,59 @@ const code: ComponentSpec = {
 	},
 }
 
-export const components: readonly ComponentSpec[] = [gha, button, badge, code]
+/**
+ * Site masthead. No variants — it is one instance — so every binding is keyed
+ * `'*'`. It is in the contract anyway, because that is what subjects it to the
+ * mode guard; a component left out of the contract can be built dark-locked
+ * and nothing will say so.
+ *
+ * The wordmark's gradient is `fixed:`. Those three brand colours are the
+ * identity, not a theme decision, and a mark that changes hue with the OS
+ * setting is a different mark.
+ */
+const header: ComponentSpec = {
+	name: 'pmndrs-header',
+	react: 'Header',
+	source: 'pmndrs-docs',
+	description: 'Masthead: wordmark, section links, search affordance.',
+	props: {
+		active: {
+			type: 'string',
+			description: 'Which section link reads as current.',
+		},
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line',
+			wordmark: 'text',
+			wordmarkMuted: 'text-muted',
+			link: 'text-muted',
+			linkActive: 'text',
+			linkRule: 'accent-teal',
+			searchSurface: 'surface-sunken',
+			searchBorder: 'line',
+			searchInk: 'text-muted',
+			markFrom: 'fixed:brand.yellow',
+			markVia: 'fixed:brand.teal',
+			markTo: 'fixed:brand.purple',
+		},
+	},
+}
+
+export const components: readonly ComponentSpec[] = [gha, button, badge, code, header]
 
 /**
  * **Every component binds theme slots, not ramp steps.**
  *
  * A bare name (`tint-blue`, `text-body`) is a *theme slot*: it must exist in
  * both the `light` and `dark` scopes, and therefore follows the mode wherever
- * it is used. A dotted path (`fonts.legible`) is a fixed token that is the same
- * in both modes, and is allowed only where that is genuinely true.
+ * it is used.
+ *
+ * `fixed:<path>` marks a token that is deliberately the same in both modes —
+ * a font family, or a brand mark whose colours are the identity rather than a
+ * theme choice. The prefix is required rather than inferred, because "this one
+ * doesn't change" is a decision someone should have to write down.
  *
  * The distinction is enforced at build time by `boundTokenPaths`, which
  * expands every bare name into both modes. Binding `ramp.blue-950` directly
@@ -221,17 +265,17 @@ export function boundTokenPaths(specs: readonly ComponentSpec[] = components) {
 				/* `transparent` is a CSS keyword, not a token. */
 				if (value === 'transparent') continue
 
-				if (value.includes('.')) {
-					/* A fixed token. Legal, but only for genuinely mode-invariant
-					   things — a font family, not a colour. */
-					if (value.startsWith('ramp.') || value.startsWith('brand.')) {
-						throw new Error(
-							`${spec.name} binds ${value} for ${variant}.${slot}. Colours must bind a theme ` +
-								`slot so they follow the mode — use the matching light/dark slot instead.`,
-						)
-					}
-					paths.add(value)
+				if (value.startsWith('fixed:')) {
+					/* Deliberately mode-invariant, and said so. */
+					paths.add(value.slice('fixed:'.length))
 					continue
+				}
+
+				if (value.includes('.')) {
+					throw new Error(
+						`${spec.name} binds ${value} for ${variant}.${slot}. Bind a theme slot so it ` +
+							`follows the mode, or write \`fixed:${value}\` if it genuinely must not change.`,
+					)
 				}
 
 				/* A theme slot has to exist in both modes or the switch is a no-op. */
