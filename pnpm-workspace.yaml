@@ -1,0 +1,8 @@
+# The token package at the root stays dependency-light: a contributor who only
+# touches `src/` should not have to install React, three.js and a headless
+# browser. The OG image generator lives in its own workspace package and pulls
+# the tokens in as `pmndrs-design-tokens: workspace:*` — i.e. through exactly
+# the published entry points an outside consumer would use.
+packages:
+  - '.'
+  - 'og'

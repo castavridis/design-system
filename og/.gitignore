@@ -1,0 +1,7 @@
+# Rendered cards.
+out/
+
+# Fonts copied out of @fontsource by scripts/fonts.ts. Generated, not authored.
+# (The root .gitignore already ignores every `public/`; repeated here so the
+# reason is next to the directory it explains.)
+public/
