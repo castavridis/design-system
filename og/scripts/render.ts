@@ -12,7 +12,13 @@
  */
 
 import { bundle } from '@remotion/bundler'
-import { ensureBrowser, openBrowser, renderStill, selectComposition } from '@remotion/renderer'
+import {
+	ensureBrowser,
+	openBrowser,
+	renderMedia,
+	renderStill,
+	selectComposition,
+} from '@remotion/renderer'
 import { copyFile, mkdir, readFile, rm } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { existsSync, statSync } from 'node:fs'
@@ -60,6 +66,14 @@ const { values, positionals } = parseArgs({
 		// Forwards the page's own console to this one. The card is a web page,
 		// so when it misbehaves that is where it says so.
 		verbose: { type: 'boolean', default: false },
+		// Animated output. One loop of the scene, which meets itself exactly
+		// because every rate is rounded to whole cycles per `loopSeconds`.
+		gif: { type: 'boolean', default: false },
+		mp4: { type: 'boolean', default: false },
+		/** Frames per second of the output. Only thins a GIF; ignored for mp4. */
+		fps: { type: 'string' },
+		/** GIF repeats. Omit for endless, which is what a card wants. */
+		loops: { type: 'string' },
 		// Enough inline overrides to render a card without writing a file.
 		title: { type: 'string' },
 		eyebrow: { type: 'string' },
@@ -74,6 +88,21 @@ const { values, positionals } = parseArgs({
 		seed: { type: 'string' },
 	},
 })
+
+/**
+ * Which codec, if any, this run produces. `null` means stills.
+ *
+ * GIF because that is what pastes into a README and animates in a feed; mp4
+ * because it is a tenth of the size when the target accepts it.
+ */
+const animate: 'gif' | 'h264' | null = values.gif ? 'gif' : values.mp4 ? 'h264' : null
+
+const outputExtension = animate === 'gif' ? '.gif' : animate === 'h264' ? '.mp4' : '.png'
+
+/** `'card.png'` -> `'card.gif'`, so a manifest need not know how it is rendered. */
+function withExtension(path: string): string {
+	return path.replace(/\.[^./\\]+$/, '') + outputExtension
+}
 
 function fail(message: string): never {
 	console.error(`\n  ${message}\n`)
@@ -151,7 +180,7 @@ async function collectJobs(): Promise<Job[]> {
 
 			return {
 				spec: withOverrides,
-				out: out ? resolve(outDir, out) : join(outDir, `${slug(withOverrides.title)}.png`),
+				out: withExtension(out ? resolve(outDir, out) : join(outDir, slug(withOverrides.title))),
 			}
 		})
 	}
@@ -165,7 +194,7 @@ async function collectJobs(): Promise<Job[]> {
 	return [
 		{
 			spec,
-			out: values.out ? resolve(values.out) : join(outDirDefault, `${slug(spec.title)}.png`),
+			out: withExtension(values.out ? resolve(values.out) : join(outDirDefault, slug(spec.title))),
 		},
 	]
 }
@@ -298,23 +327,61 @@ async function main() {
 
 			await mkdir(dirname(job.out), { recursive: true })
 
-			await renderStill({
-				composition,
-				serveUrl,
-				output: job.out,
-				inputProps,
-				frame,
-				imageFormat,
-				scale,
-				puppeteerInstance: browser,
-				chromiumOptions,
-				...(onBrowserLog ? { onBrowserLog } : {}),
-			})
+			if (animate) {
+				// Exactly one loop, ending on the last frame of the timeline.
+				// `calculateMetadata` sized the composition as `atSeconds +
+				// loopSeconds`, so this is the whole loop no matter how late the
+				// card is sampled — and because every rate is a whole number of
+				// cycles per loop, the last frame leads back into the first.
+				const loopFrames = Math.round(resolved.loopSeconds * composition.fps)
+				const first = Math.max(0, composition.durationInFrames - loopFrames)
 
-			console.log(
-				`  ${composition.width}×${composition.height}` +
-					`${scale === 1 ? '' : ` @${scale}x`}  ${job.out}`,
-			)
+				// A GIF is thinned by dropping frames rather than by slowing the
+				// clip down, so the motion keeps its speed. mp4 keeps them all.
+				const targetFps = values.fps ? Number(values.fps) : animate === 'gif' ? 15 : composition.fps
+				const everyNthFrame =
+					animate === 'gif' ? Math.max(1, Math.round(composition.fps / targetFps)) : 1
+
+				await renderMedia({
+					composition,
+					serveUrl,
+					codec: animate,
+					outputLocation: job.out,
+					inputProps,
+					frameRange: [first, composition.durationInFrames - 1],
+					everyNthFrame,
+					numberOfGifLoops: values.loops ? Number(values.loops) : null,
+					imageFormat: 'png',
+					scale,
+					puppeteerInstance: browser,
+					chromiumOptions,
+					...(onBrowserLog ? { onBrowserLog } : {}),
+				})
+
+				console.log(
+					`  ${composition.width}×${composition.height}  ` +
+						`${resolved.loopSeconds}s loop @${Math.round(composition.fps / everyNthFrame)}fps  ` +
+						`${job.out}`,
+				)
+			} else {
+				await renderStill({
+					composition,
+					serveUrl,
+					output: job.out,
+					inputProps,
+					frame,
+					imageFormat,
+					scale,
+					puppeteerInstance: browser,
+					chromiumOptions,
+					...(onBrowserLog ? { onBrowserLog } : {}),
+				})
+
+				console.log(
+					`  ${composition.width}×${composition.height}` +
+						`${scale === 1 ? '' : ` @${scale}x`}  ${job.out}`,
+				)
+			}
 		}
 	} finally {
 		await browser.close({ silent: true })

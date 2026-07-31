@@ -43,7 +43,12 @@ export function CardScene({ spec, palette, time, videoRef }: CardSceneProps) {
 		<>
 			{Scene ? (
 				// Scenes bring their own `<Stage>`, so lighting comes with them.
-				<Scene time={time} palette={palette} seed={spec.seed} />
+				<Scene
+					time={time}
+					loopSeconds={spec.loopSeconds}
+					palette={palette}
+					seed={spec.seed}
+				/>
 			) : (
 				// Plates are unlit, so a media card needs nothing but a ground
 				// colour behind whatever the plate does not cover.

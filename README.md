@@ -44,6 +44,7 @@ video sampled at a timestamp, or an image. See [`og/README.md`](og/README.md).
 
 ```bash
 pnpm og -- specs/site.json --manifest   # render a set of cards
+pnpm og -- specs/r3f.json --gif         # one seamless loop, animated
 pnpm og:studio                          # live preview
 ```
 

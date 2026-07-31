@@ -25,9 +25,7 @@ const sample: OgSpec = {
 	source: { kind: 'scene', name: 'ramp-orbit' },
 }
 
-/** 10s at 30fps — enough timeline to scrub for a composition worth keeping. */
 const fps = 30
-const durationInFrames = 300
 
 export function RemotionRoot() {
 	return (
@@ -36,13 +34,18 @@ export function RemotionRoot() {
 			component={OgCard}
 			defaultProps={{ spec: sample }}
 			fps={fps}
-			durationInFrames={durationInFrames}
 			// Placeholders. `calculateMetadata` is what actually decides, but
 			// `<Composition>` requires them up front.
+			durationInFrames={fps * 6}
 			width={1200}
 			height={630}
 			calculateMetadata={({ props }) => {
 				const spec = resolveSpec(props.spec)
+
+				// One loop, offset by wherever the card is sampled. Animated
+				// output renders exactly the last `loopSeconds` of this, so a
+				// card sampled late still has a whole loop ahead of it.
+				const durationInFrames = Math.ceil((spec.atSeconds + spec.loopSeconds) * fps)
 
 				return { width: spec.width, height: spec.height, fps, durationInFrames }
 			}}

@@ -107,6 +107,14 @@ export interface OgSpec {
 	 * having to reconcile two clocks.
 	 */
 	atSeconds?: number
+	/**
+	 * The period a scene repeats over, in seconds. Defaults to 6.
+	 *
+	 * Only animated output reads it directly, but it shapes stills too: scenes
+	 * round their rates to whole cycles of this, so changing it changes how
+	 * fast everything moves. Shorter loops mean faster motion and smaller GIFs.
+	 */
+	loopSeconds?: number
 }
 
 /**
@@ -193,6 +201,7 @@ export function resolveSpec(input: OgSpec): ResolvedSpec {
 		// the headline twice, so media starts with none.
 		wordmark: input.wordmark ?? (source.kind === 'scene' ? input.title : ''),
 		seed: input.seed ?? 1,
+		loopSeconds: Math.max(0.5, input.loopSeconds ?? 6),
 		atSeconds: input.atSeconds ?? 2,
 	}
 }

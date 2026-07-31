@@ -16,6 +16,14 @@ import type { Palette } from '../lib/palette'
 export interface SceneProps {
 	/** Seconds along the composition. Every animation is a function of this. */
 	time: number
+	/**
+	 * The period the scene must repeat over, in seconds.
+	 *
+	 * Scenes round their rates to whole cycles of this with `loopSpeed`, so
+	 * `time` and `time + loopSeconds` render the same picture — which is what
+	 * makes an animated card loop without a jump.
+	 */
+	loopSeconds: number
 	/** Colours resolved from the design tokens. */
 	palette: Palette
 	/** Seeds all placement jitter. */

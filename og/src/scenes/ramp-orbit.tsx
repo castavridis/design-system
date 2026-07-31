@@ -11,6 +11,7 @@
 
 import { useMemo } from 'react'
 import { accentBand } from '../lib/palette'
+import { loopSpeed } from '../lib/loop'
 import { between, mulberry32 } from '../lib/random'
 import { InstancedBodies, type Body } from '../three/InstancedBodies'
 import { Stage } from '../three/Stage'
@@ -18,7 +19,7 @@ import type { SceneProps } from './types'
 
 const COUNT = 34
 
-export function RampOrbit({ time, palette, seed }: SceneProps) {
+export function RampOrbit({ time, loopSeconds, palette, seed }: SceneProps) {
 	const band = useMemo(() => accentBand(palette, 7), [palette])
 
 	// Built once per seed. The array is the scene's entire random content —
@@ -30,14 +31,20 @@ export function RampOrbit({ time, palette, seed }: SceneProps) {
 			radius: between(random, 2.0, 3.8),
 			height: between(random, -1.35, 1.35),
 			// Signed, so the shoal counter-rotates against itself and reads as
-			// depth rather than as one rigid turntable.
-			speed: between(random, 0.06, 0.22) * (random() > 0.35 ? 1 : -1),
+			// depth rather than as one rigid turntable. Rounded to whole turns
+			// per loop so an animated card meets itself at the end.
+			speed: loopSpeed(between(random, 0.06, 0.22) * (random() > 0.35 ? 1 : -1), loopSeconds),
 			phase: random() * Math.PI * 2,
 			scale: between(random, 0.14, 0.46),
-			tumble: between(random, -0.5, 0.5),
+			// Two rates rather than one scaled by a fraction. A single `tumble`
+			// used as `[spin, spin * 0.7, 0]` would put the second axis 0.7 of
+			// a turn out at the end of the loop — the one thing here that made
+			// the animation jump.
+			tumble: loopSpeed(between(random, -0.5, 0.5), loopSeconds),
+			tumbleY: loopSpeed(between(random, -0.35, 0.35), loopSeconds),
 			color: band[index % band.length]!,
 		}))
-	}, [band, seed])
+	}, [band, loopSeconds, seed])
 
 	// Positions for this instant. Recomputed whenever `time` moves, and handed
 	// to the instanced mesh as a finished table.
@@ -45,7 +52,6 @@ export function RampOrbit({ time, palette, seed }: SceneProps) {
 		() =>
 			bodies.map((body) => {
 				const angle = body.phase + time * body.speed
-				const spin = time * body.tumble
 
 				return {
 					position: [
@@ -53,7 +59,7 @@ export function RampOrbit({ time, palette, seed }: SceneProps) {
 						body.height + Math.sin(angle * 2) * 0.18,
 						Math.sin(angle) * body.radius,
 					],
-					rotation: [spin, spin * 0.7, 0],
+					rotation: [time * body.tumble, time * body.tumbleY, 0],
 					scale: body.scale,
 					color: body.color,
 				}

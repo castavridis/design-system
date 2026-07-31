@@ -10,6 +10,7 @@
  */
 
 import { useMemo } from 'react'
+import { loopSpeed } from '../lib/loop'
 import type { Palette } from '../lib/palette'
 import { InstancedBodies, type Body } from '../three/InstancedBodies'
 import { Stage } from '../three/Stage'
@@ -24,8 +25,13 @@ function columnScale(palette: Palette): string[] {
 	return palette.scale.slice(1, 9)
 }
 
-export function TokenGrid({ time, palette, seed }: SceneProps) {
+export function TokenGrid({ time, loopSeconds, palette, seed }: SceneProps) {
 	const scale = useMemo(() => columnScale(palette), [palette])
+
+	// The two temporal frequencies of the wave, rounded to whole cycles per
+	// loop. The spatial terms need no such treatment — they do not move.
+	const radialRate = useMemo(() => loopSpeed(1.25, loopSeconds), [loopSeconds])
+	const diagonalRate = useMemo(() => loopSpeed(0.45, loopSeconds), [loopSeconds])
 
 	// The grid itself is regular; the seed only shifts the wave's origin, so a
 	// different seed re-composes the field without disturbing its rhythm.
@@ -56,8 +62,8 @@ export function TokenGrid({ time, palette, seed }: SceneProps) {
 				// One radial wave crossed with a slower diagonal one, so the field
 				// never resolves into an obvious repeat.
 				const wave =
-					Math.sin(cell.distance * 1.15 - time * 1.25) * 0.6 +
-					Math.sin((cell.x - cell.z) * 0.5 + time * 0.45) * 0.4
+					Math.sin(cell.distance * 1.15 - time * radialRate) * 0.6 +
+					Math.sin((cell.x - cell.z) * 0.5 + time * diagonalRate) * 0.4
 
 				const normalised = (wave + 1) / 2
 				const height = 0.22 + normalised * 2.1
@@ -72,7 +78,7 @@ export function TokenGrid({ time, palette, seed }: SceneProps) {
 					color: scale[step]!,
 				}
 			}),
-		[cells, scale, time],
+		[cells, diagonalRate, radialRate, scale, time],
 	)
 
 	return (

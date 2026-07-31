@@ -47,6 +47,7 @@ place they live.
   "wordmark": "…",                  // 3D type in the scene; "" for none
   "seed": 1,                        // fixes every random placement
   "atSeconds": 2.4,                 // where on the timeline the card is sampled
+  "loopSeconds": 6,                 // the period a scene repeats over
   "source": { "kind": "scene", "name": "ramp-orbit" },
   "effects": { "bloom": 0.9, "chromaticAberration": 0.0016, "noise": 0.045, "vignette": 0.5 }
 }
@@ -81,6 +82,41 @@ the wall clock — five cards take about as long as one.
 `outDir` is relative to the manifest. A card without `out` is named from its
 title.
 
+## Animated cards
+
+`--gif` or `--mp4` renders one loop instead of a still. The loop is seamless:
+every rate in a scene is rounded to a whole number of cycles per `loopSeconds`,
+so the last frame leads back into the first.
+
+```bash
+pnpm og -- specs/r3f.json --gif                 # endless loop, 15fps
+pnpm og -- specs/r3f.json --gif --fps 10 --loops 3
+pnpm og -- specs/r3f.json --mp4                 # far smaller, if the target takes it
+```
+
+Verified rather than asserted: a still at `t=0` and one at `t=loopSeconds` are
+byte-identical for all three scenes.
+
+**GIF is expensive.** At 1200×630, six seconds, 15fps it comes out around
+23 MB — too big for anything. Cut the dimensions and the loop, which is what
+the format wants:
+
+```jsonc
+{ "width": 600, "height": 315, "loopSeconds": 4 }   // ≈3 MB at 10fps
+```
+
+`--fps` thins the clip by dropping frames rather than slowing it down, so
+motion keeps its speed — but only whole divisors of 30 are reachable
+(30, 15, 10, 7.5…). The line the CLI prints is the rate you actually got.
+
+An animated card is a real Open Graph option: the spec allows `image/gif`.
+Support for actually *playing* it varies by platform, so treat the first frame
+as the card and the motion as a bonus — which is why `atSeconds` still picks
+the frame a still would use, and the loop runs from there.
+
+Video sources can be animated too, but they cannot loop seamlessly: the clip is
+whatever the file does over that span.
+
 ## Scenes
 
 | | |
@@ -99,6 +135,11 @@ accumulates — `useFrame` deltas, a `THREE.Clock`, drei's `<Float>`,
 every time. Derive motion from `time` and jitter from `mulberry32(seed)`.
 
 Verified: the same spec rendered twice is byte-identical.
+
+A scene must also be *periodic* over `loopSeconds`, or animated output jumps
+where it repeats. Run every rate through `loopSpeed()` and keep the arithmetic
+downstream in whole multiples — `sin(angle * 2)` is fine, `sin(angle * 1.3)` is
+not, and neither is `[spin, spin * 0.7, 0]`. Both of those were real bugs here.
 
 ## Adding a scene
 
