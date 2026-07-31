@@ -810,12 +810,41 @@
 			"contract": "pmndrs-grid",
 			"note": "deprecated: the odd item out leaves the last cell short, which was half the reason it went",
 			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Mermaid": {
+			"id": "157:1200",
+			"type": "COMPONENT_SET",
+			"variantProps": {
+				"kind": [
+					"flowchart",
+					"sequence"
+				]
+			},
+			"contract": "pmndrs-mermaid",
+			"note": "the kind is read from the diagram’s aria-label, not restated in an attribute",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Contributors": {
+			"id": "157:1218",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-contributors",
+			"note": "8 avatars cycling the seven accent ramps at 400 with their 950 for the initials; fixed: because an avatar stands in for a photograph",
+			"boundTo": "theme/surface for the ring; ramp/* for the avatars, declared fixed:"
+		},
+		"Backers": {
+			"id": "157:1230",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-backers",
+			"note": "5 avatars cycling the seven accent ramps at 400 with their 950 for the initials; fixed: because an avatar stands in for a photograph",
+			"boundTo": "theme/surface for the ring; ramp/* for the avatars, declared fixed:"
 		}
 	},
 	"pages": {
 		"demo/index.html": {
 			"pageId": "70:2622",
-			"frameId": "139:3620",
+			"frameId": "146:5090",
 			"instances": [
 				{
 					"path": "hero > hero-actions > Button",
@@ -841,6 +870,56 @@
 					"path": "section#components > waterfall > group:Chrome > spec:Header > stage > Header",
 					"component": "Header",
 					"id": "139:3843"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Nav > stage > Nav",
+					"component": "Nav",
+					"id": "149:331"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Search > stage > Search",
+					"component": "Search",
+					"id": "149:364"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Toc > stage > Toc",
+					"component": "Toc",
+					"id": "149:393"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Intro > stage > Intro",
+					"component": "Intro",
+					"id": "153:673"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Keypoints > stage > Keypoints",
+					"component": "Keypoints",
+					"id": "153:676"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Details / Summary > stage > Details",
+					"component": "Details",
+					"id": "153:690"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Entries > stage > Entries",
+					"component": "Entries",
+					"id": "153:698"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Prose > stage > Prose",
+					"component": "Prose",
+					"id": "154:761"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:blockquote > stage > Blockquote",
+					"component": "Blockquote",
+					"id": "154:787"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:table > stage > Table",
+					"component": "Table",
+					"id": "154:789"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha",
@@ -873,6 +952,11 @@
 					"id": "139:3943"
 				},
 				{
+					"path": "section#components > waterfall > group:Callouts > spec:Hint > stage > Hint",
+					"component": "Hint",
+					"id": "154:825"
+				},
+				{
 					"path": "section#components > waterfall > group:Code > spec:Code > stage > Code",
 					"component": "Code",
 					"id": "139:3961"
@@ -886,6 +970,46 @@
 					"path": "section#components > waterfall > group:Code > spec:Code[diff] > stage > Code",
 					"component": "Code",
 					"id": "139:3973"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Sandpack > stage > Sandpack",
+					"component": "Sandpack",
+					"id": "156:534"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Codesandbox > stage > Codesandbox",
+					"component": "Codesandbox",
+					"id": "156:560"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Img > stage > Img",
+					"component": "Img",
+					"id": "156:529"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Mermaid — flowchart > stage > Mermaid",
+					"component": "Mermaid",
+					"id": "159:1167"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Mermaid — sequence > stage > Mermaid",
+					"component": "Mermaid",
+					"id": "159:1187"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Grid > stage > Grid",
+					"component": "Grid",
+					"id": "156:565"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Contributors > stage > Contributors",
+					"component": "Contributors",
+					"id": "159:1217"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Backers > stage > Backers",
+					"component": "Backers",
+					"id": "159:1234"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button",

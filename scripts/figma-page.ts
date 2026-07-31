@@ -104,9 +104,10 @@ function stroke(node, name, weight) {
 
 /* ---------- primitives ---------- */
 
-function frame(name, opts) {
+function frame(name, opts, existing) {
   const options = opts || {}
-  const node = figma.createFrame()
+  // An existing node is re-used rather than replaced: see the assemble step.
+  const node = existing || figma.createFrame()
   node.name = name
   // Before the sizing modes, not after: resize() resets them to FIXED, so a
   // frame given a width last would stop hugging its own content.
@@ -506,12 +507,20 @@ if (!previous) previous = page.children.find((n) => n.name === FRAME_NAME) || nu
 // which is the round trip working rather than a merge conflict in a canvas.
 // Its position is kept, because where it sits on the canvas is a decision the
 // code has no opinion about.
-const at = previous ? { x: previous.x, y: previous.y } : { x: 0, y: 0 }
 const previousModes = previous ? { ...previous.explicitVariableModes } : {}
-if (previous) previous.remove()
 
-const root = frame(FRAME_NAME, { gap: 56, padY: 64, padX: 64, surface: 'theme/page', width: WIDTH })
-page.appendChild(root)
+// Rebuilt *in place*. The obvious implementation removes the old frame and
+// appends a new one, and it is wrong: someone may have turned this frame into a
+// component — ours is one — and deleting it detaches every instance of it. So
+// the node keeps its identity and only its children are replaced. Its position,
+// its mode and its component-ness are Figma's business, not this script's.
+const root = previous || frame(FRAME_NAME, { gap: 56, padY: 64, padX: 64, surface: 'theme/page', width: WIDTH })
+if (previous) {
+  for (const child of [...previous.children]) child.remove()
+  frame(FRAME_NAME, { gap: 56, padY: 64, padX: 64, surface: 'theme/page', width: WIDTH }, previous)
+} else {
+  page.appendChild(root)
+}
 
 // Which mode the frame is *viewed* in is a Figma decision, like where it sits
 // on the canvas: the tokens define both modes and the code has no opinion about
@@ -526,9 +535,6 @@ if (themeCollection) {
   if (modeId) root.setExplicitVariableModeForCollection(themeCollection, modeId)
 }
 
-root.x = at.x
-root.y = at.y
-
 await children(root, SPEC.blocks, '')
 
 figma.currentPage.selection = [root]
@@ -536,6 +542,7 @@ figma.currentPage.selection = [root]
 return {
   pageId: page.id,
   frameId: root.id,
+  frameType: root.type,
   instances: placed,
   counts: { instances: placed.length, blocks: SPEC.blocks.length },
   missingFonts,

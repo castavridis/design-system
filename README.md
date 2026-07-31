@@ -132,12 +132,18 @@ carry `is-hl` — so a Figma instance cannot claim a variant the page isn't
 rendering. A variant the contract doesn't declare stops the push.
 
 Everything the contract doesn't declare is recorded as what it is. The swatch and
-ramp grids are rebuilt from the `brand` and `ramp` variables; the rest —
-`doc-sandpack`, `doc-entries`, the Mermaid diagrams — becomes a labelled
-**stand-in**. That is deliberate: a hand-drawn Figma `doc-sandpack` would be a
-design with no owner in code, and nothing to audit it against. A stand-in becomes
-an instance the moment its component is declared in the contract and built: that
-is what landing `Nav`, `Search` and `Toc` did to three of them.
+ramp grids are rebuilt from the `brand` and `ramp` variables; anything else
+becomes a labelled **stand-in**. That is deliberate: a hand-drawn Figma design
+with no owner in code has nothing to audit it against. A stand-in becomes an
+instance the moment its component is declared and built, which is what emptied
+the waterfall: all 23 of its components are now instances, and the four
+remaining stand-ins are the page's own furniture — the space slider and the
+gradient generator's controls — which are demo widgets, not doc components.
+
+The frame is **rebuilt in place**, never replaced. The obvious implementation
+deletes it and appends a new one, and it is wrong: someone may have turned the
+frame into a component — ours is one — and deleting it would detach every
+instance of it.
 
 The audit compares composition rather than typography. It reports a block that
 moved or vanished, an instance of the wrong component, a variant swapped in

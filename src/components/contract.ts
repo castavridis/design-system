@@ -638,6 +638,82 @@ const grid: ComponentSpec = {
 	},
 }
 
+/**
+ * Text-based diagrams. `kind` is a real variant axis — a flowchart and a
+ * sequence diagram share a palette but not a vocabulary, so the two are
+ * genuinely different renderings rather than one with a different fill.
+ */
+const mermaid: ComponentSpec = {
+	name: 'pmndrs-mermaid',
+	react: 'Mermaid',
+	source: 'pmndrs-docs',
+	description: 'Text-based diagrams that follow the active theme.',
+	props: {
+		kind: {
+			type: 'enum',
+			values: ['flowchart', 'sequence'],
+			default: 'flowchart',
+			description: 'Diagram type. Changes the vocabulary, not just the palette.',
+		},
+	},
+	variantProp: 'kind',
+	bindings: {
+		flowchart: { diamond: 'surface-raised' },
+		sequence: { lifeline: 'text-faint' },
+		'*': {
+			node: 'surface-raised',
+			nodeBorder: 'accent-teal',
+			text: 'text',
+			label: 'text-faint',
+			edge: 'text-faint',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Avatar listings. Both fall back to John Doe without credentials, which is
+ * what the page shows, since it makes no network requests.
+ *
+ * The avatars cycle the seven accent ramps at `400` with their `950` for the
+ * initials — a recipe, so it is spelled out per hue rather than hidden in a
+ * loop nobody can audit. `fixed:` because an avatar stands in for a photograph.
+ */
+const peopleBindings = {
+	'*': {
+		ring: 'surface',
+		mono: 'fixed:fonts.mono',
+		...Object.fromEntries(
+			['purple', 'red', 'orange', 'yellow', 'green', 'teal', 'blue'].flatMap((hue) => [
+				[`fill-${hue}`, `fixed:ramp.${hue}-400`],
+				[`ink-${hue}`, `fixed:ramp.${hue}-950`],
+			]),
+		),
+	},
+}
+
+const contributors: ComponentSpec = {
+	name: 'pmndrs-contributors',
+	react: 'Contributors',
+	source: 'pmndrs-docs',
+	description: 'Avatars pulled from the GitHub API, falling back to John Doe without a token.',
+	props: {
+		count: { type: 'number', default: 8, description: 'How many avatars to show.' },
+	},
+	bindings: peopleBindings,
+}
+
+const backers: ComponentSpec = {
+	name: 'pmndrs-backers',
+	react: 'Backers',
+	source: 'pmndrs-docs',
+	description: 'Open Collective backers, sized by tier. Same fallback, same reason.',
+	props: {
+		count: { type: 'number', default: 5, description: 'How many avatars to show.' },
+	},
+	bindings: peopleBindings,
+}
+
 export const components: readonly ComponentSpec[] = [
 	gha,
 	button,
@@ -659,6 +735,9 @@ export const components: readonly ComponentSpec[] = [
 	sandpack,
 	codesandbox,
 	grid,
+	mermaid,
+	contributors,
+	backers,
 ]
 
 /**

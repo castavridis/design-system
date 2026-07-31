@@ -210,6 +210,18 @@ function asInstance(el: Element, specs: readonly ComponentSpec[]): InstanceBlock
 		return { kind: 'instance', name: spec.name, component: spec.react, props: validate(spec, props), gutterStart }
 	}
 
+	if (spec.react === 'Mermaid') {
+		/*
+		 * Read, not restated: the diagram already says which kind it is, in the
+		 * `aria-label` a screen reader gets. A `kind="sequence"` attribute beside
+		 * it would be a second answer to a question the markup already answers.
+		 */
+		const svg = findTag(el, 'svg')
+		const described = svg?.attrs['aria-label'] ?? ''
+		const kind = /^sequence/i.test(described) ? 'sequence' : 'flowchart'
+		return { kind: 'instance', name: spec.name, component: spec.react, props: validate(spec, { kind }) }
+	}
+
 	if (spec.react === 'Button') {
 		const key = classList(el).filter((c) => c.startsWith('button')).join(' ')
 		const variant = BUTTON_VARIANT_BY_CLASS[key]

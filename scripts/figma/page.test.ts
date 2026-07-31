@@ -163,6 +163,22 @@ test('a Button class that matches no variant stops the extraction', () => {
 	)
 })
 
+test("Mermaid's kind is read from the diagram's own description", () => {
+	const diagram = (aria: string) =>
+		`<article class="spec"><header class="spec-head"><h4>Mermaid</h4><p>x</p></header><div class="spec-stage">` +
+		`<figure class="doc-mermaid" data-component="Mermaid"><svg role="img" aria-label="${aria}"></svg></figure>` +
+		`</div></article>`
+
+	assert.equal(
+		instancesOf(spec(diagram('Flowchart: Start leads to a decision'))).find((i) => i.component === 'Mermaid')?.props.kind,
+		'flowchart',
+	)
+	assert.equal(
+		instancesOf(spec(diagram('Sequence diagram: User clicks a button'))).find((i) => i.component === 'Mermaid')?.props.kind,
+		'sequence',
+	)
+})
+
 test('line numbers collapse into fence ranges', () => {
 	assert.equal(ranges([1, 4, 5, 6]), '1,4-6')
 	assert.equal(ranges([2]), '2')
