@@ -1,0 +1,102 @@
+{
+	"fileKey": "SIckEXy6xkVPcJucd5Lnl9",
+	"pageId": "70:2622",
+	"collections": {
+		"brand": "VariableCollectionId:83:2",
+		"fonts": "VariableCollectionId:83:3"
+	},
+	"modes": {
+		"brand": "83:0",
+		"fonts": "83:1"
+	},
+	"variables": {
+		"brand.dark": {
+			"id": "VariableID:83:4",
+			"collection": "brand"
+		},
+		"brand.light": {
+			"id": "VariableID:83:5",
+			"collection": "brand"
+		},
+		"brand.purple": {
+			"id": "VariableID:83:6",
+			"collection": "brand"
+		},
+		"brand.red": {
+			"id": "VariableID:83:7",
+			"collection": "brand"
+		},
+		"brand.orange": {
+			"id": "VariableID:83:8",
+			"collection": "brand"
+		},
+		"brand.yellow": {
+			"id": "VariableID:83:9",
+			"collection": "brand"
+		},
+		"brand.green": {
+			"id": "VariableID:83:10",
+			"collection": "brand"
+		},
+		"brand.teal": {
+			"id": "VariableID:83:11",
+			"collection": "brand"
+		},
+		"brand.blue": {
+			"id": "VariableID:83:12",
+			"collection": "brand"
+		},
+		"brand.headline": {
+			"id": "VariableID:83:13",
+			"collection": "brand"
+		},
+		"brand.space": {
+			"id": "VariableID:83:14",
+			"collection": "brand"
+		},
+		"brand.radius": {
+			"id": "VariableID:83:15",
+			"collection": "brand"
+		},
+		"fonts.mono": {
+			"id": "VariableID:83:16",
+			"collection": "fonts"
+		},
+		"fonts.sans": {
+			"id": "VariableID:83:17",
+			"collection": "fonts"
+		},
+		"fonts.serif": {
+			"id": "VariableID:83:18",
+			"collection": "fonts"
+		}
+	},
+	"prefer": {
+		"brand": "ask",
+		"fonts": "code"
+	},
+	"derived": [
+		"ramp"
+	],
+	"lastSync": {
+		"syncId": "20260731T181656Z",
+		"at": "2026-07-31T18:16:56.074Z",
+		"values": {
+			"brand.dark": "#36342f",
+			"brand.light": "#eae5da",
+			"brand.purple": "#d855f9",
+			"brand.red": "#ff4980",
+			"brand.orange": "#ffc043",
+			"brand.yellow": "#ebff0f",
+			"brand.green": "#caf543",
+			"brand.teal": "#00f7a3",
+			"brand.blue": "#2bdcf6",
+			"brand.headline": "Faculty Glyphic",
+			"brand.space": "16",
+			"brand.radius": "16",
+			"fonts.mono": "\"Geist Mono\", ui-monospace, monospace",
+			"fonts.sans": "\"Geist\", system-ui, sans-serif",
+			"fonts.serif": "\"Faculty Glyphic\", serif"
+		}
+	}
+}

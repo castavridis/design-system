@@ -36,6 +36,9 @@
 		"demo": "tsx scripts/build.ts && tsx scripts/serve.ts",
 		"preview": "pnpm run build:site && tsx scripts/serve.ts public",
 		"watch": "tsx watch --include src --include scripts scripts/build.ts",
+		"figma:emit": "tsx scripts/build.ts && node scripts/emit-figma-tokens.mjs",
+		"figma:push": "tsx scripts/figma-push.ts",
+		"figma:pull": "tsx scripts/figma-pull.ts",
 		"typecheck": "tsc --noEmit",
 		"clean": "node --input-type=module -e \"import{rm}from'node:fs/promises';for(const d of ['dist','public'])await rm(d,{recursive:true,force:true})\"",
 		"prepack": "pnpm run build"
