@@ -108,6 +108,13 @@ pnpm figma:page --record <result.json>
 pnpm figma:audit <snapshot.json>   # components *and* page composition
 ```
 
+Where the frame lives is Figma's decision, not the script's. The push resolves it
+by the node id recorded in `figma/sync.json` first, so dragging it to another
+page is a move the next push follows rather than a second copy it makes — the
+same rule the token push uses for a renamed variable. Only if that id is gone
+does it fall back to the recorded page, then to the page the components are on,
+then to the frame's own name. It never creates a page.
+
 A block becomes an instance in one of two ways. A `<pmndrs-gha>` custom element
 *is* the component — the demo already renders it from the contract. A
 `data-component="Code"` marker names a contract component the page renders as

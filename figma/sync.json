@@ -700,133 +700,133 @@
 	},
 	"pages": {
 		"demo/index.html": {
-			"pageId": "128:2",
-			"frameId": "130:133",
+			"pageId": "70:2622",
+			"frameId": "139:3620",
 			"instances": [
 				{
 					"path": "hero > hero-actions > Button",
 					"component": "Button",
-					"id": "130:139"
+					"id": "139:3626"
 				},
 				{
 					"path": "hero > hero-actions > Button#2",
 					"component": "Button",
-					"id": "130:141"
+					"id": "139:3627"
 				},
 				{
 					"path": "hero > hero-actions > Button#3",
 					"component": "Button",
-					"id": "130:144"
+					"id": "139:3628"
 				},
 				{
 					"path": "hero > hero-actions > Button#4",
 					"component": "Button",
-					"id": "130:147"
+					"id": "139:3629"
 				},
 				{
 					"path": "section#components > waterfall > group:Chrome > spec:Header > stage > Header",
 					"component": "Header",
-					"id": "130:363"
+					"id": "139:3843"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha",
 					"component": "Gha",
-					"id": "130:469"
+					"id": "139:3933"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#2",
 					"component": "Gha",
-					"id": "130:476"
+					"id": "139:3934"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#3",
 					"component": "Gha",
-					"id": "130:489"
+					"id": "139:3935"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#4",
 					"component": "Gha",
-					"id": "130:503"
+					"id": "139:3936"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#5",
 					"component": "Gha",
-					"id": "130:516"
+					"id": "139:3937"
 				},
 				{
 					"path": "section#components > waterfall > group:Callouts > spec:Gha[title] > stage > Gha",
 					"component": "Gha",
-					"id": "130:534"
+					"id": "139:3943"
 				},
 				{
 					"path": "section#components > waterfall > group:Code > spec:Code > stage > Code",
 					"component": "Code",
-					"id": "130:564"
+					"id": "139:3961"
 				},
 				{
 					"path": "section#components > waterfall > group:Code > spec:Code[showLineNumbers=X] > stage > Code",
 					"component": "Code",
-					"id": "130:594"
+					"id": "139:3967"
 				},
 				{
 					"path": "section#components > waterfall > group:Code > spec:Code[diff] > stage > Code",
 					"component": "Code",
-					"id": "130:624"
+					"id": "139:3973"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button",
 					"component": "Button",
-					"id": "130:740"
+					"id": "139:4050"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#2",
 					"component": "Button",
-					"id": "130:742"
+					"id": "139:4051"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#3",
 					"component": "Button",
-					"id": "130:745"
+					"id": "139:4052"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#4",
 					"component": "Button",
-					"id": "130:748"
+					"id": "139:4053"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge",
 					"component": "Badge",
-					"id": "130:757"
+					"id": "139:4060"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#2",
 					"component": "Badge",
-					"id": "130:759"
+					"id": "139:4061"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#3",
 					"component": "Badge",
-					"id": "130:762"
+					"id": "139:4062"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#4",
 					"component": "Badge",
-					"id": "130:765"
+					"id": "139:4063"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#5",
 					"component": "Badge",
-					"id": "130:768"
+					"id": "139:4064"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#6",
 					"component": "Badge",
-					"id": "130:771"
+					"id": "139:4065"
 				},
 				{
 					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#7",
 					"component": "Badge",
-					"id": "130:774"
+					"id": "139:4066"
 				}
 			]
 		}
