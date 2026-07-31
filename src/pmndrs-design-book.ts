@@ -81,6 +81,9 @@ radius.set('small', spacingScale(ref('brand.space'), { multiplier: 0.125 })) // 
  * Steps of every colour ramp, light to dark. The familiar 50–950 scale, so a
  * consumer coming from Tailwind or Material can reach for a step without
  * learning a second vocabulary.
+ *
+ * Declared before the ramps themselves because the semantic scopes below
+ * reference ramp steps, and a reference needs its target to exist.
  */
 export const rampShades = [
   '50',
@@ -140,3 +143,49 @@ for (const name of rampNames) {
   for (const [step, value] of Object.entries(stops)) ramp.set(step, value)
 }
 
+
+// Semantic surfaces and text — the theme layer.
+//
+// These used to live in `demo/demo.css` as `:root` aliases, which meant the
+// package shipped raw scales while the actual decisions — what counts as a
+// page ground, what counts as muted text — were stranded in one stylesheet
+// where no consumer could reach them. They belong here.
+//
+// Modes are modelled the way design-book models them: `light` holds the full
+// set, `dark` extends it and overrides only what differs. Every slot resolves
+// through the neutral ramps, which is what makes a second mode a re-pointing
+// exercise rather than a new palette.
+//
+// Note the ladders run in opposite directions. On a dark ground, elevation
+// goes *lighter* (page 900 -> raised 700); on a light ground it goes *whiter*
+// (page 100 -> raised 50). That asymmetry is why light mode is not an
+// inversion of dark — a mirrored scale would sink raised surfaces instead of
+// lifting them.
+const light = book.addScope('light')
+light.set('page', ref('ramp.light-100'))
+light.set('surface', ref('ramp.light-50'))
+light.set('surface-raised', ref('ramp.light-50'))
+light.set('surface-sunken', ref('ramp.light-200'))
+light.set('line', ref('ramp.light-300'))
+light.set('line-soft', ref('ramp.light-200'))
+light.set('text', ref('ramp.dark-900'))
+light.set('text-muted', ref('ramp.dark-600'))
+light.set('text-faint', ref('ramp.dark-500'))
+/* Body copy, and copy sitting on a tinted callout ground. Both were hardcoded
+   to dark-ramp steps in demo.css, which is invisible until a light mode exists
+   and then reads at 1.36:1. */
+light.set('text-body', ref('ramp.dark-800'))
+light.set('text-strong', ref('ramp.dark-900'))
+
+const dark = book.addScope('dark', { extends: 'light' })
+dark.set('page', ref('ramp.dark-900'))
+dark.set('surface', ref('ramp.dark-800'))
+dark.set('surface-raised', ref('ramp.dark-700'))
+dark.set('surface-sunken', ref('ramp.dark-950'))
+dark.set('line', ref('ramp.dark-600'))
+dark.set('line-soft', ref('ramp.dark-700'))
+dark.set('text', ref('brand.light'))
+dark.set('text-muted', ref('ramp.dark-400'))
+dark.set('text-faint', ref('ramp.dark-500'))
+dark.set('text-body', ref('ramp.dark-300'))
+dark.set('text-strong', ref('ramp.dark-200'))

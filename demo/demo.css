@@ -12,18 +12,83 @@
  * above and below it to build elevation from, which is the whole argument for
  * ramping the neutrals rather than only the accents.
  */
+/*
+ * These nine slots now live in the design book as `light` and `dark` scopes, so
+ * the package ships the decisions and not just the scales. All this file does
+ * is choose which mode is active.
+ *
+ * design-book's CSS renderer emits flat `--light-*` / `--dark-*` variables
+ * rather than a media query — it has no concept of one mode being "active" —
+ * so the switch is made here. Dark is the default because the brand book was
+ * designed on a dark ground; `prefers-color-scheme` flips it, and an explicit
+ * `data-theme` wins over both so a toggle can override the OS.
+ */
 :root {
-  --page: var(--ramp-dark-900);
-  --surface: var(--ramp-dark-800);
-  --surface-raised: var(--ramp-dark-700);
-  --surface-sunken: var(--ramp-dark-950);
+  --page: var(--dark-page);
+  --surface: var(--dark-surface);
+  --surface-raised: var(--dark-surface-raised);
+  --surface-sunken: var(--dark-surface-sunken);
 
-  --line: var(--ramp-dark-600);
-  --line-soft: var(--ramp-dark-700);
+  --line: var(--dark-line);
+  --line-soft: var(--dark-line-soft);
 
-  --text: var(--brand-light);
-  --text-muted: var(--ramp-dark-400);
-  --text-faint: var(--ramp-dark-500);
+  --text: var(--dark-text);
+  --text-muted: var(--dark-text-muted);
+  --text-faint: var(--dark-text-faint);
+  --text-body: var(--dark-text-body);
+  --text-strong: var(--dark-text-strong);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --page: var(--light-page);
+    --surface: var(--light-surface);
+    --surface-raised: var(--light-surface-raised);
+    --surface-sunken: var(--light-surface-sunken);
+
+    --line: var(--light-line);
+    --line-soft: var(--light-line-soft);
+
+    --text: var(--light-text);
+    --text-muted: var(--light-text-muted);
+    --text-faint: var(--light-text-faint);
+  --text-body: var(--light-text-body);
+  --text-strong: var(--light-text-strong);
+
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="light"] {
+  --page: var(--light-page);
+  --surface: var(--light-surface);
+  --surface-raised: var(--light-surface-raised);
+  --surface-sunken: var(--light-surface-sunken);
+  --line: var(--light-line);
+  --line-soft: var(--light-line-soft);
+  --text: var(--light-text);
+  --text-muted: var(--light-text-muted);
+  --text-faint: var(--light-text-faint);
+  --text-body: var(--light-text-body);
+  --text-strong: var(--light-text-strong);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --page: var(--dark-page);
+  --surface: var(--dark-surface);
+  --surface-raised: var(--dark-surface-raised);
+  --surface-sunken: var(--dark-surface-sunken);
+  --line: var(--dark-line);
+  --line-soft: var(--dark-line-soft);
+  --text: var(--dark-text);
+  --text-muted: var(--dark-text-muted);
+  --text-faint: var(--dark-text-faint);
+  --text-body: var(--dark-text-body);
+  --text-strong: var(--dark-text-strong);
+  color-scheme: dark;
 }
 
 *,
@@ -98,7 +163,7 @@ a {
 .lede {
   margin: 0 auto;
   max-width: 56ch;
-  color: var(--ramp-dark-300);
+  color: var(--text-body);
 }
 
 .hero-actions {
@@ -189,7 +254,7 @@ section h2 {
 .section-note {
   margin: 0 0 calc(var(--brand-space) * 1.5);
   max-width: 62ch;
-  color: var(--ramp-dark-300);
+  color: var(--text-body);
 }
 
 /* ---------- palette ---------- */
@@ -496,7 +561,7 @@ section h2 {
 
 .card p {
   margin: 0;
-  color: var(--ramp-dark-300);
+  color: var(--text-body);
 }
 
 /* ---------- snippets ---------- */
@@ -959,7 +1024,7 @@ kbd {
   border-inline-start: 3px solid var(--brand-purple);
   font-size: 1.15rem;
   line-height: 1.55;
-  color: var(--ramp-dark-200);
+  color: var(--text-strong);
 }
 
 .doc-intro p {
@@ -997,7 +1062,7 @@ kbd {
 .doc-keypoints li {
   position: relative;
   padding-inline-start: 1.5em;
-  color: var(--ramp-dark-200);
+  color: var(--text-strong);
 }
 
 .doc-keypoints li::before {
@@ -1146,7 +1211,7 @@ kbd {
 
 .doc-prose p {
   margin: 0 0 1em;
-  color: var(--ramp-dark-300);
+  color: var(--text-body);
 }
 
 .doc-prose hr {
@@ -1159,7 +1224,7 @@ kbd {
 .doc-prose ol {
   margin: 0 0 1em;
   padding-inline-start: 1.4em;
-  color: var(--ramp-dark-300);
+  color: var(--text-body);
 }
 
 .doc-prose li {
@@ -1292,7 +1357,7 @@ kbd {
 
 .doc-gha p:last-child {
   margin: 0;
-  color: var(--ramp-dark-200);
+  color: var(--text-strong);
   font-size: 0.9rem;
 }
 
@@ -1408,7 +1473,7 @@ kbd {
 
 /* A highlighted range, per `{1,4-6}`. */
 .doc-code .ln.is-hl {
-  background: var(--ramp-dark-800);
+  background: var(--surface);
   box-shadow: inset 3px 0 0 var(--brand-yellow);
 }
 
@@ -1623,8 +1688,8 @@ kbd {
   background:
     repeating-linear-gradient(
       -45deg,
-      var(--ramp-dark-800) 0 8px,
-      var(--ramp-dark-900) 8px 16px
+      var(--surface) 0 8px,
+      var(--surface-sunken) 8px 16px
     );
   border: 1px solid var(--line-soft);
 }
@@ -1679,7 +1744,7 @@ kbd {
 .doc-mermaid .mm-edges path,
 .doc-mermaid .mm-lifelines path {
   fill: none;
-  stroke: var(--ramp-dark-500);
+  stroke: var(--text-faint);
   stroke-width: 1.5;
 }
 
@@ -1692,7 +1757,7 @@ kbd {
 }
 
 .doc-mermaid marker path {
-  fill: var(--ramp-dark-500);
+  fill: var(--text-faint);
   stroke: none;
 }
 
