@@ -226,9 +226,16 @@ a {
 }
 
 .hero h1 {
-  font-family: var(--fonts-serif);
+  /*
+   * Pulled from Figma: the headline moved off the serif and onto the legibility
+   * face, set tighter. `fonts.legible` is a token the book already had — the
+   * change is which token this slot uses, not a new value. The size was already
+   * agreed: `4.5rem` is the 72px the Figma frame is set at.
+   */
+  font-family: var(--fonts-legible);
+  font-weight: 800;
   font-size: clamp(2.5rem, 8vw, 4.5rem);
-  line-height: 1.05;
+  line-height: 0.95;
   margin: calc(var(--brand-space) * 0.75) 0;
   background: linear-gradient(
     100deg,

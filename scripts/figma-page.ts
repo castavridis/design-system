@@ -57,6 +57,7 @@ const WANTED = {
   sans: { family: 'Geist', style: 'Regular' },
   sansMedium: { family: 'Geist', style: 'Medium' },
   mono: { family: 'Geist Mono', style: 'Regular' },
+  legible: { family: 'Atkinson Hyperlegible Next', style: 'ExtraBold' },
 }
 const FALLBACK = { family: 'Inter', style: 'Regular' }
 /** Widest a text node is measured at before it is told to fill its parent. */
@@ -333,7 +334,7 @@ async function render(parent, block, path) {
       const box = frame('hero', { gap: 16, padY: 24 })
       add(parent, box)
       box.appendChild(text(block.eyebrow, { font: 'mono', size: 12, slot: 'text-faint', letterSpacing: 1 }))
-      const heading = text(block.heading.join('\\n'), { font: 'serif', size: 64, slot: 'text', leading: 110 })
+      const heading = text(block.heading.join('\\n'), { font: 'legible', size: 72, slot: 'text', leading: 95 })
       add(box, heading)
       add(box, text(block.lede, { size: 18, slot: 'text-muted' }))
       await children(box, block.children, path)
