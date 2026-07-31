@@ -633,7 +633,24 @@
 				"CAUTION"
 			],
 			"contract": "pmndrs-gha",
-			"titleProp": "direct text override (not a component property — a set-level TEXT property has one default and cannot vary per keyword)"
+			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)"
+		},
+		"Button": {
+			"id": "101:14",
+			"type": "COMPONENT_SET",
+			"variantProps": {
+				"variant": [
+					"default",
+					"secondary",
+					"ghost"
+				],
+				"disabled": [
+					"False",
+					"True"
+				]
+			},
+			"contract": "pmndrs-button",
+			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill"
 		}
 	}
 }

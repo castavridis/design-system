@@ -117,6 +117,14 @@ const button: ComponentSpec = {
 		default: { surface: 'brand.purple', ink: 'ramp.purple-950', hover: 'ramp.purple-400', border: 'brand.purple' },
 		secondary: { surface: 'transparent', ink: 'brand.light', hover: 'ramp.dark-700', border: 'ramp.dark-600' },
 		ghost: { surface: 'transparent', ink: 'ramp.dark-400', hover: 'ramp.dark-700', border: 'transparent' },
+		/*
+		 * Not a variant — a state override. `.button:disabled` in demo.css
+		 * replaces surface, ink and border identically whichever variant is
+		 * underneath, so it is one entry rather than three. Figma models it as a
+		 * second variant axis because a BOOLEAN component property can toggle
+		 * visibility but cannot repaint a fill.
+		 */
+		disabled: { surface: 'transparent', ink: 'ramp.dark-500', border: 'ramp.dark-700' },
 	},
 }
 
