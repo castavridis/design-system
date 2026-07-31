@@ -625,10 +625,8 @@
 				"WARNING",
 				"CAUTION"
 			],
-			"properties": {
-				"title": "title#92:0"
-			},
-			"contract": "pmndrs-gha"
+			"contract": "pmndrs-gha",
+			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)"
 		}
 	}
 }
