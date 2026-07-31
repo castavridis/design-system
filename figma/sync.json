@@ -696,6 +696,29 @@
 			"variantProps": {},
 			"contract": "pmndrs-header",
 			"boundTo": "theme/* (mode-aware); brand gradient mark is fixed: by design"
+		},
+		"Nav": {
+			"id": "144:364",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-nav",
+			"note": "no variant axis: open/closed and current-page are per-item states, and a set would need 2^n members",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Search": {
+			"id": "144:392",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-search",
+			"note": "the matched term is a chip, not a range fill — Figma can range-colour text but cannot range-fill it",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Toc": {
+			"id": "145:346",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-toc",
+			"boundTo": "theme/* (mode-aware)"
 		}
 	},
 	"pages": {

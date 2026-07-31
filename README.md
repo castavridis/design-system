@@ -106,14 +106,21 @@ pnpm figma:page              # dist/figma-page.json + the script that builds it
 pnpm figma:page --snapshot   # also the read-back script the audit consumes
 pnpm figma:page --record <result.json>
 pnpm figma:audit <snapshot.json>   # components *and* page composition
+pnpm figma:audit <snapshot.json> --only=Nav,Search,Toc
 ```
+
+Components land a few at a time, so `--only` scopes the component half to the
+ones named — a snapshot of three would otherwise report the other five as
+missing from Figma, which is true of the snapshot and false of the file.
 
 Where the frame lives is Figma's decision, not the script's. The push resolves it
 by the node id recorded in `figma/sync.json` first, so dragging it to another
 page is a move the next push follows rather than a second copy it makes — the
 same rule the token push uses for a renamed variable. Only if that id is gone
 does it fall back to the recorded page, then to the page the components are on,
-then to the frame's own name. It never creates a page.
+then to the frame's own name. It never creates a page. Which theme mode the
+frame is *viewed* in is carried over for the same reason — the tokens define
+both modes, and the code has no opinion about which one you are looking at.
 
 A block becomes an instance in one of two ways. A `<pmndrs-gha>` custom element
 *is* the component — the demo already renders it from the contract. A
@@ -125,10 +132,12 @@ carry `is-hl` — so a Figma instance cannot claim a variant the page isn't
 rendering. A variant the contract doesn't declare stops the push.
 
 Everything the contract doesn't declare is recorded as what it is. The swatch and
-ramp grids are rebuilt from the `brand` and `ramp` variables; the rest — `doc-nav`,
-`doc-search`, the Mermaid diagrams — becomes a labelled **stand-in**. That is
-deliberate: a hand-drawn Figma `doc-search` would be a design with no owner in
-code, and nothing to audit it against.
+ramp grids are rebuilt from the `brand` and `ramp` variables; the rest —
+`doc-sandpack`, `doc-entries`, the Mermaid diagrams — becomes a labelled
+**stand-in**. That is deliberate: a hand-drawn Figma `doc-sandpack` would be a
+design with no owner in code, and nothing to audit it against. A stand-in becomes
+an instance the moment its component is declared in the contract and built: that
+is what landing `Nav`, `Search` and `Toc` did to three of them.
 
 The audit compares composition rather than typography. It reports a block that
 moved or vanished, an instance of the wrong component, a variant swapped in

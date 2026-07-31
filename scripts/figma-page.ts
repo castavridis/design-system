@@ -507,17 +507,24 @@ if (!previous) previous = page.children.find((n) => n.name === FRAME_NAME) || nu
 // Its position is kept, because where it sits on the canvas is a decision the
 // code has no opinion about.
 const at = previous ? { x: previous.x, y: previous.y } : { x: 0, y: 0 }
+const previousModes = previous ? { ...previous.explicitVariableModes } : {}
 if (previous) previous.remove()
 
 const root = frame(FRAME_NAME, { gap: 56, padY: 64, padX: 64, surface: 'theme/page', width: WIDTH })
 page.appendChild(root)
 
-// The theme collection has two modes and a frame inherits whichever the file
-// defaults to. The demo defaults to dark, so say so rather than letting the
-// page render in whatever mode someone last left selected.
+// Which mode the frame is *viewed* in is a Figma decision, like where it sits
+// on the canvas: the tokens define both modes and the code has no opinion about
+// which one someone is looking at. So an existing frame's mode is carried over,
+// and only a brand new frame is pinned — to dark, the ground the book was
+// designed on.
 const themeCollection = (await figma.variables.getLocalVariableCollectionsAsync()).find((c) => c.name === 'theme')
-const dark = themeCollection && themeCollection.modes.find((m) => m.name === 'Dark')
-if (themeCollection && dark) root.setExplicitVariableModeForCollection(themeCollection, dark.modeId)
+if (themeCollection) {
+  const inherited = previousModes[themeCollection.id]
+  const dark = themeCollection.modes.find((m) => m.name === 'Dark')
+  const modeId = inherited || (dark && dark.modeId)
+  if (modeId) root.setExplicitVariableModeForCollection(themeCollection, modeId)
+}
 
 root.x = at.x
 root.y = at.y

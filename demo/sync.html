@@ -144,7 +144,11 @@
           <section>
             <h5>keeping honest</h5>
             <ul>
-              <li><code>pnpm figma:audit</code> — component and page drift</li>
+              <li>
+                <code>pnpm figma:audit</code> — component and page drift.
+                <code>--only=Nav,Search,Toc</code> scopes it to the components
+                you just landed
+              </li>
               <li><code>pnpm test</code> — 64 offline tests</li>
               <li><code>pnpm typecheck</code></li>
             </ul>
@@ -222,15 +226,15 @@
           <article class="card">
             <h3>Components</h3>
             <p>
-              5 of 24 built in Figma — Gha, Button, Badge, Code, Header. All
-              mode-aware, zero unbound paints.
+              8 of 24 built in Figma — Gha, Button, Badge, Code, Header, Nav,
+              Search, Toc. All mode-aware, zero unbound paints.
             </p>
           </article>
           <article class="card">
             <h3>The page</h3>
             <p>
               <code>demo/index.html</code> assembled beside its components from
-              135 blocks: 25 instances, 23 stand-ins, and the swatch and ramp
+              135 blocks: 28 instances, 20 stand-ins, and the swatch and ramp
               grids drawn from the variables themselves. Move the frame in Figma
               and the next push follows it — the recorded node id wins over any
               name.
@@ -239,7 +243,7 @@
           <article class="card">
             <h3>Not done</h3>
             <p>
-              <code>figma:adopt</code> for per-component pulls, 19 remaining
+              <code>figma:adopt</code> for per-component pulls, 16 remaining
               specimens, and Code Connect — which waits for a React target in
               <code>@pmndrs/docs</code>.
             </p>

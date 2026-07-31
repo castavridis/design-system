@@ -941,8 +941,11 @@ kbd {
 }
 
 .doc-nav-cat li a.is-current {
-  background: var(--ramp-teal-950);
-  color: var(--brand-teal);
+  /* Theme slots, not ramp steps: `Nav` is in the contract now, and the contract
+     binds `tint-teal` / `accent-teal`. Identical in dark — the teal seed *is*
+     `ramp-teal-300` — and legible in light, which the ramp steps were not. */
+  background: var(--tint-teal);
+  color: var(--accent-teal);
 }
 
 /* ---------- search ---------- */
@@ -996,7 +999,7 @@ kbd {
   width: 1px;
   height: 1em;
   margin-inline-start: 1px;
-  background: var(--brand-teal);
+  background: var(--accent-teal);
   vertical-align: -0.15em;
   animation: doc-blink 1.1s steps(1) infinite;
 }
@@ -1024,7 +1027,7 @@ kbd {
 
 .doc-search-results li.is-active {
   background: var(--surface);
-  box-shadow: inset 2px 0 0 var(--brand-teal);
+  box-shadow: inset 2px 0 0 var(--accent-teal);
 }
 
 .doc-search-title {
@@ -1034,8 +1037,8 @@ kbd {
 }
 
 .doc-search-title mark {
-  background: var(--ramp-yellow-950);
-  color: var(--brand-yellow);
+  background: var(--tint-yellow);
+  color: var(--accent-yellow);
   border-radius: 2px;
   padding-inline: 0.1em;
 }
@@ -1088,8 +1091,8 @@ kbd {
 }
 
 .doc-toc li a.is-current {
-  border-inline-start-color: var(--brand-teal);
-  color: var(--brand-teal);
+  border-inline-start-color: var(--accent-teal);
+  color: var(--accent-teal);
 }
 
 .doc-toc li.is-nested a {

@@ -253,7 +253,120 @@ const header: ComponentSpec = {
 	},
 }
 
-export const components: readonly ComponentSpec[] = [gha, button, badge, code, header]
+/**
+ * Sidebar navigation, grouped by category.
+ *
+ * No variant property. The states that look like variants — a category open or
+ * closed, a page current or not — belong to *items* inside one instance, and a
+ * variant axis can only describe the whole component. Modelling "open" as a
+ * variant would mean a set of 2^n members for n categories, which is how a
+ * component set stops being usable at the third category.
+ *
+ * The current item is the only place chrome takes an accent: teal, matching the
+ * Header's active-link rule, so "you are here" reads the same in the masthead
+ * and in the sidebar.
+ */
+const nav: ComponentSpec = {
+	name: 'pmndrs-nav',
+	react: 'Nav',
+	source: 'pmndrs-docs',
+	description: 'Sidebar, grouped by category. Categories collapse; the current page is marked.',
+	props: {
+		active: {
+			type: 'string',
+			description: 'Which page reads as current.',
+		},
+	},
+	bindings: {
+		'*': {
+			category: 'text',
+			chevron: 'text-faint',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'surface-raised',
+			currentSurface: 'tint-teal',
+			currentInk: 'accent-teal',
+		},
+	},
+}
+
+/**
+ * The search modal.
+ *
+ * Two accents doing different jobs, which is why they are separate slots rather
+ * than one `accent`: teal marks the selected result, the way it marks the
+ * current page everywhere else, and yellow highlights the matched term. A
+ * matched term is not a selection, and collapsing them would make the modal
+ * argue with itself the moment both appear on one row.
+ */
+const search: ComponentSpec = {
+	name: 'pmndrs-search',
+	react: 'Search',
+	source: 'pmndrs-docs',
+	description: 'Modal with matched-term highlighting and a breadcrumb path.',
+	props: {
+		query: {
+			type: 'string',
+			description: 'The typed query. Shown in the field, and what the results are matched against.',
+		},
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line',
+			divider: 'line-soft',
+			icon: 'text-faint',
+			query: 'text',
+			caret: 'accent-teal',
+			kbd: 'text-muted',
+			kbdSurface: 'surface',
+			kbdBorder: 'line',
+			activeSurface: 'surface',
+			activeRule: 'accent-teal',
+			title: 'text',
+			markTint: 'tint-yellow',
+			markInk: 'accent-yellow',
+			path: 'text-muted',
+			excerpt: 'text-muted',
+			/* The query and the breadcrumb are code, and set like it. */
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Table of contents.
+ *
+ * The same "you are here" teal as `Nav`, but as a rule on the margin rather
+ * than a filled row: the ToC sits beside body copy, and a filled highlight
+ * there competes with the text it is indexing.
+ */
+const toc: ComponentSpec = {
+	name: 'pmndrs-toc',
+	react: 'Toc',
+	source: 'pmndrs-docs',
+	description: 'Table of contents built from the headings, with the section in view marked.',
+	props: {
+		active: {
+			type: 'string',
+			description: 'Which heading is in view.',
+		},
+	},
+	bindings: {
+		'*': {
+			label: 'text-muted',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'text',
+			currentInk: 'accent-teal',
+			currentRule: 'accent-teal',
+			/* The "On this page" label is set in mono, like every other eyebrow. */
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+export const components: readonly ComponentSpec[] = [gha, button, badge, code, header, nav, search, toc]
 
 /**
  * **Every component binds theme slots, not ramp steps.**

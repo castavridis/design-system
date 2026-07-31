@@ -175,8 +175,12 @@ test('demo/index.html extracts every contract component the page renders', async
 	const out = extractPage(html)
 	const used = new Set(instancesOf(out).map((i) => i.component))
 
-	assert.deepEqual([...used].sort(), ['Badge', 'Button', 'Code', 'Gha', 'Header'])
-	assert.equal(used.size, components.length, 'every contract component appears on the page')
+	/*
+	 * Derived from the contract rather than listed, so it keeps meaning as
+	 * components land: the page is where a component earns its declaration, and a
+	 * contract entry nothing renders is one nobody can audit.
+	 */
+	assert.deepEqual([...used].sort(), components.map((c) => c.react).sort())
 	assert.equal(
 		instancesOf(out).every((i) => i.component && Object.keys(i.props).length >= 0),
 		true,
