@@ -37,6 +37,9 @@
   --text-faint: var(--dark-text-faint);
   --text-body: var(--dark-text-body);
   --text-strong: var(--dark-text-strong);
+  --action: var(--dark-action);
+  --action-ink: var(--dark-action-ink);
+  --action-hover: var(--dark-action-hover);
 
   color-scheme: dark;
 }
@@ -56,6 +59,9 @@
     --text-faint: var(--light-text-faint);
   --text-body: var(--light-text-body);
   --text-strong: var(--light-text-strong);
+  --action: var(--light-action);
+  --action-ink: var(--light-action-ink);
+  --action-hover: var(--light-action-hover);
 
     color-scheme: light;
   }
@@ -73,6 +79,9 @@
   --text-faint: var(--light-text-faint);
   --text-body: var(--light-text-body);
   --text-strong: var(--light-text-strong);
+  --action: var(--light-action);
+  --action-ink: var(--light-action-ink);
+  --action-hover: var(--light-action-hover);
   color-scheme: light;
 }
 
@@ -88,6 +97,9 @@
   --text-faint: var(--dark-text-faint);
   --text-body: var(--dark-text-body);
   --text-strong: var(--dark-text-strong);
+  --action: var(--dark-action);
+  --action-ink: var(--dark-action-ink);
+  --action-hover: var(--dark-action-hover);
   color-scheme: dark;
 }
 
@@ -197,16 +209,17 @@ a {
   background: var(--surface-raised);
 }
 
+/* Theme slots, so the filled action follows the mode. See `action` in the book. */
 .button-primary {
-  background: var(--brand-purple);
-  border-color: var(--brand-purple);
-  color: var(--ramp-purple-950);
+  background: var(--action);
+  border-color: var(--action);
+  color: var(--action-ink);
 }
 
 /* One step along the ramp, rather than a mix invented at the call site. */
 .button-primary:hover {
-  background: var(--ramp-purple-400);
-  border-color: var(--ramp-purple-400);
+  background: var(--action-hover);
+  border-color: var(--action-hover);
 }
 
 .button-quiet {

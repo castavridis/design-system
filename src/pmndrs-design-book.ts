@@ -210,3 +210,27 @@ for (const hue of ['purple', 'red', 'orange', 'yellow', 'green', 'teal', 'blue']
   dark.set(`accent-${hue}`, ref(`ramp.${hue}-300`))
   dark.set(`tint-${hue}`, ref(`ramp.${hue}-950`))
 }
+
+/*
+ * The filled action — its own slots, not the accent pair above.
+ *
+ * A filled button inverts the usual relationship: the accent is the *ground*
+ * and the ink sits on top of it, so it needs a fill dark enough to carry pale
+ * text in light mode and bright enough to read as an action in dark. The
+ * accent pair is built for the opposite case (accent *on* a tint), and reusing
+ * it would have made the dark button a pale lavender instead of brand purple.
+ *
+ * Dark keeps `brand.purple` as the fill. Light drops to `purple-700`, which is
+ * the lightest step whose pale ink clears AA (5.51:1) and which still reads as
+ * a filled control against a near-white page (5.41:1).
+ *
+ * The dark ink is `ramp.dark-950`, not `purple-950`. The tinted ink measured
+ * 4.47:1 — under AA by a hair, and a pre-existing miss rather than a new one.
+ * Near-black takes it to 6.20:1 and costs nothing visually at this size.
+ */
+light.set('action', ref('ramp.purple-700'))
+light.set('action-ink', ref('ramp.purple-50'))
+light.set('action-hover', ref('ramp.purple-800'))
+dark.set('action', ref('brand.purple'))
+dark.set('action-ink', ref('ramp.dark-950'))
+dark.set('action-hover', ref('ramp.purple-400'))

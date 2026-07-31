@@ -657,7 +657,7 @@
 			},
 			"contract": "pmndrs-button",
 			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill",
-			"boundTo": "theme/* (mode-aware)"
+			"boundTo": "theme/* including theme/action (mode-aware filled action)"
 		},
 		"Badge": {
 			"id": "103:16",
