@@ -89,9 +89,9 @@ every rate in a scene is rounded to a whole number of cycles per `loopSeconds`,
 so the last frame leads back into the first.
 
 ```bash
-pnpm og -- specs/r3f.json --gif                 # endless loop, 15fps
-pnpm og -- specs/r3f.json --gif --fps 10 --loops 3
-pnpm og -- specs/r3f.json --mp4                 # far smaller, if the target takes it
+pnpm og -- specs/react-three-fiber.json --gif                 # endless loop, 15fps
+pnpm og -- specs/react-three-fiber.json --gif --fps 10 --loops 3
+pnpm og -- specs/react-three-fiber.json --mp4                 # far smaller, if the target takes it
 ```
 
 Verified rather than asserted: a still at `t=0` and one at `t=loopSeconds` are
@@ -190,6 +190,28 @@ and the card comes out black.
   decode nothing for H.264. In the Studio, where your own browser has the
   codecs, a real `<video>` element is used instead.
 - `og/public/` and `og/out/` are generated and git-ignored.
+
+## If a render dies before it starts
+
+```
+Cannot find native binding … @rspack/binding-linux-arm64-gnu
+You installed esbuild for another platform than the one you're currently using
+```
+
+Both mean the same thing: pnpm linked a native binary for the wrong platform.
+It happens when the same `node_modules` or store is written from two places —
+a macOS host and a Linux container over a bind mount, or two worktrees
+installing at once. Neither is caused by anything in this package, and the fix
+is the same:
+
+```bash
+CI=true pnpm install --force
+```
+
+`--force` re-resolves the optional platform packages instead of trusting what
+is on disk; `CI=true` lets pnpm purge `node_modules` without a TTY to confirm
+at. Remotion's bundler is the first thing a render loads, so this surfaces as
+a crash before any card is touched.
 
 ## Licensing
 

@@ -1,7 +1,7 @@
 /**
  * The renderer.
  *
- *     tsx scripts/render.ts specs/r3f.json --out out/r3f.png
+ *     tsx scripts/render.ts specs/react-three-fiber.json --out out/r3f.png
  *     tsx scripts/render.ts specs/site.json --manifest
  *     tsx scripts/render.ts --title "Postprocessing" --accent teal --out out/pp.png
  *
@@ -21,7 +21,7 @@ import {
 } from '@remotion/renderer'
 import { copyFile, mkdir, readFile, rm } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
-import { existsSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, statSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
@@ -144,8 +144,34 @@ function applyOverrides(spec: OgSpec): OgSpec {
 	return next
 }
 
+/**
+ * The specs that ship with the package, for when someone names one that does
+ * not exist. A bare "no such file" is a dead end; the list is the answer.
+ */
+function knownSpecs(): string[] {
+	const directory = join(root, 'specs')
+
+	if (!existsSync(directory)) return []
+
+	try {
+		return readdirSync(directory)
+			.filter((entry) => entry.endsWith('.json'))
+			.map((entry) => `specs/${entry}`)
+			.sort()
+	} catch {
+		return []
+	}
+}
+
 async function readSpecFile(path: string): Promise<unknown> {
-	if (!existsSync(path)) fail(`No spec at ${path}`)
+	if (!existsSync(path)) {
+		const available = knownSpecs()
+
+		fail(
+			`No spec at ${path}` +
+				(available.length > 0 ? `\n  Available: ${available.join(', ')}` : ''),
+		)
+	}
 
 	try {
 		return JSON.parse(await readFile(path, 'utf8')) as unknown

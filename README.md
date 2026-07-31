@@ -43,9 +43,9 @@ Open Graph images are rendered from the same tokens — a live three.js scene, a
 video sampled at a timestamp, or an image. See [`og/README.md`](og/README.md).
 
 ```bash
-pnpm og -- specs/site.json --manifest   # render a set of cards
-pnpm og -- specs/r3f.json --gif         # one seamless loop, animated
-pnpm og:studio                          # live preview
+pnpm og -- specs/site.json --manifest           # render a set of cards
+pnpm og -- specs/react-three-fiber.json --gif   # one seamless loop, animated
+pnpm og:studio                                  # live preview
 ```
 
 ## Deploying
