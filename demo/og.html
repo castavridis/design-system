@@ -21,7 +21,11 @@
       property="og:description"
       content="Cards rendered from the design tokens: a live three.js scene, a video sampled at a timestamp, or an image."
     />
-    <meta property="og:image" content="/demo/og/og-endpoint.jpg" data-og-image />
+    <meta
+      property="og:image"
+      content="/demo/og/og-endpoint.jpg"
+      data-og-image
+    />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -57,7 +61,6 @@
         <a class="button button-primary" href="#gallery">See the cards</a>
         <a class="button" href="#spec">The spec</a>
         <a class="button" href="#meta">Use one</a>
-        <a class="button" href="/demo/sync.html">Figma sync</a>
       </div>
     </header>
 
@@ -94,7 +97,9 @@
                 </td>
               </tr>
               <tr>
-                <td><code>pnpm og -- --title "Postprocessing" --accent teal</code></td>
+                <td>
+                  <code>pnpm og -- --title "Postprocessing" --accent teal</code>
+                </td>
                 <td>
                   No file at all — enough flags to render a card from the shell.
                 </td>
@@ -565,8 +570,8 @@
         <p class="section-note">
           Plain JSON, so it travels from a file on disk into the browser without
           anything having to serialise a closure. Only <code>title</code> is
-          required; <code>src/lib/spec.ts</code> fills in the rest and is the one
-          place the defaults live.
+          required; <code>src/lib/spec.ts</code> fills in the rest and is the
+          one place the defaults live.
         </p>
 
         <div class="spec">
@@ -574,8 +579,8 @@
             <h4>A card, in full</h4>
             <p>
               An excerpt of <code>og/specs/demo.json</code> — the manifest that
-              renders this page. <code>outDir</code> is relative to the manifest;
-              a card without <code>out</code> is named from its title.
+              renders this page. <code>outDir</code> is relative to the
+              manifest; a card without <code>out</code> is named from its title.
             </p>
           </div>
           <div class="spec-stage spec-stage-flush">
@@ -584,7 +589,9 @@
                 <span class="doc-code-lang">json</span>
                 <span class="doc-code-meta">og/specs/demo.json</span>
               </figcaption>
-              <pre class="doc-code"><code><span class="ln"><span class="tok-punc">{</span></span>
+              <pre
+                class="doc-code"
+              ><code><span class="ln"><span class="tok-punc">{</span></span>
 <span class="ln">  <span class="tok-str">"outDir"</span><span class="tok-punc">:</span> <span class="tok-str">"../../demo/og"</span><span class="tok-punc">,</span></span>
 <span class="ln">  <span class="tok-str">"cards"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span></span>
 <span class="ln">    <span class="tok-punc">{</span></span>
@@ -652,7 +659,9 @@
                 <td><code>og</code></td>
                 <td>
                   <code>og</code> 1200×630 · <code>square</code> 1200×1200 ·
-                  <code>wide</code> 1920×1080. <code>width</code>/<code>height</code>
+                  <code>wide</code> 1920×1080. <code>width</code>/<code
+                    >height</code
+                  >
                   override it.
                 </td>
               </tr>
@@ -778,7 +787,9 @@
                 <span class="doc-code-lang">html</span>
                 <span class="doc-code-meta">demo/og.html</span>
               </figcaption>
-              <pre class="doc-code"><code><span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:title"</span> content=<span class="tok-str">"OG images — pmndrs design tokens"</span><span class="tok-punc">/&gt;</span></span>
+              <pre
+                class="doc-code"
+              ><code><span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:title"</span> content=<span class="tok-str">"OG images — pmndrs design tokens"</span><span class="tok-punc">/&gt;</span></span>
 <span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image"</span> content=<span class="tok-str">"https://example.com/demo/og/og-endpoint.jpg"</span><span class="tok-punc">/&gt;</span></span>
 <span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image:width"</span> content=<span class="tok-str">"1200"</span><span class="tok-punc">/&gt;</span></span>
 <span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image:height"</span> content=<span class="tok-str">"630"</span><span class="tok-punc">/&gt;</span></span>
@@ -786,7 +797,6 @@
             </figure>
           </div>
         </div>
-
       </section>
 
       <section id="rules">
@@ -800,7 +810,9 @@
 
         <div class="spec-stage-stack">
           <div class="doc-gha" data-keyword="important">
-            <p class="doc-gha-label">A scene must be a pure function of time and seed</p>
+            <p class="doc-gha-label">
+              A scene must be a pure function of time and seed
+            </p>
             <p>
               A still is produced by seeking straight to one frame, with no
               frames rendered before it. Anything that accumulates —
@@ -889,8 +901,7 @@
 
     <footer>
       <p>
-        Rendered from <code>dist/tokens.js</code> ·
-        <a href="/">brand book</a> ·
+        Rendered from <code>dist/tokens.js</code> · <a href="/">brand book</a> ·
         <a href="/demo/sync.html">figma sync</a>
       </p>
     </footer>
