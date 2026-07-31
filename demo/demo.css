@@ -19,9 +19,12 @@
  *
  * design-book's CSS renderer emits flat `--light-*` / `--dark-*` variables
  * rather than a media query — it has no concept of one mode being "active" —
- * so the switch is made here. Dark is the default because the brand book was
- * designed on a dark ground; `prefers-color-scheme` flips it, and an explicit
- * `data-theme` wins over both so a toggle can override the OS.
+ * so the switch is made here. Dark is the default, unconditionally: the brand
+ * book was designed on a dark ground, and the palette, the ramps and the
+ * gradients are all judged against it, so a visitor whose OS prefers light
+ * would otherwise meet the work in a mode it wasn't composed in. Light is a
+ * choice you make with the toggle — `data-theme="light"` — not one the OS
+ * makes for you, and the choice is remembered.
  */
 /*
  * Every slot the `light` and `dark` scopes define is aliased here — including
@@ -66,44 +69,6 @@
   --tint-blue: var(--dark-tint-blue);
 
   color-scheme: dark;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --page: var(--light-page);
-    --surface: var(--light-surface);
-    --surface-raised: var(--light-surface-raised);
-    --surface-sunken: var(--light-surface-sunken);
-
-    --line: var(--light-line);
-    --line-soft: var(--light-line-soft);
-
-    --text: var(--light-text);
-    --text-muted: var(--light-text-muted);
-    --text-faint: var(--light-text-faint);
-    --text-body: var(--light-text-body);
-    --text-strong: var(--light-text-strong);
-    --action: var(--light-action);
-    --action-ink: var(--light-action-ink);
-    --action-hover: var(--light-action-hover);
-
-    --accent-purple: var(--light-accent-purple);
-    --tint-purple: var(--light-tint-purple);
-    --accent-red: var(--light-accent-red);
-    --tint-red: var(--light-tint-red);
-    --accent-orange: var(--light-accent-orange);
-    --tint-orange: var(--light-tint-orange);
-    --accent-yellow: var(--light-accent-yellow);
-    --tint-yellow: var(--light-tint-yellow);
-    --accent-green: var(--light-accent-green);
-    --tint-green: var(--light-tint-green);
-    --accent-teal: var(--light-accent-teal);
-    --tint-teal: var(--light-tint-teal);
-    --accent-blue: var(--light-accent-blue);
-    --tint-blue: var(--light-tint-blue);
-
-    color-scheme: light;
-  }
 }
 
 :root[data-theme="light"] {
@@ -1636,17 +1601,6 @@ kbd {
   --tok-num: var(--brand-orange);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --tok-kw: var(--ramp-purple-700);
-    --tok-str: var(--ramp-green-700);
-    --tok-fn: var(--ramp-yellow-700);
-    --tok-type: var(--ramp-blue-700);
-    --tok-tag: var(--ramp-teal-700);
-    --tok-num: var(--ramp-orange-700);
-  }
-}
-
 :root[data-theme="light"] {
   --tok-kw: var(--ramp-purple-700);
   --tok-str: var(--ramp-green-700);
@@ -2247,8 +2201,7 @@ footer p {
   transition: background-color 120ms ease;
 }
 
-:root[data-theme="light"] .theme-toggle-icon,
-:root:not([data-theme]) .theme-toggle-icon {
+:root[data-theme="light"] .theme-toggle-icon {
   background: var(--brand-orange);
 }
 
