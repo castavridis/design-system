@@ -38,6 +38,7 @@
 		"watch": "tsx watch --include src --include scripts scripts/build.ts",
 		"figma:emit": "tsx scripts/build.ts && node scripts/emit-figma-tokens.mjs",
 		"figma:push": "tsx scripts/figma-push.ts",
+		"figma:page": "tsx scripts/figma-page.ts",
 		"figma:pull": "tsx scripts/figma-pull.ts",
 		"figma:audit": "tsx scripts/figma-audit.ts",
 		"test": "tsx --test scripts/figma/*.test.ts",

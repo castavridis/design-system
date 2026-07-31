@@ -17,6 +17,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
+import { flag, has } from './figma/args.js'
 import { nextBase, reconcile, summarise, type Entry, type Policy, type ValueMap } from './figma/reconcile.js'
 import { readState, reportPath, syncId, writeState } from './figma/state.js'
 import { hexToOklchString } from './figma/oklch.js'
@@ -26,11 +27,6 @@ interface Snapshot {
 	variables: ValueMap
 }
 
-const flag = (name: string) => {
-	const hit = process.argv.find((a) => a.startsWith(`--${name}=`))
-	return hit ? hit.slice(name.length + 3) : undefined
-}
-const has = (name: string) => process.argv.includes(`--${name}`)
 
 /** Resolved hex per token, following aliases — the same view the push writes. */
 async function oursFromPlan(): Promise<ValueMap> {

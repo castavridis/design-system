@@ -638,7 +638,7 @@
 				"CAUTION"
 			],
 			"contract": "pmndrs-gha",
-			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)",
+			"titleProp": "direct text override (not a component property — a set-level TEXT property has one default and cannot vary per keyword)",
 			"boundTo": "theme/* (mode-aware)"
 		},
 		"Button": {
@@ -656,7 +656,7 @@
 				]
 			},
 			"contract": "pmndrs-button",
-			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill",
+			"note": "disabled is a variant axis, not a BOOLEAN property — a boolean can toggle visibility but cannot repaint a fill",
 			"boundTo": "theme/* including theme/action (mode-aware filled action)"
 		},
 		"Badge": {
@@ -674,7 +674,7 @@
 				]
 			},
 			"contract": "pmndrs-badge",
-			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale",
+			"note": "pill radius and em-based padding are intentionally literal — neither is a step on a scale",
 			"boundTo": "theme/* (mode-aware)"
 		},
 		"Code": {
@@ -696,6 +696,377 @@
 			"variantProps": {},
 			"contract": "pmndrs-header",
 			"boundTo": "theme/* (mode-aware); brand gradient mark is fixed: by design"
+		},
+		"Nav": {
+			"id": "144:364",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-nav",
+			"note": "no variant axis: open/closed and current-page are per-item states, and a set would need 2^n members",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Search": {
+			"id": "144:392",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-search",
+			"note": "the matched term is a chip, not a range fill — Figma can range-colour text but cannot range-fill it",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Toc": {
+			"id": "145:346",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-toc",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Intro": {
+			"id": "153:613",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-intro",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Keypoints": {
+			"id": "153:628",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-keypoints",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Details": {
+			"id": "153:637",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-details",
+			"note": "shown expanded: `open` is a boolean prop, and a boolean cannot repaint — the collapsed state is the same component with its body hidden",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Entries": {
+			"id": "153:672",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-entries",
+			"note": "the thumbnail is a gradient with bound stops, fixed: because a screenshot does not follow the mode",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Prose": {
+			"id": "154:691",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-prose",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Blockquote": {
+			"id": "154:694",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-blockquote",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Table": {
+			"id": "154:731",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-table",
+			"note": "cells are fixed-width columns: Figma auto-layout has no colspan, and a table is the one place where the grid is the component",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Hint": {
+			"id": "154:734",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-hint",
+			"note": "deprecated — kept so a retired component still looks deliberate",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Img": {
+			"id": "155:534",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-img",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Sandpack": {
+			"id": "155:561",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-sandpack",
+			"note": "the preview is fixed: artwork — a picture of a rendered scene, which does not follow the mode",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Codesandbox": {
+			"id": "155:567",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-codesandbox",
+			"note": "thumbnail is a bound three-stop gradient, fixed: for the same reason",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Grid": {
+			"id": "155:588",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-grid",
+			"note": "deprecated: the odd item out leaves the last cell short, which was half the reason it went",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Mermaid": {
+			"id": "157:1200",
+			"type": "COMPONENT_SET",
+			"variantProps": {
+				"kind": [
+					"flowchart",
+					"sequence"
+				]
+			},
+			"contract": "pmndrs-mermaid",
+			"note": "the kind is read from the diagram’s aria-label, not restated in an attribute",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Contributors": {
+			"id": "157:1218",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-contributors",
+			"note": "8 avatars cycling the seven accent ramps at 400 with their 950 for the initials; fixed: because an avatar stands in for a photograph",
+			"boundTo": "theme/surface for the ring; ramp/* for the avatars, declared fixed:"
+		},
+		"Backers": {
+			"id": "157:1230",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-backers",
+			"note": "5 avatars cycling the seven accent ramps at 400 with their 950 for the initials; fixed: because an avatar stands in for a photograph",
+			"boundTo": "theme/surface for the ring; ramp/* for the avatars, declared fixed:"
+		}
+	},
+	"pages": {
+		"demo/index.html": {
+			"pageId": "70:2622",
+			"frameId": "146:5090",
+			"instances": [
+				{
+					"path": "hero > hero-actions > Button",
+					"component": "Button",
+					"id": "139:3626"
+				},
+				{
+					"path": "hero > hero-actions > Button#2",
+					"component": "Button",
+					"id": "139:3627"
+				},
+				{
+					"path": "hero > hero-actions > Button#3",
+					"component": "Button",
+					"id": "139:3628"
+				},
+				{
+					"path": "hero > hero-actions > Button#4",
+					"component": "Button",
+					"id": "139:3629"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Header > stage > Header",
+					"component": "Header",
+					"id": "139:3843"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Nav > stage > Nav",
+					"component": "Nav",
+					"id": "149:331"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Search > stage > Search",
+					"component": "Search",
+					"id": "149:364"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Toc > stage > Toc",
+					"component": "Toc",
+					"id": "149:393"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Intro > stage > Intro",
+					"component": "Intro",
+					"id": "153:673"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Keypoints > stage > Keypoints",
+					"component": "Keypoints",
+					"id": "153:676"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Details / Summary > stage > Details",
+					"component": "Details",
+					"id": "153:690"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Entries > stage > Entries",
+					"component": "Entries",
+					"id": "153:698"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:Prose > stage > Prose",
+					"component": "Prose",
+					"id": "154:761"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:blockquote > stage > Blockquote",
+					"component": "Blockquote",
+					"id": "154:787"
+				},
+				{
+					"path": "section#components > waterfall > group:Article furniture > spec:table > stage > Table",
+					"component": "Table",
+					"id": "154:789"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha",
+					"component": "Gha",
+					"id": "139:3933"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#2",
+					"component": "Gha",
+					"id": "139:3934"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#3",
+					"component": "Gha",
+					"id": "139:3935"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#4",
+					"component": "Gha",
+					"id": "139:3936"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#5",
+					"component": "Gha",
+					"id": "139:3937"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha[title] > stage > Gha",
+					"component": "Gha",
+					"id": "139:3943"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Hint > stage > Hint",
+					"component": "Hint",
+					"id": "154:825"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code > stage > Code",
+					"component": "Code",
+					"id": "139:3961"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code[showLineNumbers=X] > stage > Code",
+					"component": "Code",
+					"id": "139:3967"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code[diff] > stage > Code",
+					"component": "Code",
+					"id": "139:3973"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Sandpack > stage > Sandpack",
+					"component": "Sandpack",
+					"id": "156:534"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Codesandbox > stage > Codesandbox",
+					"component": "Codesandbox",
+					"id": "156:560"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Img > stage > Img",
+					"component": "Img",
+					"id": "156:529"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Mermaid — flowchart > stage > Mermaid",
+					"component": "Mermaid",
+					"id": "159:1167"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Mermaid — sequence > stage > Mermaid",
+					"component": "Mermaid",
+					"id": "159:1187"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Grid > stage > Grid",
+					"component": "Grid",
+					"id": "156:565"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Contributors > stage > Contributors",
+					"component": "Contributors",
+					"id": "159:1217"
+				},
+				{
+					"path": "section#components > waterfall > group:Media & data > spec:Backers > stage > Backers",
+					"component": "Backers",
+					"id": "159:1234"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button",
+					"component": "Button",
+					"id": "139:4050"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#2",
+					"component": "Button",
+					"id": "139:4051"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#3",
+					"component": "Button",
+					"id": "139:4052"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#4",
+					"component": "Button",
+					"id": "139:4053"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge",
+					"component": "Badge",
+					"id": "139:4060"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#2",
+					"component": "Badge",
+					"id": "139:4061"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#3",
+					"component": "Badge",
+					"id": "139:4062"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#4",
+					"component": "Badge",
+					"id": "139:4063"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#5",
+					"component": "Badge",
+					"id": "139:4064"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#6",
+					"component": "Badge",
+					"id": "139:4065"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#7",
+					"component": "Badge",
+					"id": "139:4066"
+				}
+			]
 		}
 	}
 }

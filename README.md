@@ -19,6 +19,9 @@ dependency only.
 | `scripts/serve.ts` | Dependency-free static server for the demo |
 | `demo/` | Landing page that consumes the build output |
 | `demo/og/` | Rendered OG cards, checked in — the gallery at `/demo/og.html` |
+| `src/components/contract.ts` | Component props and their per-variant token bindings |
+| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page |
+| `figma/sync.json` | Committed sync state: variable, component and page-instance ids |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
 | `og/` | [OG image generator](og/README.md) — a separate workspace package |
@@ -112,6 +115,62 @@ are checked into `demo/og/` rather than rendered during deployment. Rendering
 needs a headless browser and Remotion, neither of which belongs in a static
 build — and cards are deterministic, so a committed render is the same file the
 build would have produced.
+
+## The page in Figma
+
+`demo/index.html` is part of the Figma round trip, not just its output. `pnpm
+figma:page` reads the page into a spec and generates the Plugin API script that
+assembles it — and where the page renders a component the contract declares, the
+Figma page places an **instance of that component set**:
+
+```bash
+pnpm figma:page              # dist/figma-page.json + the script that builds it
+pnpm figma:page --snapshot   # also the read-back script the audit consumes
+pnpm figma:page --record <result.json>
+pnpm figma:audit <snapshot.json>   # components *and* page composition
+pnpm figma:audit <snapshot.json> --only=Nav,Search,Toc
+```
+
+Components land a few at a time, so `--only` scopes the component half to the
+ones named — a snapshot of three would otherwise report the other five as
+missing from Figma, which is true of the snapshot and false of the file.
+
+Where the frame lives is Figma's decision, not the script's. The push resolves it
+by the node id recorded in `figma/sync.json` first, so dragging it to another
+page is a move the next push follows rather than a second copy it makes — the
+same rule the token push uses for a renamed variable. Only if that id is gone
+does it fall back to the recorded page, then to the page the components are on,
+then to the frame's own name. It never creates a page. Which theme mode the
+frame is *viewed* in is carried over for the same reason — the tokens define
+both modes, and the code has no opinion about which one you are looking at.
+
+A block becomes an instance in one of two ways. A `<pmndrs-gha>` custom element
+*is* the component — the demo already renders it from the contract. A
+`data-component="Code"` marker names a contract component the page renders as
+plain markup instead, because there is no custom element for it. Either way the
+props are **read back out of the markup** — a code block's language from its
+caption, its numbering from `counter-reset`, its highlight range from which lines
+carry `is-hl` — so a Figma instance cannot claim a variant the page isn't
+rendering. A variant the contract doesn't declare stops the push.
+
+Everything the contract doesn't declare is recorded as what it is. The swatch and
+ramp grids are rebuilt from the `brand` and `ramp` variables; anything else
+becomes a labelled **stand-in**. That is deliberate: a hand-drawn Figma design
+with no owner in code has nothing to audit it against. A stand-in becomes an
+instance the moment its component is declared and built, which is what emptied
+the waterfall: all 23 of its components are now instances, and the four
+remaining stand-ins are the page's own furniture — the space slider and the
+gradient generator's controls — which are demo widgets, not doc components.
+
+The frame is **rebuilt in place**, never replaced. The obvious implementation
+deletes it and appends a new one, and it is wrong: someone may have turned the
+frame into a component — ours is one — and deleting it would detach every
+instance of it.
+
+The audit compares composition rather than typography. It reports a block that
+moved or vanished, an instance of the wrong component, a variant swapped in
+Figma, and a **detached instance** — the one that looks right until the component
+changes and one copy quietly doesn't.
 
 ## Colour notation
 

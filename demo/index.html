@@ -35,6 +35,13 @@
         <code>dist/tokens.css</code> — the same artifact a React, Svelte, Vue or
         vanilla app would import.
       </p>
+      <!--
+        `data-component` marks a block that *is* a contract component but is
+        rendered as plain markup — here because these are links, and
+        <pmndrs-button> renders a <button>. The marker names the component;
+        the variant is still read from the class, so there is one declaration.
+        scripts/figma/page.ts turns each one into a Figma instance.
+      -->
       <div class="hero-actions">
         <a class="button button-primary" href="#palette">See the palette</a>
         <a class="button" href="#ramps">Ramps</a>
@@ -59,11 +66,11 @@
         <h2>Ramps</h2>
         <p class="section-note">
           Every brand colour expands into an eleven-step tonal scale —
-          <code>50</code> through <code>950</code> — including the two
-          neutrals. Steps are placed by <em>perceived</em> lightness rather
-          than mixed toward white and black, so <code>purple-300</code> and
-          <code>teal-300</code> read as the same brightness. The ringed step
-          is the brand colour itself, kept exactly, at whichever step it
+          <code>50</code> through <code>950</code> — including the two neutrals.
+          Steps are placed by <em>perceived</em> lightness rather than mixed
+          toward white and black, so <code>purple-300</code> and
+          <code>teal-300</code> read as the same brightness. The ringed step is
+          the brand colour itself, kept exactly, at whichever step it
           perceptually belongs to.
         </p>
 
@@ -80,10 +87,10 @@
       <section id="gradient">
         <h2>Gradient generator</h2>
         <p class="section-note">
-          Three stops at fixed positions — 16%, 50% and 84%. Any brand colour
-          is available except <code>dark</code> and <code>light</code>, and no
-          two adjacent stops may be the same, so the options matching a
-          neighbour are disabled below rather than silently rejected.
+          Three stops at fixed positions — 16%, 50% and 84%. Any brand colour is
+          available except <code>dark</code> and <code>light</code>, and no two
+          adjacent stops may be the same, so the options matching a neighbour
+          are disabled below rather than silently rejected.
         </p>
 
         <div class="gradient-preview" data-gradient-preview></div>
@@ -216,7 +223,9 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Masthead: wordmark, section links, search affordance.</p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <div class="doc-header">
+              <!-- The contract's Header, rendered as markup: one instance, no
+                   variants, so a custom element would only add a script. -->
+              <div class="doc-header" data-component="Header">
                 <a class="doc-brand" href="#components">
                   <span class="doc-brand-mark" aria-hidden="true"></span>
                   <span class="doc-brand-name">pmndrs<span>/docs</span></span>
@@ -243,7 +252,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <nav class="doc-nav">
+              <nav class="doc-nav" data-component="Nav">
                 <details class="doc-nav-cat" open>
                   <summary>Getting started</summary>
                   <ul>
@@ -281,7 +290,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Modal with matched-term highlighting and a breadcrumb path.</p>
             </header>
             <div class="spec-stage">
-              <div class="doc-search">
+              <div class="doc-search" data-component="Search">
                 <div class="doc-search-field">
                   <span class="doc-search-icon" aria-hidden="true"></span>
                   <span class="doc-search-query"
@@ -291,9 +300,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
                 </div>
                 <ul class="doc-search-results">
                   <li class="is-active">
-                    <span class="doc-search-title"
-                      ><mark>Sandpack</mark></span
-                    >
+                    <span class="doc-search-title"><mark>Sandpack</mark></span>
                     <span class="doc-search-path">authoring / sandpack</span>
                     <span class="doc-search-excerpt"
                       >Interactive code sandboxes powered by CodeSandbox.</span
@@ -331,7 +338,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <nav class="doc-toc">
+              <nav class="doc-toc" data-component="Toc">
                 <p class="doc-toc-label">On this page</p>
                 <ul>
                   <li><a href="#components">Configuration</a></li>
@@ -359,10 +366,10 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-intro">
+              <div class="doc-intro" data-component="Intro">
                 <p>
-                  This is an intro. Here you can write a long description of
-                  the article, longer than the frontmatter
+                  This is an intro. Here you can write a long description of the
+                  article, longer than the frontmatter
                   <code>description</code>, eventually with
                   <a href="#components">links</a>, lists, etc.
                 </p>
@@ -380,7 +387,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <aside class="doc-keypoints">
+              <aside class="doc-keypoints" data-component="Keypoints">
                 <p class="doc-keypoints-title">What you'll learn</p>
                 <ul>
                   <li>How tokens are authored once and rendered many ways</li>
@@ -397,7 +404,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Collapsible aside for detail that would break the flow.</p>
             </header>
             <div class="spec-stage">
-              <details class="doc-details">
+              <details class="doc-details" data-component="Details">
                 <summary>Replaying the visual tests locally</summary>
                 <div class="doc-details-body">
                   <p>
@@ -416,12 +423,12 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
             <header class="spec-head">
               <h4><code>Entries</code></h4>
               <p>
-                Directory listing of every page, grouped by the first segment
-                of the slug.
+                Directory listing of every page, grouped by the first segment of
+                the slug.
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-entries">
+              <div class="doc-entries" data-component="Entries">
                 <section>
                   <h5>getting-started</h5>
                   <ul>
@@ -463,7 +470,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-prose">
+              <div class="doc-prose" data-component="Prose">
                 <h2>Configuration</h2>
                 <p>
                   Every option is an environment variable. Pass
@@ -498,12 +505,11 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Quoted passage, set apart by a rule rather than a box.</p>
             </header>
             <div class="spec-stage">
-              <div class="doc-prose">
+              <div class="doc-prose" data-component="Blockquote">
                 <blockquote>
                   <p>
                     Poimandres is a collective of developers building open
-                    source tools for the web — and documenting them in the
-                    open.
+                    source tools for the web — and documenting them in the open.
                   </p>
                 </blockquote>
               </div>
@@ -516,7 +522,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Scrolls horizontally rather than squashing its columns.</p>
             </header>
             <div class="spec-stage">
-              <div class="doc-table-wrap">
+              <div class="doc-table-wrap" data-component="Table">
                 <table class="doc-table">
                   <thead>
                     <tr>
@@ -560,20 +566,33 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <h4><code>Gha</code></h4>
               <p>
                 GitHub-style alerts. Five keywords, each mapped to one accent
-                ramp — tint from <code>950</code>, rule and icon from the
-                brand step.
+                ramp — tint from <code>950</code>, rule and icon from the brand
+                step.
               </p>
             </header>
             <div class="spec-stage spec-stage-stack">
-              <pmndrs-gha keyword="NOTE">Highlights information that users should take into account, even when skimming.</pmndrs-gha>
+              <pmndrs-gha keyword="NOTE"
+                >Highlights information that users should take into account,
+                even when skimming.</pmndrs-gha
+              >
 
-              <pmndrs-gha keyword="TIP">Optional information to help a user be more successful.</pmndrs-gha>
+              <pmndrs-gha keyword="TIP"
+                >Optional information to help a user be more
+                successful.</pmndrs-gha
+              >
 
-              <pmndrs-gha keyword="IMPORTANT">Crucial information necessary for users to succeed.</pmndrs-gha>
+              <pmndrs-gha keyword="IMPORTANT"
+                >Crucial information necessary for users to succeed.</pmndrs-gha
+              >
 
-              <pmndrs-gha keyword="WARNING">Critical content demanding immediate user attention due to potential risks.</pmndrs-gha>
+              <pmndrs-gha keyword="WARNING"
+                >Critical content demanding immediate user attention due to
+                potential risks.</pmndrs-gha
+              >
 
-              <pmndrs-gha keyword="CAUTION">Negative potential consequences of an action.</pmndrs-gha>
+              <pmndrs-gha keyword="CAUTION"
+                >Negative potential consequences of an action.</pmndrs-gha
+              >
             </div>
           </article>
 
@@ -586,20 +605,24 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <pmndrs-gha keyword="TIP" title="MCP-server">Browse these docs from your MCP-compatible client.</pmndrs-gha>
+              <pmndrs-gha keyword="TIP" title="MCP-server"
+                >Browse these docs from your MCP-compatible client.</pmndrs-gha
+              >
             </div>
           </article>
 
           <article class="spec">
             <header class="spec-head">
-              <h4><code>Hint</code> <span class="spec-tag">deprecated</span></h4>
+              <h4>
+                <code>Hint</code> <span class="spec-tag">deprecated</span>
+              </h4>
               <p>
                 Superseded by <code>Gha[keyword="NOTE"]</code>. Kept here
                 because a deprecated component still has to look deliberate.
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-hint">
+              <div class="doc-hint" data-component="Hint">
                 <p>I'm a deprecated hint. Use <code>Gha</code> instead.</p>
               </div>
             </div>
@@ -617,14 +640,19 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <!-- Also the contract's Code. Its props are read back out of
+                   this markup — language from the caption, numbering from the
+                   class, the highlight range from which lines carry is-hl. -->
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">tsx</span>
                   <button type="button" class="doc-code-copy" data-copy>
                     Copy
                   </button>
                 </figcaption>
-                <pre class="doc-code doc-code-numbered"><code><span class="ln is-hl"><span class="tok-kw">type</span> <span class="tok-type">Props</span> = {who: <span class="tok-type">string</span>}</span>
+                <pre
+                  class="doc-code doc-code-numbered"
+                ><code><span class="ln is-hl"><span class="tok-kw">type</span> <span class="tok-type">Props</span> = {who: <span class="tok-type">string</span>}</span>
 <span class="ln"></span>
 <span class="ln"><span class="tok-kw">function</span> <span class="tok-fn">Hi</span>({who}: <span class="tok-type">Props</span>) {</span>
 <span class="ln is-hl">  <span class="tok-kw">return</span> (</span>
@@ -639,12 +667,11 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
             <header class="spec-head">
               <h4><code>Code[showLineNumbers=X]</code></h4>
               <p>
-                Numbering can start anywhere, for quoting the middle of a
-                file.
+                Numbering can start anywhere, for quoting the middle of a file.
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">tsx</span>
                   <span class="doc-code-meta">showLineNumbers=150</span>
@@ -667,16 +694,18 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
             <header class="spec-head">
               <h4><code>Code[diff]</code></h4>
               <p>
-                Additions and removals get the green and red ramps rather than
-                a second palette.
+                Additions and removals get the green and red ramps rather than a
+                second palette.
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">diff</span>
                 </figcaption>
-                <pre class="doc-code"><code><span class="ln is-meta">diff --git a/example.txt b/example.txt</span>
+                <pre
+                  class="doc-code"
+                ><code><span class="ln is-meta">diff --git a/example.txt b/example.txt</span>
 <span class="ln is-meta">index 8c3317a..47ea956 100644</span>
 <span class="ln is-meta">--- a/example.txt</span>
 <span class="ln is-meta">+++ b/example.txt</span>
@@ -696,13 +725,16 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <h4><code>Sandpack</code></h4>
               <p>
                 Editable sandbox: file tabs, source, live preview. The preview
-                stands in for the drei <code>Cloud</code> example the docs
-                ship.
+                stands in for the drei <code>Cloud</code> example the docs ship.
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <div class="doc-sandpack">
-                <div class="doc-sandpack-tabs" role="tablist" data-sandpack-tabs>
+              <div class="doc-sandpack" data-component="Sandpack">
+                <div
+                  class="doc-sandpack-tabs"
+                  role="tablist"
+                  data-sandpack-tabs
+                >
                   <button
                     type="button"
                     role="tab"
@@ -722,11 +754,20 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
                   <span class="doc-sandpack-template">react-ts</span>
                 </div>
                 <div class="doc-sandpack-body">
-                  <pre id="sp-styles" role="tabpanel" hidden class="doc-code doc-code-numbered"><code><span class="ln"><span class="tok-tag">html</span>,<span class="tok-tag">body</span>,<span class="tok-punc">#</span><span class="tok-tag">root</span> {</span>
+                  <pre
+                    id="sp-styles"
+                    role="tabpanel"
+                    hidden
+                    class="doc-code doc-code-numbered"
+                  ><code><span class="ln"><span class="tok-tag">html</span>,<span class="tok-tag">body</span>,<span class="tok-punc">#</span><span class="tok-tag">root</span> {</span>
 <span class="ln">  <span class="tok-kw">height</span>: <span class="tok-num">100%</span>;</span>
 <span class="ln">  <span class="tok-kw">margin</span>: <span class="tok-str">unset</span>;</span>
 <span class="ln">}</span></code></pre>
-                  <pre id="sp-app" role="tabpanel" class="doc-code doc-code-numbered"><code><span class="ln"><span class="tok-kw">import</span> { Canvas } <span class="tok-kw">from</span> <span class="tok-str">'@react-three/fiber'</span></span>
+                  <pre
+                    id="sp-app"
+                    role="tabpanel"
+                    class="doc-code doc-code-numbered"
+                  ><code><span class="ln"><span class="tok-kw">import</span> { Canvas } <span class="tok-kw">from</span> <span class="tok-str">'@react-three/fiber'</span></span>
 <span class="ln"><span class="tok-kw">import</span> { Cloud, CameraControls } <span class="tok-kw">from</span> <span class="tok-str">'@react-three/drei'</span></span>
 <span class="ln"></span>
 <span class="ln"><span class="tok-kw">export default function</span> <span class="tok-fn">App</span>() {</span>
@@ -759,7 +800,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <figure class="doc-csb">
+              <figure class="doc-csb" data-component="Codesandbox">
                 <div class="doc-csb-thumb" aria-hidden="true"></div>
                 <figcaption>
                   <span class="doc-csb-title">Cell fracture</span>
@@ -777,12 +818,12 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <h4><code>Img</code></h4>
               <p>
                 Relative images get intrinsic
-                <code>width</code>/<code>height</code> written in at build
-                time, so nothing shifts while they load.
+                <code>width</code>/<code>height</code> written in at build time,
+                so nothing shifts while they load.
               </p>
             </header>
             <div class="spec-stage">
-              <figure class="doc-img">
+              <figure class="doc-img" data-component="Img">
                 <div class="doc-img-frame" aria-hidden="true">
                   <span class="doc-img-ratio">1200 × 630</span>
                 </div>
@@ -800,7 +841,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Text-based diagrams that follow the active theme.</p>
             </header>
             <div class="spec-stage">
-              <figure class="doc-mermaid">
+              <figure class="doc-mermaid" data-component="Mermaid">
                 <svg
                   viewBox="0 0 320 252"
                   role="img"
@@ -865,7 +906,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Participants, lifelines, and solid or dashed messages.</p>
             </header>
             <div class="spec-stage">
-              <figure class="doc-mermaid">
+              <figure class="doc-mermaid" data-component="Mermaid">
                 <svg
                   viewBox="0 0 320 186"
                   role="img"
@@ -914,7 +955,9 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
 
           <article class="spec">
             <header class="spec-head">
-              <h4><code>Grid</code> <span class="spec-tag">deprecated</span></h4>
+              <h4>
+                <code>Grid</code> <span class="spec-tag">deprecated</span>
+              </h4>
               <p>
                 Fixed-column list layout, superseded by utility classes. An odd
                 item count leaves the last cell short — which was half the
@@ -922,7 +965,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <ul class="doc-grid" data-cols="2">
+              <ul class="doc-grid" data-cols="2" data-component="Grid">
                 <li>A</li>
                 <li>B</li>
                 <li>C</li>
@@ -945,7 +988,11 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-people" data-people="contributors"></div>
+              <div
+                class="doc-people"
+                data-people="contributors"
+                data-component="Contributors"
+              ></div>
             </div>
           </article>
 
@@ -958,7 +1005,11 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage">
-              <div class="doc-people doc-people-lg" data-people="backers"></div>
+              <div
+                class="doc-people doc-people-lg"
+                data-people="backers"
+                data-component="Backers"
+              ></div>
             </div>
           </article>
 
@@ -969,8 +1020,8 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
             <header class="spec-head">
               <h4>Buttons</h4>
               <p>
-                Primary, secondary and quiet, plus the disabled state — hue
-                from the brand step, hover from one step along its ramp.
+                Primary, secondary and quiet, plus the disabled state — hue from
+                the brand step, hover from one step along its ramp.
               </p>
             </header>
             <div class="spec-stage">
@@ -978,7 +1029,9 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
                 <pmndrs-button variant="default">Get started</pmndrs-button>
                 <pmndrs-button variant="secondary">Read the docs</pmndrs-button>
                 <pmndrs-button variant="ghost">Edit this page</pmndrs-button>
-                <pmndrs-button variant="secondary" disabled>Unavailable</pmndrs-button>
+                <pmndrs-button variant="secondary" disabled
+                  >Unavailable</pmndrs-button
+                >
               </div>
             </div>
           </article>

@@ -18,6 +18,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 
+import { flag } from './figma/args.js'
 import { nextBase, type ValueMap } from './figma/reconcile.js'
 import { readState, writeState, syncId } from './figma/state.js'
 
@@ -35,10 +36,6 @@ interface PlanToken {
 const PLAN_PATH = resolve(process.cwd(), 'dist', 'figma-tokens.json')
 const OUT_PATH = resolve(process.cwd(), 'dist', 'figma-push.js')
 
-function flag(name: string) {
-	const hit = process.argv.find((a) => a.startsWith(`--${name}=`))
-	return hit ? hit.slice(name.length + 3) : undefined
-}
 
 /**
  * Emits the program that runs *inside* Figma.

@@ -253,7 +253,492 @@ const header: ComponentSpec = {
 	},
 }
 
-export const components: readonly ComponentSpec[] = [gha, button, badge, code, header]
+/**
+ * Sidebar navigation, grouped by category.
+ *
+ * No variant property. The states that look like variants — a category open or
+ * closed, a page current or not — belong to *items* inside one instance, and a
+ * variant axis can only describe the whole component. Modelling "open" as a
+ * variant would mean a set of 2^n members for n categories, which is how a
+ * component set stops being usable at the third category.
+ *
+ * The current item is the only place chrome takes an accent: teal, matching the
+ * Header's active-link rule, so "you are here" reads the same in the masthead
+ * and in the sidebar.
+ */
+const nav: ComponentSpec = {
+	name: 'pmndrs-nav',
+	react: 'Nav',
+	source: 'pmndrs-docs',
+	description: 'Sidebar, grouped by category. Categories collapse; the current page is marked.',
+	props: {
+		active: {
+			type: 'string',
+			description: 'Which page reads as current.',
+		},
+	},
+	bindings: {
+		'*': {
+			category: 'text',
+			chevron: 'text-faint',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'surface-raised',
+			currentSurface: 'tint-teal',
+			currentInk: 'accent-teal',
+		},
+	},
+}
+
+/**
+ * The search modal.
+ *
+ * Two accents doing different jobs, which is why they are separate slots rather
+ * than one `accent`: teal marks the selected result, the way it marks the
+ * current page everywhere else, and yellow highlights the matched term. A
+ * matched term is not a selection, and collapsing them would make the modal
+ * argue with itself the moment both appear on one row.
+ */
+const search: ComponentSpec = {
+	name: 'pmndrs-search',
+	react: 'Search',
+	source: 'pmndrs-docs',
+	description: 'Modal with matched-term highlighting and a breadcrumb path.',
+	props: {
+		query: {
+			type: 'string',
+			description: 'The typed query. Shown in the field, and what the results are matched against.',
+		},
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line',
+			divider: 'line-soft',
+			icon: 'text-faint',
+			query: 'text',
+			caret: 'accent-teal',
+			kbd: 'text-muted',
+			kbdSurface: 'surface',
+			kbdBorder: 'line',
+			activeSurface: 'surface',
+			activeRule: 'accent-teal',
+			title: 'text',
+			markTint: 'tint-yellow',
+			markInk: 'accent-yellow',
+			path: 'text-muted',
+			excerpt: 'text-muted',
+			/* The query and the breadcrumb are code, and set like it. */
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Table of contents.
+ *
+ * The same "you are here" teal as `Nav`, but as a rule on the margin rather
+ * than a filled row: the ToC sits beside body copy, and a filled highlight
+ * there competes with the text it is indexing.
+ */
+const toc: ComponentSpec = {
+	name: 'pmndrs-toc',
+	react: 'Toc',
+	source: 'pmndrs-docs',
+	description: 'Table of contents built from the headings, with the section in view marked.',
+	props: {
+		active: {
+			type: 'string',
+			description: 'Which heading is in view.',
+		},
+	},
+	bindings: {
+		'*': {
+			label: 'text-muted',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'text',
+			currentInk: 'accent-teal',
+			currentRule: 'accent-teal',
+			/* The "On this page" label is set in mono, like every other eyebrow. */
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * The lede under the frontmatter. A rule and a heavier body, nothing else.
+ *
+ * The rule was `brand.purple` and is now `accent-purple`, which is a step
+ * lighter in dark and legible in light. The old value was the brand colour
+ * itself, and a brand colour is the wrong thing for decoration: it cannot move
+ * with the mode, because moving is exactly what it must not do elsewhere.
+ */
+const intro: ComponentSpec = {
+	name: 'pmndrs-intro',
+	react: 'Intro',
+	source: 'pmndrs-docs',
+	description: 'Prominent lede, directly under the frontmatter. Takes rich markdown.',
+	props: {},
+	bindings: {
+		'*': { rule: 'accent-purple', body: 'text-strong' },
+	},
+}
+
+/**
+ * Key takeaways. The `Gha` recipe — tint from one ramp, rule and label from the
+ * same ramp's accent — applied to teal, because it is an aside rather than an
+ * alert and teal is what this book uses for "pay attention" without alarm.
+ */
+const keypoints: ComponentSpec = {
+	name: 'pmndrs-keypoints',
+	react: 'Keypoints',
+	source: 'pmndrs-docs',
+	description: 'Key takeaways as a visually distinct list — one bullet per KeypointsItem.',
+	props: {
+		title: {
+			type: 'string',
+			default: "What you'll learn",
+			description: 'Heading above the list.',
+		},
+	},
+	bindings: {
+		'*': {
+			surface: 'tint-teal',
+			border: 'accent-teal',
+			title: 'accent-teal',
+			bullet: 'accent-teal',
+			body: 'text-strong',
+			titleFont: 'fixed:fonts.serif',
+		},
+	},
+}
+
+/** Collapsible aside. The marker is the only accent it gets. */
+const details: ComponentSpec = {
+	name: 'pmndrs-details',
+	react: 'Details',
+	source: 'pmndrs-docs',
+	description: 'Collapsible aside for detail that would break the flow.',
+	props: {
+		summary: { type: 'string', description: 'The always-visible line.' },
+		open: { type: 'boolean', default: false, description: 'Whether it starts expanded.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line-soft',
+			marker: 'accent-orange',
+			summary: 'text',
+			body: 'text-muted',
+		},
+	},
+}
+
+/**
+ * The directory listing. Its thumbnail is `fixed:` on purpose: it stands in for
+ * a screenshot, and a picture does not change colour with the OS setting.
+ */
+const entries: ComponentSpec = {
+	name: 'pmndrs-entries',
+	react: 'Entries',
+	source: 'pmndrs-docs',
+	description: 'Directory listing of every page, grouped by the first segment of the slug.',
+	props: {},
+	bindings: {
+		'*': {
+			heading: 'text-muted',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'accent-teal',
+			headingFont: 'fixed:fonts.mono',
+			thumbFrom: 'fixed:ramp.blue-400',
+			thumbTo: 'fixed:ramp.purple-500',
+		},
+	},
+}
+
+/**
+ * The markdown primitives, as one specimen: headings, body, rules, lists,
+ * inline code and links. `brand-book`, not `pmndrs-docs` — there is no `Prose`
+ * component to mirror. It is the page's own demonstration that the type scale
+ * and the neutral ramp hold together, which is why it earns a declaration.
+ */
+const prose: ComponentSpec = {
+	name: 'pmndrs-prose',
+	react: 'Prose',
+	source: 'brand-book',
+	description: 'The markdown primitives: headings, paragraphs, links, inline code, rules and lists.',
+	props: {},
+	bindings: {
+		'*': {
+			heading: 'text',
+			headingFont: 'fixed:fonts.serif',
+			body: 'text-body',
+			rule: 'line-soft',
+			marker: 'accent-orange',
+			link: 'accent-teal',
+			code: 'accent-teal',
+			codeSurface: 'surface',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/** Quoted passage, set apart by a rule rather than a box. */
+const blockquote: ComponentSpec = {
+	name: 'pmndrs-blockquote',
+	react: 'Blockquote',
+	source: 'pmndrs-docs',
+	description: 'Quoted passage, set apart by a rule rather than a box.',
+	props: {},
+	bindings: {
+		'*': { rule: 'line', body: 'text-muted' },
+	},
+}
+
+/**
+ * Tables. The zebra stripe is `surface-raised` rather than a tinted overlay,
+ * because an overlay would have to know what it sits on and a raised surface
+ * already does.
+ */
+const table: ComponentSpec = {
+	name: 'pmndrs-table',
+	react: 'Table',
+	source: 'pmndrs-docs',
+	description: 'Scrolls horizontally rather than squashing its columns.',
+	props: {},
+	bindings: {
+		'*': {
+			wrapBorder: 'line-soft',
+			headSurface: 'surface-sunken',
+			headInk: 'text-muted',
+			headBorder: 'line',
+			cell: 'text-muted',
+			cellBorder: 'line-soft',
+			zebra: 'surface-raised',
+			firstCell: 'text',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Deprecated, and styled to look it: no accent at all. Superseded by
+ * `Gha[keyword="NOTE"]`, and kept because a deprecated component still has to
+ * look deliberate — an unstyled one reads as broken rather than retired.
+ */
+const hint: ComponentSpec = {
+	name: 'pmndrs-hint',
+	react: 'Hint',
+	source: 'pmndrs-docs',
+	description: 'Deprecated callout, superseded by Gha[keyword="NOTE"].',
+	props: {},
+	bindings: {
+		'*': { surface: 'surface-raised', border: 'line', body: 'text-muted' },
+	},
+}
+
+/** Relative images, with intrinsic dimensions written in at build time. */
+const img: ComponentSpec = {
+	name: 'pmndrs-img',
+	react: 'Img',
+	source: 'pmndrs-docs',
+	description: 'Relative image with intrinsic width and height, so nothing shifts while it loads.',
+	props: {
+		src: { type: 'string', description: 'Resolved against the article\'s own folder.' },
+	},
+	bindings: {
+		'*': {
+			frame: 'surface-sunken',
+			border: 'line-soft',
+			checker: 'surface',
+			ratio: 'text-muted',
+			caption: 'text-muted',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * The editable sandbox: file tabs, source, live preview.
+ *
+ * The preview is the only place in the contract where several slots are
+ * `fixed:` on purpose. It stands in for a rendered three.js scene — a picture
+ * of a cloud — and a picture does not change colour when the OS setting does.
+ * Everything that is *chrome* around it still follows the mode.
+ */
+const sandpack: ComponentSpec = {
+	name: 'pmndrs-sandpack',
+	react: 'Sandpack',
+	source: 'pmndrs-docs',
+	description: 'Editable sandbox: file tabs, source, live preview.',
+	props: {
+		template: { type: 'string', default: 'react-ts', description: 'Sandbox template.' },
+		active: { type: 'string', description: 'Which file tab is selected.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-sunken',
+			tabsSurface: 'surface-raised',
+			tabsBorder: 'line-soft',
+			tab: 'text-muted',
+			tabActive: 'text',
+			tabRule: 'accent-teal',
+			template: 'text-faint',
+			previewBorder: 'line-soft',
+			dot: 'accent-teal',
+			mono: 'fixed:fonts.mono',
+			/* The rendered scene. A picture, not a surface. */
+			sky: 'fixed:ramp.blue-950',
+			cloudFrom: 'fixed:ramp.blue-100',
+			cloudTo: 'fixed:ramp.purple-200',
+			status: 'fixed:ramp.blue-200',
+		},
+	},
+}
+
+/** Embedded example, referenced by id. Its thumbnail is artwork, so `fixed:`. */
+const codesandbox: ComponentSpec = {
+	name: 'pmndrs-codesandbox',
+	react: 'Codesandbox',
+	source: 'pmndrs-docs',
+	description: 'Embedded CodeSandbox example, referenced by id.',
+	props: {
+		id: { type: 'string', description: 'The sandbox id.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line-soft',
+			title: 'text',
+			id: 'text-muted',
+			mono: 'fixed:fonts.mono',
+			thumbFrom: 'fixed:ramp.yellow-300',
+			thumbVia: 'fixed:ramp.red-400',
+			thumbTo: 'fixed:ramp.blue-950',
+		},
+	},
+}
+
+/**
+ * Deprecated, and its own argument for why: a fixed column count leaves the
+ * last cell short on an odd item count. Superseded by utility classes.
+ */
+const grid: ComponentSpec = {
+	name: 'pmndrs-grid',
+	react: 'Grid',
+	source: 'pmndrs-docs',
+	description: 'Fixed-column list layout, superseded by utility classes.',
+	props: {
+		cols: { type: 'number', default: 2, description: 'Column count.' },
+	},
+	bindings: {
+		'*': { surface: 'surface-raised', border: 'line', ink: 'text-muted', mono: 'fixed:fonts.mono' },
+	},
+}
+
+/**
+ * Text-based diagrams. `kind` is a real variant axis — a flowchart and a
+ * sequence diagram share a palette but not a vocabulary, so the two are
+ * genuinely different renderings rather than one with a different fill.
+ */
+const mermaid: ComponentSpec = {
+	name: 'pmndrs-mermaid',
+	react: 'Mermaid',
+	source: 'pmndrs-docs',
+	description: 'Text-based diagrams that follow the active theme.',
+	props: {
+		kind: {
+			type: 'enum',
+			values: ['flowchart', 'sequence'],
+			default: 'flowchart',
+			description: 'Diagram type. Changes the vocabulary, not just the palette.',
+		},
+	},
+	variantProp: 'kind',
+	bindings: {
+		flowchart: { diamond: 'surface-raised' },
+		sequence: { lifeline: 'text-faint' },
+		'*': {
+			node: 'surface-raised',
+			nodeBorder: 'accent-teal',
+			text: 'text',
+			label: 'text-faint',
+			edge: 'text-faint',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Avatar listings. Both fall back to John Doe without credentials, which is
+ * what the page shows, since it makes no network requests.
+ *
+ * The avatars cycle the seven accent ramps at `400` with their `950` for the
+ * initials — a recipe, so it is spelled out per hue rather than hidden in a
+ * loop nobody can audit. `fixed:` because an avatar stands in for a photograph.
+ */
+const peopleBindings = {
+	'*': {
+		ring: 'surface',
+		mono: 'fixed:fonts.mono',
+		...Object.fromEntries(
+			['purple', 'red', 'orange', 'yellow', 'green', 'teal', 'blue'].flatMap((hue) => [
+				[`fill-${hue}`, `fixed:ramp.${hue}-400`],
+				[`ink-${hue}`, `fixed:ramp.${hue}-950`],
+			]),
+		),
+	},
+}
+
+const contributors: ComponentSpec = {
+	name: 'pmndrs-contributors',
+	react: 'Contributors',
+	source: 'pmndrs-docs',
+	description: 'Avatars pulled from the GitHub API, falling back to John Doe without a token.',
+	props: {
+		count: { type: 'number', default: 8, description: 'How many avatars to show.' },
+	},
+	bindings: peopleBindings,
+}
+
+const backers: ComponentSpec = {
+	name: 'pmndrs-backers',
+	react: 'Backers',
+	source: 'pmndrs-docs',
+	description: 'Open Collective backers, sized by tier. Same fallback, same reason.',
+	props: {
+		count: { type: 'number', default: 5, description: 'How many avatars to show.' },
+	},
+	bindings: peopleBindings,
+}
+
+export const components: readonly ComponentSpec[] = [
+	gha,
+	button,
+	badge,
+	code,
+	header,
+	nav,
+	search,
+	toc,
+	intro,
+	keypoints,
+	details,
+	entries,
+	prose,
+	blockquote,
+	table,
+	hint,
+	img,
+	sandpack,
+	codesandbox,
+	grid,
+	mermaid,
+	contributors,
+	backers,
+]
 
 /**
  * **Every component binds theme slots, not ramp steps.**
