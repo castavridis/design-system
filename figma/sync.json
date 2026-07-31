@@ -719,6 +719,36 @@
 			"variantProps": {},
 			"contract": "pmndrs-toc",
 			"boundTo": "theme/* (mode-aware)"
+		},
+		"Intro": {
+			"id": "153:613",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-intro",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Keypoints": {
+			"id": "153:628",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-keypoints",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Details": {
+			"id": "153:637",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-details",
+			"note": "shown expanded: `open` is a boolean prop, and a boolean cannot repaint — the collapsed state is the same component with its body hidden",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Entries": {
+			"id": "153:672",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-entries",
+			"note": "the thumbnail is a gradient with bound stops, fixed: because a screenshot does not follow the mode",
+			"boundTo": "theme/* (mode-aware)"
 		}
 	},
 	"pages": {

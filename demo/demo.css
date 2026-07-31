@@ -1104,7 +1104,7 @@ kbd {
 
 .doc-intro {
   padding-inline-start: var(--brand-space);
-  border-inline-start: 3px solid var(--brand-purple);
+  border-inline-start: 3px solid var(--accent-purple);
   font-size: 1.15rem;
   line-height: 1.55;
   color: var(--text-strong);
@@ -1122,16 +1122,18 @@ kbd {
 
 .doc-keypoints {
   padding: calc(var(--brand-space) * 1.1) calc(var(--brand-space) * 1.25);
-  border: 1px solid var(--ramp-teal-800);
+  /* The Gha recipe on teal: tint from the ramp, rule and label from its
+     accent. Contract slots, so it follows the mode. */
+  border: 1px solid var(--accent-teal);
   border-radius: var(--brand-radius);
-  background: var(--ramp-teal-950);
+  background: var(--tint-teal);
 }
 
 .doc-keypoints-title {
   margin: 0 0 calc(var(--brand-space) * 0.6);
   font-family: var(--fonts-serif);
   font-size: 1.1rem;
-  color: var(--brand-teal);
+  color: var(--accent-teal);
 }
 
 .doc-keypoints ul {
@@ -1156,7 +1158,7 @@ kbd {
   width: 0.45em;
   height: 0.45em;
   border-radius: 50%;
-  background: var(--brand-teal);
+  background: var(--accent-teal);
 }
 
 /* ---------- details ---------- */
@@ -1188,7 +1190,7 @@ kbd {
   height: 0;
   border-inline-start: 5px solid currentColor;
   border-block: 4px solid transparent;
-  color: var(--brand-orange);
+  color: var(--accent-orange);
   transition: transform 120ms ease;
 }
 
@@ -1247,7 +1249,7 @@ kbd {
 }
 
 .doc-entries a:hover {
-  color: var(--brand-teal);
+  color: var(--accent-teal);
 }
 
 /* The thumb `Entries` shows when a page embeds a CodeSandbox. */

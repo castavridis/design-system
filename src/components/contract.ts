@@ -366,7 +366,112 @@ const toc: ComponentSpec = {
 	},
 }
 
-export const components: readonly ComponentSpec[] = [gha, button, badge, code, header, nav, search, toc]
+/**
+ * The lede under the frontmatter. A rule and a heavier body, nothing else.
+ *
+ * The rule was `brand.purple` and is now `accent-purple`, which is a step
+ * lighter in dark and legible in light. The old value was the brand colour
+ * itself, and a brand colour is the wrong thing for decoration: it cannot move
+ * with the mode, because moving is exactly what it must not do elsewhere.
+ */
+const intro: ComponentSpec = {
+	name: 'pmndrs-intro',
+	react: 'Intro',
+	source: 'pmndrs-docs',
+	description: 'Prominent lede, directly under the frontmatter. Takes rich markdown.',
+	props: {},
+	bindings: {
+		'*': { rule: 'accent-purple', body: 'text-strong' },
+	},
+}
+
+/**
+ * Key takeaways. The `Gha` recipe — tint from one ramp, rule and label from the
+ * same ramp's accent — applied to teal, because it is an aside rather than an
+ * alert and teal is what this book uses for "pay attention" without alarm.
+ */
+const keypoints: ComponentSpec = {
+	name: 'pmndrs-keypoints',
+	react: 'Keypoints',
+	source: 'pmndrs-docs',
+	description: 'Key takeaways as a visually distinct list — one bullet per KeypointsItem.',
+	props: {
+		title: {
+			type: 'string',
+			default: "What you'll learn",
+			description: 'Heading above the list.',
+		},
+	},
+	bindings: {
+		'*': {
+			surface: 'tint-teal',
+			border: 'accent-teal',
+			title: 'accent-teal',
+			bullet: 'accent-teal',
+			body: 'text-strong',
+			titleFont: 'fixed:fonts.serif',
+		},
+	},
+}
+
+/** Collapsible aside. The marker is the only accent it gets. */
+const details: ComponentSpec = {
+	name: 'pmndrs-details',
+	react: 'Details',
+	source: 'pmndrs-docs',
+	description: 'Collapsible aside for detail that would break the flow.',
+	props: {
+		summary: { type: 'string', description: 'The always-visible line.' },
+		open: { type: 'boolean', default: false, description: 'Whether it starts expanded.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line-soft',
+			marker: 'accent-orange',
+			summary: 'text',
+			body: 'text-muted',
+		},
+	},
+}
+
+/**
+ * The directory listing. Its thumbnail is `fixed:` on purpose: it stands in for
+ * a screenshot, and a picture does not change colour with the OS setting.
+ */
+const entries: ComponentSpec = {
+	name: 'pmndrs-entries',
+	react: 'Entries',
+	source: 'pmndrs-docs',
+	description: 'Directory listing of every page, grouped by the first segment of the slug.',
+	props: {},
+	bindings: {
+		'*': {
+			heading: 'text-muted',
+			rule: 'line-soft',
+			link: 'text-muted',
+			linkHover: 'accent-teal',
+			headingFont: 'fixed:fonts.mono',
+			thumbFrom: 'fixed:ramp.blue-400',
+			thumbTo: 'fixed:ramp.purple-500',
+		},
+	},
+}
+
+export const components: readonly ComponentSpec[] = [
+	gha,
+	button,
+	badge,
+	code,
+	header,
+	nav,
+	search,
+	toc,
+	intro,
+	keypoints,
+	details,
+	entries,
+]
 
 /**
  * **Every component binds theme slots, not ramp steps.**
