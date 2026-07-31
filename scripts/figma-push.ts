@@ -106,10 +106,20 @@ for (const token of PLAN) {
   }
 
   if (token.aliasOf) {
-    const targetVar = variableObjects[token.aliasOf]
-    if (!targetVar) throw new Error('alias target not yet created: ' + token.aliasOf)
+    // Alias targets may live outside this push — a ramp seed points at its
+    // brand colour, radius/base at brand/radius. Try this run, then the
+    // recorded ids, then the file itself before giving up.
+    let targetVar = variableObjects[token.aliasOf] || null
+    if (!targetVar && KNOWN[token.aliasOf]) {
+      targetVar = await figma.variables.getVariableByIdAsync(KNOWN[token.aliasOf].id)
+    }
+    if (!targetVar) {
+      const targetName = token.aliasOf.replace(/\./g, '/')
+      targetVar = allExisting.find((v) => v.name === targetName) || null
+    }
+    if (!targetVar) throw new Error('alias target not found: ' + token.aliasOf)
     variable.setValueForMode(modeId, figma.variables.createVariableAlias(targetVar))
-    values[token.key] = values[token.aliasOf]
+    values[token.key] = values[token.aliasOf] ?? String(targetVar.valuesByMode[Object.keys(targetVar.valuesByMode)[0]])
   } else if (token.type === 'COLOR') {
     const { r, g, b, a } = token.value
     variable.setValueForMode(modeId, { r, g, b, a })
@@ -193,8 +203,16 @@ async function main() {
 		return
 	}
 
+	/*
+	 * Recorded ids for the tokens being pushed, plus any alias target they point
+	 * at. Without the targets, a scoped push (`--scopes=radius`) couldn't resolve
+	 * `radius.base -> brand.radius` and would fail on a cross-collection alias.
+	 */
+	const aliasTargets = new Set(tokens.map((t) => t.aliasOf).filter(Boolean) as string[])
 	const known = Object.fromEntries(
-		Object.entries(state.variables).filter(([key]) => tokens.some((t) => t.key === key)),
+		Object.entries(state.variables).filter(
+			([key]) => tokens.some((t) => t.key === key) || aliasTargets.has(key),
+		),
 	)
 
 	await writeFile(OUT_PATH, pluginScript(tokens, known), 'utf8')

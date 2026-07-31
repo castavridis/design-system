@@ -4,6 +4,7 @@ import {
   px,
   rampStops,
   ref,
+  spacingScale,
   string,
 } from 'design-book'
 
@@ -33,6 +34,26 @@ const fonts = book.addScope('fonts')
 fonts.set('mono', string('"Geist Mono", ui-monospace, monospace'))
 fonts.set('sans', string('"Geist", system-ui, sans-serif'))
 fonts.set('serif', string('"Faculty Glyphic", serif'))
+
+// Corner radii.
+//
+// Pulled from Figma, where they were already decided as `Base Radius` 16,
+// `Input Radius` 4 and `Input Radius Small` 2 — the first values to travel
+// design -> code through the sync.
+//
+// Kept as *relationships* rather than the three literals they arrived as. A
+// radius is not an independent quantity: it belongs to the box it sits on, and
+// these three are all fractions of the spacing rhythm. `spacingScale` renders
+// to `calc(var(--brand-space) * 0.25)`, so the whole scale still moves when
+// `--brand-space` is themed at runtime — the same live-reference behaviour
+// `brand.radius` already had, extended to the scale.
+//
+// The ratios are exact, which is the tell that they were a system already:
+// 16 -> 4 is a quarter, 16 -> 2 an eighth.
+const radius = book.addScope('radius')
+radius.set('base', ref('brand.radius')) // 16px — frames, cards, panels
+radius.set('input', spacingScale(ref('brand.space'), { multiplier: 0.25 })) // 4px — 32px-high controls
+radius.set('small', spacingScale(ref('brand.space'), { multiplier: 0.125 })) // 2px — tightly packed chrome
 
 /**
  * Steps of every colour ramp, light to dark. The familiar 50–950 scale, so a

@@ -73,6 +73,9 @@ const RAMP_NEUTRALS = new Set(['dark', 'light'])
  * still a neutral.
  */
 function scopesFor(collection, leaf, figmaType) {
+	/* Every member of the radius scale is a corner radius, whatever it's called. */
+	if (collection === 'radius') return SCOPE_BY_NAME.radius
+
 	if (collection === 'ramp') {
 		const base = leaf.slice(0, leaf.lastIndexOf('-'))
 		return RAMP_NEUTRALS.has(base)
