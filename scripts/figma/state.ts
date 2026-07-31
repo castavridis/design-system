@@ -27,6 +27,17 @@ export interface SyncState {
 	modes: Record<string, string>
 	/** Token path -> Figma variable id. */
 	variables: Record<string, { id: string; collection: string }>
+	/** Component-set name -> what was pushed. Written by the component milestones. */
+	components?: Record<string, { id: string; contract?: string; [key: string]: unknown }>
+	/**
+	 * Pages assembled from those components — `demo/index.html` and, later,
+	 * whatever else earns a Figma counterpart. The instance ids are what makes a
+	 * re-push an update of the same page rather than a second copy of it.
+	 */
+	pages?: Record<
+		string,
+		{ pageId: string; frameId: string; instances: Array<{ path: string; component: string; id: string }> }
+	>
 	/** Per-scope resolution when both sides moved. */
 	prefer: Record<string, Preference>
 	/** Scopes the book computes; Figma edits to these are reported, never applied. */

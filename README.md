@@ -18,6 +18,9 @@ dependency only.
 | `scripts/site.ts` | Assembles the deployable site into `public/` |
 | `scripts/serve.ts` | Dependency-free static server for the demo |
 | `demo/` | Landing page that consumes the build output |
+| `src/components/contract.ts` | Component props and their per-variant token bindings |
+| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page |
+| `figma/sync.json` | Committed sync state: variable, component and page-instance ids |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
 | `og/` | [OG image generator](og/README.md) — a separate workspace package |
@@ -90,6 +93,40 @@ hairlines and muted text all come from the neutral ramp, and each callout takes
 its tint from one accent ramp's `950` and its rule from that ramp's `300`. No
 component hard-codes a colour, and the page makes no network requests, so
 avatars and thumbnails are drawn from ramp steps rather than fetched.
+
+## The page in Figma
+
+`demo/index.html` is part of the Figma round trip, not just its output. `pnpm
+figma:page` reads the page into a spec and generates the Plugin API script that
+assembles it — and where the page renders a component the contract declares, the
+Figma page places an **instance of that component set**:
+
+```bash
+pnpm figma:page              # dist/figma-page.json + the script that builds it
+pnpm figma:page --snapshot   # also the read-back script the audit consumes
+pnpm figma:page --record <result.json>
+pnpm figma:audit <snapshot.json>   # components *and* page composition
+```
+
+A block becomes an instance in one of two ways. A `<pmndrs-gha>` custom element
+*is* the component — the demo already renders it from the contract. A
+`data-component="Code"` marker names a contract component the page renders as
+plain markup instead, because there is no custom element for it. Either way the
+props are **read back out of the markup** — a code block's language from its
+caption, its numbering from `counter-reset`, its highlight range from which lines
+carry `is-hl` — so a Figma instance cannot claim a variant the page isn't
+rendering. A variant the contract doesn't declare stops the push.
+
+Everything the contract doesn't declare is recorded as what it is. The swatch and
+ramp grids are rebuilt from the `brand` and `ramp` variables; the rest — `doc-nav`,
+`doc-search`, the Mermaid diagrams — becomes a labelled **stand-in**. That is
+deliberate: a hand-drawn Figma `doc-search` would be a design with no owner in
+code, and nothing to audit it against.
+
+The audit compares composition rather than typography. It reports a block that
+moved or vanished, an instance of the wrong component, a variant swapped in
+Figma, and a **detached instance** — the one that looks right until the component
+changes and one copy quietly doesn't.
 
 ## Colour notation
 

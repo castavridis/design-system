@@ -35,11 +35,24 @@
         <code>dist/tokens.css</code> — the same artifact a React, Svelte, Vue or
         vanilla app would import.
       </p>
+      <!--
+        `data-component` marks a block that *is* a contract component but is
+        rendered as plain markup — here because these are links, and
+        <pmndrs-button> renders a <button>. The marker names the component;
+        the variant is still read from the class, so there is one declaration.
+        scripts/figma/page.ts turns each one into a Figma instance.
+      -->
       <div class="hero-actions">
-        <a class="button button-primary" href="#palette">See the palette</a>
-        <a class="button" href="#ramps">Ramps</a>
-        <a class="button" href="#components">Components</a>
-        <a class="button" href="/demo/sync.html">Figma sync</a>
+        <a class="button button-primary" href="#palette" data-component="Button"
+          >See the palette</a
+        >
+        <a class="button" href="#ramps" data-component="Button">Ramps</a>
+        <a class="button" href="#components" data-component="Button"
+          >Components</a
+        >
+        <a class="button" href="/demo/sync.html" data-component="Button"
+          >Figma sync</a
+        >
       </div>
     </header>
 
@@ -215,7 +228,9 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               <p>Masthead: wordmark, section links, search affordance.</p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <div class="doc-header">
+              <!-- The contract's Header, rendered as markup: one instance, no
+                   variants, so a custom element would only add a script. -->
+              <div class="doc-header" data-component="Header">
                 <a class="doc-brand" href="#components">
                   <span class="doc-brand-mark" aria-hidden="true"></span>
                   <span class="doc-brand-name">pmndrs<span>/docs</span></span>
@@ -616,7 +631,10 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <!-- Also the contract's Code. Its props are read back out of
+                   this markup — language from the caption, numbering from the
+                   class, the highlight range from which lines carry is-hl. -->
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">tsx</span>
                   <button type="button" class="doc-code-copy" data-copy>
@@ -643,7 +661,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">tsx</span>
                   <span class="doc-code-meta">showLineNumbers=150</span>
@@ -671,7 +689,7 @@ cssVar('brand.radius')  // 'var(--brand-radius)'</code></pre>
               </p>
             </header>
             <div class="spec-stage spec-stage-flush">
-              <figure class="doc-code-block">
+              <figure class="doc-code-block" data-component="Code">
                 <figcaption>
                   <span class="doc-code-lang">diff</span>
                 </figcaption>

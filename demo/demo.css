@@ -23,6 +23,15 @@
  * designed on a dark ground; `prefers-color-scheme` flips it, and an explicit
  * `data-theme` wins over both so a toggle can override the OS.
  */
+/*
+ * Every slot the `light` and `dark` scopes define is aliased here — including
+ * the seven accent/tint pairs. They belong in the same list as the surfaces:
+ * `component-contract.ts` binds components to `tint-blue` and `accent-blue` by
+ * name, `demo/elements.js` renders that binding as `var(--tint-blue)`, and a
+ * slot missing from this block resolves to nothing at all. The badges were the
+ * proof — bound correctly, aliased nowhere, and rendering as colourless
+ * outlines while their Figma component had the tints right.
+ */
 :root {
   --page: var(--dark-page);
   --surface: var(--dark-surface);
@@ -41,6 +50,21 @@
   --action-ink: var(--dark-action-ink);
   --action-hover: var(--dark-action-hover);
 
+  --accent-purple: var(--dark-accent-purple);
+  --tint-purple: var(--dark-tint-purple);
+  --accent-red: var(--dark-accent-red);
+  --tint-red: var(--dark-tint-red);
+  --accent-orange: var(--dark-accent-orange);
+  --tint-orange: var(--dark-tint-orange);
+  --accent-yellow: var(--dark-accent-yellow);
+  --tint-yellow: var(--dark-tint-yellow);
+  --accent-green: var(--dark-accent-green);
+  --tint-green: var(--dark-tint-green);
+  --accent-teal: var(--dark-accent-teal);
+  --tint-teal: var(--dark-tint-teal);
+  --accent-blue: var(--dark-accent-blue);
+  --tint-blue: var(--dark-tint-blue);
+
   color-scheme: dark;
 }
 
@@ -57,11 +81,26 @@
     --text: var(--light-text);
     --text-muted: var(--light-text-muted);
     --text-faint: var(--light-text-faint);
-  --text-body: var(--light-text-body);
-  --text-strong: var(--light-text-strong);
-  --action: var(--light-action);
-  --action-ink: var(--light-action-ink);
-  --action-hover: var(--light-action-hover);
+    --text-body: var(--light-text-body);
+    --text-strong: var(--light-text-strong);
+    --action: var(--light-action);
+    --action-ink: var(--light-action-ink);
+    --action-hover: var(--light-action-hover);
+
+    --accent-purple: var(--light-accent-purple);
+    --tint-purple: var(--light-tint-purple);
+    --accent-red: var(--light-accent-red);
+    --tint-red: var(--light-tint-red);
+    --accent-orange: var(--light-accent-orange);
+    --tint-orange: var(--light-tint-orange);
+    --accent-yellow: var(--light-accent-yellow);
+    --tint-yellow: var(--light-tint-yellow);
+    --accent-green: var(--light-accent-green);
+    --tint-green: var(--light-tint-green);
+    --accent-teal: var(--light-accent-teal);
+    --tint-teal: var(--light-tint-teal);
+    --accent-blue: var(--light-accent-blue);
+    --tint-blue: var(--light-tint-blue);
 
     color-scheme: light;
   }
@@ -82,6 +121,20 @@
   --action: var(--light-action);
   --action-ink: var(--light-action-ink);
   --action-hover: var(--light-action-hover);
+  --accent-purple: var(--light-accent-purple);
+  --tint-purple: var(--light-tint-purple);
+  --accent-red: var(--light-accent-red);
+  --tint-red: var(--light-tint-red);
+  --accent-orange: var(--light-accent-orange);
+  --tint-orange: var(--light-tint-orange);
+  --accent-yellow: var(--light-accent-yellow);
+  --tint-yellow: var(--light-tint-yellow);
+  --accent-green: var(--light-accent-green);
+  --tint-green: var(--light-tint-green);
+  --accent-teal: var(--light-accent-teal);
+  --tint-teal: var(--light-tint-teal);
+  --accent-blue: var(--light-accent-blue);
+  --tint-blue: var(--light-tint-blue);
   color-scheme: light;
 }
 
@@ -100,6 +153,20 @@
   --action: var(--dark-action);
   --action-ink: var(--dark-action-ink);
   --action-hover: var(--dark-action-hover);
+  --accent-purple: var(--dark-accent-purple);
+  --tint-purple: var(--dark-tint-purple);
+  --accent-red: var(--dark-accent-red);
+  --tint-red: var(--dark-tint-red);
+  --accent-orange: var(--dark-accent-orange);
+  --tint-orange: var(--dark-tint-orange);
+  --accent-yellow: var(--dark-accent-yellow);
+  --tint-yellow: var(--dark-tint-yellow);
+  --accent-green: var(--dark-accent-green);
+  --tint-green: var(--dark-tint-green);
+  --accent-teal: var(--dark-accent-teal);
+  --tint-teal: var(--dark-tint-teal);
+  --accent-blue: var(--dark-accent-blue);
+  --tint-blue: var(--dark-tint-blue);
   color-scheme: dark;
 }
 

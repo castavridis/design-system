@@ -638,7 +638,7 @@
 				"CAUTION"
 			],
 			"contract": "pmndrs-gha",
-			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)",
+			"titleProp": "direct text override (not a component property — a set-level TEXT property has one default and cannot vary per keyword)",
 			"boundTo": "theme/* (mode-aware)"
 		},
 		"Button": {
@@ -656,7 +656,7 @@
 				]
 			},
 			"contract": "pmndrs-button",
-			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill",
+			"note": "disabled is a variant axis, not a BOOLEAN property — a boolean can toggle visibility but cannot repaint a fill",
 			"boundTo": "theme/* including theme/action (mode-aware filled action)"
 		},
 		"Badge": {
@@ -674,7 +674,7 @@
 				]
 			},
 			"contract": "pmndrs-badge",
-			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale",
+			"note": "pill radius and em-based padding are intentionally literal — neither is a step on a scale",
 			"boundTo": "theme/* (mode-aware)"
 		},
 		"Code": {
@@ -696,6 +696,139 @@
 			"variantProps": {},
 			"contract": "pmndrs-header",
 			"boundTo": "theme/* (mode-aware); brand gradient mark is fixed: by design"
+		}
+	},
+	"pages": {
+		"demo/index.html": {
+			"pageId": "128:2",
+			"frameId": "130:133",
+			"instances": [
+				{
+					"path": "hero > hero-actions > Button",
+					"component": "Button",
+					"id": "130:139"
+				},
+				{
+					"path": "hero > hero-actions > Button#2",
+					"component": "Button",
+					"id": "130:141"
+				},
+				{
+					"path": "hero > hero-actions > Button#3",
+					"component": "Button",
+					"id": "130:144"
+				},
+				{
+					"path": "hero > hero-actions > Button#4",
+					"component": "Button",
+					"id": "130:147"
+				},
+				{
+					"path": "section#components > waterfall > group:Chrome > spec:Header > stage > Header",
+					"component": "Header",
+					"id": "130:363"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha",
+					"component": "Gha",
+					"id": "130:469"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#2",
+					"component": "Gha",
+					"id": "130:476"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#3",
+					"component": "Gha",
+					"id": "130:489"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#4",
+					"component": "Gha",
+					"id": "130:503"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha > stage > Gha#5",
+					"component": "Gha",
+					"id": "130:516"
+				},
+				{
+					"path": "section#components > waterfall > group:Callouts > spec:Gha[title] > stage > Gha",
+					"component": "Gha",
+					"id": "130:534"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code > stage > Code",
+					"component": "Code",
+					"id": "130:564"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code[showLineNumbers=X] > stage > Code",
+					"component": "Code",
+					"id": "130:594"
+				},
+				{
+					"path": "section#components > waterfall > group:Code > spec:Code[diff] > stage > Code",
+					"component": "Code",
+					"id": "130:624"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button",
+					"component": "Button",
+					"id": "130:740"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#2",
+					"component": "Button",
+					"id": "130:742"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#3",
+					"component": "Button",
+					"id": "130:745"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Buttons > stage > doc-buttons > Button#4",
+					"component": "Button",
+					"id": "130:748"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge",
+					"component": "Badge",
+					"id": "130:757"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#2",
+					"component": "Badge",
+					"id": "130:759"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#3",
+					"component": "Badge",
+					"id": "130:762"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#4",
+					"component": "Badge",
+					"id": "130:765"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#5",
+					"component": "Badge",
+					"id": "130:768"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#6",
+					"component": "Badge",
+					"id": "130:771"
+				},
+				{
+					"path": "section#components > waterfall > group:Controls > spec:Badges > stage > doc-badges > Badge#7",
+					"component": "Badge",
+					"id": "130:774"
+				}
+			]
 		}
 	}
 }
