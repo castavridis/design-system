@@ -26,6 +26,19 @@
       <span class="theme-toggle-label" data-theme-label>Theme</span>
     </button>
 
+    <!--
+      The same three chips, in the same order, on all three pages. Kept outside
+      the hero on purpose: scripts/figma/page.ts reads this file into the page
+      spec by walking the body's children, and only recognises the hero, <main>
+      and the footer — so navigation stays out of the Figma frame, where it
+      would be a link that leads nowhere.
+    -->
+    <nav class="site-nav" aria-label="Demo pages">
+      <a href="/" aria-current="page">Brand book</a>
+      <a href="/demo/og.html">OG images</a>
+      <a href="/demo/sync.html">Figma sync</a>
+    </nav>
+
     <header class="hero">
       <p class="eyebrow">design tokens</p>
       <h1>Define once.<br />Ship everywhere.</h1>

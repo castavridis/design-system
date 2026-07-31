@@ -2147,6 +2147,58 @@ footer p {
   }
 }
 
+/* ---------- site nav ---------- */
+
+/*
+ * Fixed for the same reason as the theme toggle it sits opposite, and drawn as
+ * the same chip so the two read as one strip rather than two ideas. Every page
+ * lists every page, current one included — a nav that hides the page you are on
+ * changes shape as you move through the site, and you lose your place in it.
+ */
+.site-nav {
+  position: fixed;
+  inset-block-start: var(--brand-space);
+  inset-inline-start: var(--brand-space);
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--brand-space) * 0.4);
+  /*
+   * Leave the toggle its corner. Wrapping is the graceful failure here: the
+   * chips stack down the left rather than sliding under a control that is
+   * painted at the same z-index.
+   */
+  max-inline-size: calc(100% - var(--brand-space) * 3 - 8rem);
+}
+
+.site-nav a {
+  padding: calc(var(--brand-space) * 0.4) calc(var(--brand-space) * 0.7);
+  border: 1px solid var(--line);
+  border-radius: var(--brand-radius);
+  /* Opaque: the page scrolls underneath these. */
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.site-nav a:hover {
+  border-color: var(--brand-teal);
+  background: var(--surface-raised);
+}
+
+/* Still a link — it goes back to the top — but marked as where you already are. */
+.site-nav a[aria-current="page"] {
+  border-color: var(--brand-teal);
+  color: var(--brand-teal);
+}
+
 /* ---------- theme toggle ---------- */
 
 /*
@@ -2209,5 +2261,10 @@ footer p {
 @media (max-width: 32rem) {
   .theme-toggle-label {
     display: none;
+  }
+
+  /* The toggle is down to its icon, so the nav can have the width back. */
+  .site-nav {
+    max-inline-size: calc(100% - var(--brand-space) * 3 - 3rem);
   }
 }
