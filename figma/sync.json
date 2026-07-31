@@ -651,6 +651,23 @@
 			},
 			"contract": "pmndrs-button",
 			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill"
+		},
+		"Badge": {
+			"id": "103:16",
+			"type": "COMPONENT_SET",
+			"variantProps": {
+				"ramp": [
+					"purple",
+					"red",
+					"orange",
+					"yellow",
+					"green",
+					"teal",
+					"blue"
+				]
+			},
+			"contract": "pmndrs-badge",
+			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale"
 		}
 	}
 }
