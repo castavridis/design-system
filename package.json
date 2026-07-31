@@ -43,6 +43,7 @@
 		"test": "tsx --test scripts/figma/*.test.ts",
 		"og": "pnpm run build && pnpm --filter @pmndrs/og render",
 		"og:studio": "pnpm run build && pnpm --filter @pmndrs/og studio",
+		"og:demo": "pnpm run build && pnpm --filter @pmndrs/og demo",
 		"og:typecheck": "pnpm --filter @pmndrs/og typecheck",
 		"typecheck": "tsc --noEmit",
 		"clean": "node --input-type=module -e \"import{rm}from'node:fs/promises';for(const d of ['dist','public'])await rm(d,{recursive:true,force:true})\"",

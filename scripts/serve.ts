@@ -28,6 +28,14 @@ const types: Record<string, string> = {
 	'.js': 'text/javascript; charset=utf-8',
 	'.json': 'application/json; charset=utf-8',
 	'.svg': 'image/svg+xml',
+	// The OG gallery. A browser will sniff an image out of the fallback type,
+	// but `<video>` will not play a stream it was handed as a download.
+	'.jpg': 'image/jpeg',
+	'.jpeg': 'image/jpeg',
+	'.png': 'image/png',
+	'.gif': 'image/gif',
+	'.webp': 'image/webp',
+	'.mp4': 'video/mp4',
 }
 
 const server = createServer(async (req, res) => {

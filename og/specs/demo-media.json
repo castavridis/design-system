@@ -1,0 +1,24 @@
+{
+	"outDir": "../../demo/og",
+	"cards": [
+		{
+			"out": "source-image.jpg",
+			"eyebrow": "source",
+			"title": "An image, graded",
+			"subtitle": "A still drawn as a plate inside the scene, so it takes the same bloom and vignette.",
+			"meta": "kind: image",
+			"accent": "orange",
+			"source": { "kind": "image", "src": "../demo/og/minimal.jpg", "fit": "cover" }
+		},
+		{
+			"out": "source-video.jpg",
+			"eyebrow": "source",
+			"title": "A video, sampled",
+			"subtitle": "One timestamp out of a clip, decoded by the compositor rather than a video element.",
+			"meta": "kind: video",
+			"accent": "purple",
+			"source": { "kind": "video", "src": "../demo/og/loop.mp4", "fit": "cover" },
+			"atSeconds": 1.2
+		}
+	]
+}

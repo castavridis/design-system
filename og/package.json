@@ -8,6 +8,7 @@
 	"scripts": {
 		"studio": "remotion studio",
 		"render": "tsx scripts/render.ts",
+		"demo": "tsx scripts/render.ts specs/demo-loop.json --mp4 --out ../demo/og/loop.mp4 && tsx scripts/render.ts specs/demo-loop.json --format jpeg --out ../demo/og/loop-poster.jpg && tsx scripts/render.ts specs/demo.json --manifest --format jpeg && tsx scripts/render.ts specs/demo-media.json --manifest --format jpeg",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {

@@ -1,0 +1,109 @@
+{
+	"outDir": "../../demo/og",
+	"cards": [
+		{
+			"out": "minimal.jpg",
+			"title": "Only a title"
+		},
+		{
+			"out": "react-three-fiber.jpg",
+			"eyebrow": "pmndrs",
+			"title": "React Three Fiber",
+			"subtitle": "A React renderer for three.js. Build your scene declaratively, with re-usable components.",
+			"meta": "github.com/pmndrs/react-three-fiber",
+			"accent": "purple",
+			"source": { "kind": "scene", "name": "ramp-orbit" },
+			"atSeconds": 2.4
+		},
+		{
+			"out": "drei.jpg",
+			"eyebrow": "pmndrs",
+			"title": "Drei",
+			"subtitle": "A growing collection of useful helpers and abstractions for React Three Fiber.",
+			"meta": "github.com/pmndrs/drei",
+			"accent": "orange",
+			"source": { "kind": "scene", "name": "token-grid" },
+			"atSeconds": 3.1
+		},
+		{
+			"out": "postprocessing.jpg",
+			"eyebrow": "pmndrs",
+			"title": "Postprocessing",
+			"subtitle": "A post-processing library that provides the means to implement image filter effects.",
+			"meta": "github.com/pmndrs/postprocessing",
+			"accent": "teal",
+			"source": { "kind": "scene", "name": "prism" },
+			"atSeconds": 1.8,
+			"effects": { "bloom": 1.15 }
+		},
+		{
+			"out": "design-tokens-light.jpg",
+			"eyebrow": "design system",
+			"title": "Tokens, defined once",
+			"subtitle": "CSS custom properties, JSON, W3C Design Tokens and a typed ESM module — from one source.",
+			"meta": "v0.1.0",
+			"accent": "blue",
+			"theme": "light",
+			"source": { "kind": "scene", "name": "token-grid" },
+			"atSeconds": 4.2
+		},
+		{
+			"out": "zustand-square.jpg",
+			"eyebrow": "pmndrs",
+			"title": "Zustand",
+			"subtitle": "A small, fast and scalable bearbones state management solution.",
+			"meta": "github.com/pmndrs/zustand",
+			"accent": "yellow",
+			"size": "square",
+			"source": { "kind": "scene", "name": "ramp-orbit" },
+			"seed": 7,
+			"atSeconds": 5
+		},
+		{
+			"out": "jotai-wide.jpg",
+			"eyebrow": "pmndrs",
+			"title": "Jotai",
+			"subtitle": "Primitive and flexible state management for React.",
+			"meta": "github.com/pmndrs/jotai",
+			"accent": "green",
+			"size": "wide",
+			"source": { "kind": "scene", "name": "prism" },
+			"seed": 4,
+			"atSeconds": 2.2
+		},
+		{
+			"out": "effects-default.jpg",
+			"eyebrow": "effects",
+			"title": "Graded",
+			"subtitle": "Bloom, fringing, grain and vignette at their defaults.",
+			"meta": "effects: {}",
+			"accent": "red",
+			"source": { "kind": "scene", "name": "ramp-orbit" },
+			"seed": 12,
+			"atSeconds": 3.4
+		},
+		{
+			"out": "effects-none.jpg",
+			"eyebrow": "effects",
+			"title": "Ungraded",
+			"subtitle": "The same card with every effect turned off — same seed, same second.",
+			"meta": "effects: all zero",
+			"accent": "red",
+			"source": { "kind": "scene", "name": "ramp-orbit" },
+			"seed": 12,
+			"atSeconds": 3.4,
+			"effects": { "bloom": 0, "chromaticAberration": 0, "noise": 0, "vignette": 0 }
+		},
+		{
+			"out": "og-endpoint.jpg",
+			"eyebrow": "pmndrs design tokens",
+			"title": "OG images",
+			"subtitle": "Every card on this page is rendered from the same tokens the site is styled with.",
+			"meta": "/demo/og.html",
+			"accent": "teal",
+			"source": { "kind": "scene", "name": "token-grid" },
+			"seed": 3,
+			"atSeconds": 1.6
+		}
+	]
+}

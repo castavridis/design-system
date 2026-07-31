@@ -18,6 +18,7 @@ dependency only.
 | `scripts/site.ts` | Assembles the deployable site into `public/` |
 | `scripts/serve.ts` | Dependency-free static server for the demo |
 | `demo/` | Landing page that consumes the build output |
+| `demo/og/` | Rendered OG cards, checked in — the gallery at `/demo/og.html` |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
 | `og/` | [OG image generator](og/README.md) — a separate workspace package |
@@ -46,7 +47,14 @@ video sampled at a timestamp, or an image. See [`og/README.md`](og/README.md).
 pnpm og -- specs/site.json --manifest           # render a set of cards
 pnpm og -- specs/react-three-fiber.json --gif   # one seamless loop, animated
 pnpm og:studio                                  # live preview
+pnpm og:demo                                    # re-render the gallery page
 ```
+
+`/demo/og.html` is the gallery: every card the generator can produce — each
+scene, both themes, all three sizes, the effect chain, both media sources and a
+loop — next to the spec field it demonstrates, plus the `<meta>` tags that put
+one on a page. Its assets are the only binaries in the repo, checked in because
+the deploy has no browser to render them with. `pnpm og:demo` regenerates them.
 
 ## Deploying
 
@@ -90,6 +98,20 @@ hairlines and muted text all come from the neutral ramp, and each callout takes
 its tint from one accent ramp's `950` and its rule from that ramp's `300`. No
 component hard-codes a colour, and the page makes no network requests, so
 avatars and thumbnails are drawn from ramp steps rather than fetched.
+
+Two more pages sit beside it, sharing the same stylesheet and theme toggle:
+
+| URL | Page |
+| --- | --- |
+| `/` | The brand book — palette, ramps, gradients, component waterfall |
+| `/demo/og.html` | Every OG card the generator produces, and how to use one |
+| `/demo/sync.html` | The Figma round trip, as a quickstart |
+
+`og.html` is the only page that loads images, and it is worth knowing why: they
+are checked into `demo/og/` rather than rendered during deployment. Rendering
+needs a headless browser and Remotion, neither of which belongs in a static
+build — and cards are deterministic, so a committed render is the same file the
+build would have produced.
 
 ## Colour notation
 

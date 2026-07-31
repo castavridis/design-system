@@ -1,0 +1,13 @@
+{
+	"eyebrow": "pmndrs",
+	"title": "In motion",
+	"subtitle": "One seamless loop — the last frame leads back into the first.",
+	"meta": "--mp4",
+	"accent": "purple",
+	"width": 800,
+	"height": 420,
+	"source": { "kind": "scene", "name": "ramp-orbit" },
+	"seed": 5,
+	"atSeconds": 0,
+	"loopSeconds": 4
+}

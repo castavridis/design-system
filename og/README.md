@@ -15,10 +15,14 @@ pnpm og -- specs/react-three-fiber.json --out out/r3f.png
 pnpm og -- specs/site.json --manifest
 pnpm og -- --title "Postprocessing" --accent teal --scene prism
 pnpm og:studio          # live preview; scrub the timeline, edit props
+pnpm og:demo            # re-render the gallery at /demo/og.html
 ```
 
 Run from the repo root. `pnpm og` builds the tokens first, so a card is never
 rendered against a stale palette.
+
+Every card this package can produce is on one page — `/demo/og.html`, served by
+`pnpm demo` — with each one next to the spec field it demonstrates.
 
 ## What it is built on
 
@@ -67,6 +71,12 @@ A `src` that names a file on disk is copied into the served directory
 automatically, so `--image ~/Desktop/shot.png` works. Anything that is already
 a URL is left alone; anything else resolves against `og/public/`.
 
+**A relative `src` is read from where the command runs**, not from the spec
+file — including inside a manifest, where `outDir` is manifest-relative and
+this is not. A path that matches nothing stops the run and says where it
+looked, because the alternative is worse: the plate comes back empty, and the
+card renders slightly wrong with no error anywhere.
+
 Media is drawn as a textured plate *inside* the scene rather than composited
 behind the canvas, so a photo card takes the same grade as a generated one.
 
@@ -81,6 +91,30 @@ the wall clock — five cards take about as long as one.
 
 `outDir` is relative to the manifest. A card without `out` is named from its
 title.
+
+### Stills as JPEG
+
+`--format jpeg` renders stills as JPEG and names them `.jpg`, whatever the
+manifest said. PNG is the default and is what you want for a card you ship —
+flat type over a gradient is exactly what it is good at. JPEG is for a page
+that *displays* a lot of cards at once: the gallery is thirteen stills and a
+clip, at about a quarter of the bytes.
+
+### The gallery manifests
+
+`pnpm og:demo` renders `/demo/og.html` in four passes, in this order, because
+the last one consumes what the others write:
+
+| | |
+| --- | --- |
+| `specs/demo-loop.json --mp4` | the animated loop, into `demo/og/loop.mp4` |
+| `specs/demo-loop.json` | the same frame as a still — the video's `poster` |
+| `specs/demo.json` | ten cards — every scene, theme, size, and the effect pair |
+| `specs/demo-media.json` | the image and video cards, sourced from the above |
+
+That ordering is why it is four commands rather than one manifest: media is
+staged into the bundle *before* any card in a run renders, so a card cannot
+consume a file that same run is about to write.
 
 ## Animated cards
 

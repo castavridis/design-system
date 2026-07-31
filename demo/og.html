@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OG images — pmndrs design tokens</title>
+    <meta
+      name="description"
+      content="Every card the OG generator can produce, rendered from the same tokens this site is styled with — scenes, sizes, themes, effects, media sources and a loop."
+    />
+
+    <!--
+      The page's own card, and the point of the whole exercise: these four
+      lines are what a crawler reads. `og:image` has to be an absolute URL —
+      relative paths are the single most common reason a card never appears —
+      so this one is filled in by /demo/og.js from the origin it is served
+      from. Everything else is static.
+    -->
+    <meta property="og:title" content="OG images — pmndrs design tokens" />
+    <meta
+      property="og:description"
+      content="Cards rendered from the design tokens: a live three.js scene, a video sampled at a timestamp, or an image."
+    />
+    <meta property="og:image" content="/demo/og/og-endpoint.jpg" data-og-image />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/dist/fonts.css" />
+    <link rel="stylesheet" href="/dist/tokens.css" />
+    <link rel="stylesheet" href="/demo/demo.css" />
+  </head>
+  <body>
+    <button type="button" class="theme-toggle" data-theme-toggle>
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-label" data-theme-label>Theme</span>
+    </button>
+
+    <header class="hero">
+      <p class="eyebrow">og images</p>
+      <h1>One spec in.<br />One card out.</h1>
+      <p class="lede">
+        Every image below was rendered by <code>@pmndrs/og</code> from a few
+        lines of JSON and the same <code>dist/tokens.js</code> this page is
+        styled with. Re-seed a ramp in the design book and all of them change on
+        the next render — <a href="/">the brand book</a> is next door.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#gallery">See the cards</a>
+        <a class="button" href="#spec">The spec</a>
+        <a class="button" href="#meta">Use one</a>
+        <a class="button" href="/demo/sync.html">Figma sync</a>
+      </div>
+    </header>
+
+    <main>
+      <section id="quickstart">
+        <h2>Quickstart</h2>
+        <p class="section-note">
+          Run from the repo root. Every command builds the tokens first, so a
+          card is never rendered against a stale palette. A batch shares one
+          bundle and one browser — five cards cost about what one does.
+        </p>
+
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pnpm og -- specs/react-three-fiber.json</code></td>
+                <td>
+                  Renders one spec to <code>og/out/</code>. <code>--out</code>
+                  puts it somewhere else.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm og -- specs/site.json --manifest</code></td>
+                <td>
+                  Renders a set. The manifest names an <code>outDir</code> and
+                  an <code>out</code> per card.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm og -- --title "Postprocessing" --accent teal</code></td>
+                <td>
+                  No file at all — enough flags to render a card from the shell.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm og -- specs/…json --gif</code></td>
+                <td>
+                  One seamless loop instead of a still. <code>--mp4</code> for
+                  the same motion at a tenth of the size.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm og:studio</code></td>
+                <td>
+                  Remotion Studio — scrub the timeline and edit props against a
+                  live scene.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm og:demo</code></td>
+                <td>
+                  Re-renders every asset on this page into
+                  <code>demo/og/</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="doc-gha" data-keyword="note">
+          <p class="doc-gha-label">Note</p>
+          <p>
+            The generator is a workspace package, not part of the published
+            token package — a contributor who only touches
+            <code>src/</code> never installs React, three.js or a headless
+            browser. It consumes the tokens as
+            <code>pmndrs-design-tokens: workspace:*</code>, through exactly the
+            entry points an outside consumer would use.
+          </p>
+        </div>
+      </section>
+
+      <section id="gallery">
+        <h2>The cards</h2>
+        <p class="section-note">
+          Grouped by the field each one is there to demonstrate. Together they
+          cover every source kind, every scene, both themes, all three sizes and
+          the effect chain — which is the whole surface of the spec.
+        </p>
+
+        <p class="wf-group">scenes</p>
+        <p class="section-note">
+          A scene is plain React Three Fiber that receives
+          <code>{ time, palette, seed }</code> and imports nothing from the
+          renderer. The palette is the accent's eleven-step ramp, so the scene
+          never picks a colour — it picks a step.
+        </p>
+
+        <div class="og-grid">
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/react-three-fiber.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="Purple spheres and polyhedra circling a lit core, with React Three Fiber set across the lower left."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">ramp-orbit</p>
+              <p class="og-note">
+                Solids circling a lit core, one ramp step each. The default
+                scene.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent purple</li>
+                <li class="og-tag">atSeconds 2.4</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/drei.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="An orange travelling wave of blocks under the word Drei."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">token-grid</p>
+              <p class="og-note">
+                A travelling wave; height picks the ramp step, so the grid reads
+                as the scale itself.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent orange</li>
+                <li class="og-tag">atSeconds 3.1</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/postprocessing.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="Teal polished slabs catching reflections behind the word Postprocessing."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">prism</p>
+              <p class="og-note">
+                Polished slabs, mostly reflections — the quietest of the three,
+                pushed here with <code>bloom: 1.15</code>.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent teal</li>
+                <li class="og-tag">bloom 1.15</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/minimal.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A purple ramp-orbit card carrying only the headline Only a title."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">every default</p>
+              <p class="og-note">
+                The whole spec was <code>{ "title": "Only a title" }</code>.
+                Purple, dark, <code>ramp-orbit</code>, 1200×630, wordmark taken
+                from the title.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">1 field</li>
+              </ul>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="wf-group">themes and sizes</p>
+        <p class="section-note">
+          <code>theme</code> chooses which neutral ramp is the ground, and it
+          moves the type and the scene lighting together rather than inverting
+          the artwork. <code>size</code> is a name for a box —
+          <code>width</code> and <code>height</code> override it when a target
+          wants exact pixels.
+        </p>
+
+        <div class="og-grid">
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/design-tokens-light.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A light card with a blue token grid and the headline Tokens, defined once."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">theme light</p>
+              <p class="og-note">
+                The same generator on the light neutral ramp. Nothing about the
+                card is inverted — it is rendered on a different ground.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent blue</li>
+                <li class="og-tag">1200×630</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame og-frame-square">
+              <img
+                src="/demo/og/zustand-square.jpg"
+                width="1200"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+                alt="A square yellow card for Zustand."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">size square</p>
+              <p class="og-note">
+                1200×1200, for the feeds that crop to a square. The layout
+                reflows; it is not the wide card letterboxed.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent yellow</li>
+                <li class="og-tag">seed 7</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card og-card-wide">
+            <div class="og-frame og-frame-wide">
+              <img
+                src="/demo/og/jotai-wide.jpg"
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+                alt="A wide green card with prism slabs and the headline Jotai."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">size wide</p>
+              <p class="og-note">
+                1920×1080 — the shape a slide or a video thumbnail wants.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent green</li>
+                <li class="og-tag">scene prism</li>
+              </ul>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="wf-group">effects</p>
+        <p class="section-note">
+          Bloom, lens fringing, grain and vignette are one chain over the whole
+          frame, media included. Both cards below are the same scene at the same
+          seed and the same second; only <code>effects</code> differs.
+        </p>
+
+        <div class="og-grid og-grid-pair">
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/effects-default.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A red card with bloom, grain and a vignette."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">defaults</p>
+              <p class="og-note">
+                <code>bloom 0.9</code>, <code>chromaticAberration 0.0016</code>,
+                <code>noise 0.045</code>, <code>vignette 0.5</code>.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/effects-none.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="The same red card with every effect switched off — flat, clean edges."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">all zero</p>
+              <p class="og-note">
+                Every effect set to <code>0</code>. Same geometry, same light —
+                the grade is the difference.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="wf-group">sources</p>
+        <p class="section-note">
+          Media is drawn as a textured plate <em>inside</em> the scene rather
+          than composited behind the canvas, so a photo card takes the same
+          camera, the same lighting and the same grade as a generated one. That
+          is why these two look like they belong to the set.
+        </p>
+
+        <div class="og-grid og-grid-pair">
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/source-image.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A card whose background is another rendered card, dimmed and graded behind the headline An image, graded."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">kind: image</p>
+              <p class="og-note">
+                The plate is the defaults card above, fed back in as a source —
+                the repo ships no photography, and a card is a real image. A
+                <code>src</code> that names a file on disk is staged into the
+                bundle automatically, so <code>--image ~/shot.png</code> works.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">fit cover</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/source-video.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A card built from one frame of the looping clip, headline A video, sampled."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">kind: video</p>
+              <p class="og-note">
+                One frame out of the clip below, at
+                <code>atSeconds: 1.2</code>. Decoded by the compositor, not by a
+                <code>&lt;video&gt;</code> element — the rendering Chromium
+                ships without proprietary codecs.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">fit cover</li>
+              </ul>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="wf-group">motion</p>
+        <p class="section-note">
+          <code>--gif</code> or <code>--mp4</code> renders one loop instead of a
+          still. Every rate in a scene is rounded to a whole number of cycles
+          per <code>loopSeconds</code>, so the last frame leads back into the
+          first — verified rather than asserted: a still at <code>t=0</code> and
+          one at <code>t=loopSeconds</code> are byte-identical for all three
+          scenes.
+        </p>
+
+        <div class="og-grid og-grid-pair">
+          <figure class="og-card">
+            <div class="og-frame og-frame-loop">
+              <!--
+                The poster is the same spec rendered as a still, so the first
+                frame is there before a byte of video is — and stays there for
+                anyone whose browser declines to autoplay.
+              -->
+              <video
+                src="/demo/og/loop.mp4"
+                poster="/demo/og/loop-poster.jpg"
+                width="800"
+                height="420"
+                autoplay
+                loop
+                muted
+                playsinline
+                preload="metadata"
+                data-loop
+                aria-label="A four-second seamless loop of the ramp-orbit scene."
+              ></video>
+            </div>
+            <figcaption>
+              <p class="og-title">4s loop, 800×420</p>
+              <p class="og-note">
+                Rendered with <code>--mp4</code>. GIF is the format that pastes
+                into a README and animates in a feed, but at 1200×630 for six
+                seconds it lands around 23 MB — cut the box and the loop, which
+                is what the format wants.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">loopSeconds 4</li>
+                <li class="og-tag">seed 5</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <div class="og-aside">
+            <div class="doc-gha" data-keyword="tip">
+              <p class="doc-gha-label">An animated card is a real option</p>
+              <p>
+                The Open Graph spec allows <code>image/gif</code>. Whether a
+                platform actually plays it varies, so treat the first frame as
+                the card and the motion as a bonus — which is why
+                <code>atSeconds</code> still picks the frame a still would use
+                and the loop runs from there.
+              </p>
+            </div>
+            <div class="doc-gha" data-keyword="caution">
+              <p class="doc-gha-label">--fps thins, it does not slow</p>
+              <p>
+                Frames are dropped rather than stretched, so motion keeps its
+                speed — but only whole divisors of 30 are reachable (30, 15, 10,
+                7.5…). The line the CLI prints is the rate you actually got.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="spec">
+        <h2>The spec</h2>
+        <p class="section-note">
+          Plain JSON, so it travels from a file on disk into the browser without
+          anything having to serialise a closure. Only <code>title</code> is
+          required; <code>src/lib/spec.ts</code> fills in the rest and is the one
+          place the defaults live.
+        </p>
+
+        <div class="spec">
+          <div class="spec-head">
+            <h4>A card, in full</h4>
+            <p>
+              An excerpt of <code>og/specs/demo.json</code> — the manifest that
+              renders this page. <code>outDir</code> is relative to the manifest;
+              a card without <code>out</code> is named from its title.
+            </p>
+          </div>
+          <div class="spec-stage spec-stage-flush">
+            <figure class="doc-code-block">
+              <figcaption>
+                <span class="doc-code-lang">json</span>
+                <span class="doc-code-meta">og/specs/demo.json</span>
+              </figcaption>
+              <pre class="doc-code"><code><span class="ln"><span class="tok-punc">{</span></span>
+<span class="ln">  <span class="tok-str">"outDir"</span><span class="tok-punc">:</span> <span class="tok-str">"../../demo/og"</span><span class="tok-punc">,</span></span>
+<span class="ln">  <span class="tok-str">"cards"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span></span>
+<span class="ln">    <span class="tok-punc">{</span></span>
+<span class="ln">      <span class="tok-str">"out"</span><span class="tok-punc">:</span> <span class="tok-str">"postprocessing.jpg"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"eyebrow"</span><span class="tok-punc">:</span> <span class="tok-str">"pmndrs"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"title"</span><span class="tok-punc">:</span> <span class="tok-str">"Postprocessing"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"subtitle"</span><span class="tok-punc">:</span> <span class="tok-str">"A post-processing library…"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"meta"</span><span class="tok-punc">:</span> <span class="tok-str">"github.com/pmndrs/postprocessing"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"accent"</span><span class="tok-punc">:</span> <span class="tok-str">"teal"</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"source"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-str">"kind"</span><span class="tok-punc">:</span> <span class="tok-str">"scene"</span><span class="tok-punc">,</span> <span class="tok-str">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"prism"</span> <span class="tok-punc">}</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"atSeconds"</span><span class="tok-punc">:</span> <span class="tok-num">1.8</span><span class="tok-punc">,</span></span>
+<span class="ln">      <span class="tok-str">"effects"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span> <span class="tok-str">"bloom"</span><span class="tok-punc">:</span> <span class="tok-num">1.15</span> <span class="tok-punc">}</span></span>
+<span class="ln">    <span class="tok-punc">}</span></span>
+<span class="ln">  <span class="tok-punc">]</span></span>
+<span class="ln"><span class="tok-punc">}</span></span></code></pre>
+            </figure>
+          </div>
+        </div>
+
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Default</th>
+                <th>What it is</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>title</code></td>
+                <td>—</td>
+                <td>The headline. The only required field.</td>
+              </tr>
+              <tr>
+                <td><code>eyebrow</code></td>
+                <td>none</td>
+                <td>Small tracked line above the title.</td>
+              </tr>
+              <tr>
+                <td><code>subtitle</code></td>
+                <td>none</td>
+                <td>One clause below it. Wraps.</td>
+              </tr>
+              <tr>
+                <td><code>meta</code></td>
+                <td>none</td>
+                <td>Chip, top right — a URL or a version.</td>
+              </tr>
+              <tr>
+                <td><code>accent</code></td>
+                <td><code>purple</code></td>
+                <td>
+                  Any ramp: purple, red, orange, yellow, green, teal, blue,
+                  dark, light. A typo stops the render with the list.
+                </td>
+              </tr>
+              <tr>
+                <td><code>theme</code></td>
+                <td><code>dark</code></td>
+                <td>Which neutral ramp is the ground.</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td><code>og</code></td>
+                <td>
+                  <code>og</code> 1200×630 · <code>square</code> 1200×1200 ·
+                  <code>wide</code> 1920×1080. <code>width</code>/<code>height</code>
+                  override it.
+                </td>
+              </tr>
+              <tr>
+                <td><code>source</code></td>
+                <td><code>scene: ramp-orbit</code></td>
+                <td>
+                  <code>{ kind: "scene" | "image" | "video" }</code>. Media
+                  takes a <code>src</code> and a <code>fit</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>effects</code></td>
+                <td>bloom 0.9, fringing 0.0016, noise 0.045, vignette 0.5</td>
+                <td>The grade. Any of them at <code>0</code> is off.</td>
+              </tr>
+              <tr>
+                <td><code>wordmark</code></td>
+                <td>the title behind a scene, none over media</td>
+                <td>
+                  3D type inside the scene, so it takes the light and the bloom.
+                  <code>""</code> always means none.
+                </td>
+              </tr>
+              <tr>
+                <td><code>seed</code></td>
+                <td><code>1</code></td>
+                <td>Fixes every random placement. Same seed, same card.</td>
+              </tr>
+              <tr>
+                <td><code>atSeconds</code></td>
+                <td><code>2</code></td>
+                <td>
+                  Where the card is sampled. For a scene it is a look-picker;
+                  for a video it is the timestamp.
+                </td>
+              </tr>
+              <tr>
+                <td><code>loopSeconds</code></td>
+                <td><code>6</code></td>
+                <td>
+                  The period a scene repeats over. Shapes stills too — rates are
+                  rounded to whole cycles of it.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="meta">
+        <h2>Using a card</h2>
+        <p class="section-note">
+          A rendered card is a file; the markup is five lines. Below is the card
+          this page declares as its own, and the tags that declare it.
+        </p>
+
+        <div class="og-grid og-grid-pair">
+          <figure class="og-card">
+            <div class="og-frame">
+              <img
+                src="/demo/og/og-endpoint.jpg"
+                width="1200"
+                height="630"
+                loading="lazy"
+                decoding="async"
+                alt="A teal token-grid card reading OG images — every card on this page is rendered from the same tokens the site is styled with."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">this page's card</p>
+              <p class="og-note">
+                Paste the URL of this page into a link preview and this is what
+                comes back. It is one more entry in the same manifest as
+                everything above — nothing about it is special.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">accent teal</li>
+                <li class="og-tag">token-grid</li>
+                <li class="og-tag">1200×630</li>
+              </ul>
+            </figcaption>
+          </figure>
+
+          <div class="og-aside">
+            <div class="doc-gha" data-keyword="important">
+              <p class="doc-gha-label">og:image must be absolute</p>
+              <p>
+                A root-relative path works in a browser and fails in every
+                crawler: the card is fetched from a different origin than the
+                page it describes, so it needs a scheme and a host. This page
+                can't know its deployed origin at build time, so
+                <code>/demo/og.js</code> rewrites the tag to
+                <code>location.origin</code> on load — a real site should write
+                the absolute URL in at build time, where a crawler sees it
+                without running JavaScript.
+              </p>
+            </div>
+            <div class="doc-gha" data-keyword="tip">
+              <p class="doc-gha-label">One render per deploy is enough</p>
+              <p>
+                Cards are deterministic — same spec, same bytes — so rendering
+                them in CI and committing or uploading the output covers it.
+                There is no request-time image service here, and nothing on this
+                page needs one.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="spec-head">
+            <h4>In the document head</h4>
+            <p>
+              <code>twitter:card</code> is what makes the image render large
+              rather than as a thumbnail. Width and height are optional but stop
+              a crawler guessing.
+            </p>
+          </div>
+          <div class="spec-stage spec-stage-flush">
+            <figure class="doc-code-block">
+              <figcaption>
+                <span class="doc-code-lang">html</span>
+                <span class="doc-code-meta">demo/og.html</span>
+              </figcaption>
+              <pre class="doc-code"><code><span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:title"</span> content=<span class="tok-str">"OG images — pmndrs design tokens"</span><span class="tok-punc">/&gt;</span></span>
+<span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image"</span> content=<span class="tok-str">"https://example.com/demo/og/og-endpoint.jpg"</span><span class="tok-punc">/&gt;</span></span>
+<span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image:width"</span> content=<span class="tok-str">"1200"</span><span class="tok-punc">/&gt;</span></span>
+<span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> property=<span class="tok-str">"og:image:height"</span> content=<span class="tok-str">"630"</span><span class="tok-punc">/&gt;</span></span>
+<span class="ln"><span class="tok-punc">&lt;</span><span class="tok-tag">meta</span> name=<span class="tok-str">"twitter:card"</span> content=<span class="tok-str">"summary_large_image"</span><span class="tok-punc">/&gt;</span></span></code></pre>
+            </figure>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="rules">
+        <h2>What will bite you</h2>
+        <p class="section-note">
+          Four failures cost real time to find in building this, and none of
+          them announce themselves. They are written up in full in
+          <code>og/README.md</code>; the short version is here because the first
+          one is a rule you have to follow when adding a scene.
+        </p>
+
+        <div class="spec-stage-stack">
+          <div class="doc-gha" data-keyword="important">
+            <p class="doc-gha-label">A scene must be a pure function of time and seed</p>
+            <p>
+              A still is produced by seeking straight to one frame, with no
+              frames rendered before it. Anything that accumulates —
+              <code>useFrame</code> deltas, a <code>THREE.Clock</code>, drei's
+              <code>&lt;Float&gt;</code>, <code>Math.random()</code> — has no
+              history to accumulate from and renders differently every time.
+              Derive motion from <code>time</code> and jitter from
+              <code>mulberry32(seed)</code>.
+            </p>
+          </div>
+          <div class="doc-gha" data-keyword="warning">
+            <p class="doc-gha-label">Fonts must be WOFF, not WOFF2</p>
+            <p>
+              The 3D wordmark is typeset by troika, which parses the file itself
+              and understands only WOFF. Handed a <code>.woff2</code> it logs
+              once, never calls its callback, and the render hangs until
+              <code>delayRender</code> times out 28 seconds later.
+            </p>
+          </div>
+          <div class="doc-gha" data-keyword="caution">
+            <p class="doc-gha-label">The canvas is drawn once</p>
+            <p>
+              With <code>frameloop="never"</code> a texture that resolves late
+              never reaches the framebuffer, and instance matrices uploaded from
+              a <code>useFrame</code> are still zero when the capture happens.
+              <code>&lt;Settle&gt;</code> and a layout-effect write are why the
+              cards above are not empty.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="assets">
+        <h2>These files are checked in</h2>
+        <p class="section-note">
+          The images on this page are the only binaries in the repository, and
+          they are here deliberately: the deploy builds the tokens and assembles
+          the site, but it has no Chromium and no Remotion licence — so cards
+          are rendered on a developer's machine and committed, the same way you
+          would ship the card for your own site.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>pnpm og:demo</h3>
+            <p>
+              Renders the loop and its poster, then
+              <code>specs/demo.json</code>, then
+              <code>specs/demo-media.json</code> — in that order, because the
+              media cards are sourced from what the earlier passes wrote.
+            </p>
+          </article>
+          <article class="card">
+            <h3>--format jpeg</h3>
+            <p>
+              The gallery is JPEG at a quarter of the bytes;
+              <code>pnpm og</code> emits PNG by default, which is what you want
+              for a card you actually ship.
+            </p>
+          </article>
+          <article class="card">
+            <h3>demo/og/</h3>
+            <p>
+              Copied into the site verbatim by
+              <code>scripts/site.ts</code> alongside the rest of
+              <code>demo/</code>, so what you see locally is what deploys.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Rendered from <code>dist/tokens.js</code> ·
+        <a href="/">brand book</a> ·
+        <a href="/demo/sync.html">figma sync</a>
+      </p>
+    </footer>
+
+    <script type="module" src="/demo/theme.js"></script>
+    <script type="module" src="/demo/og.js"></script>
+  </body>
+</html>

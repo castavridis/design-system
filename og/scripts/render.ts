@@ -97,7 +97,25 @@ const { values, positionals } = parseArgs({
  */
 const animate: 'gif' | 'h264' | null = values.gif ? 'gif' : values.mp4 ? 'h264' : null
 
-const outputExtension = animate === 'gif' ? '.gif' : animate === 'h264' ? '.mp4' : '.png'
+/**
+ * Still format. PNG is the default because a card is flat colour over a
+ * gradient and PNG keeps the type crisp; JPEG is for the web gallery, where a
+ * card is displayed rather than shipped and a quarter of the bytes matters
+ * more than a lossless edge.
+ */
+const imageFormat: 'png' | 'jpeg' =
+	values.format === 'png' || values.format === 'jpeg'
+		? values.format
+		: fail(`Unknown --format \`${values.format}\`. Expected: png, jpeg.`)
+
+const outputExtension =
+	animate === 'gif'
+		? '.gif'
+		: animate === 'h264'
+			? '.mp4'
+			: imageFormat === 'jpeg'
+				? '.jpg'
+				: '.png'
 
 /** `'card.png'` -> `'card.gif'`, so a manifest need not know how it is rendered. */
 function withExtension(path: string): string {
@@ -233,15 +251,26 @@ async function collectJobs(): Promise<Job[]> {
  */
 const inbox = join(publicDir, 'inbox')
 
+/** `https://…`, `data:…`, `file:…` — anything the page can fetch as-is. */
+function isUrl(src: string): boolean {
+	return /^[a-z][a-z0-9+.-]*:/i.test(src)
+}
+
 /**
  * Copies any `src` that names a file on disk into the served directory, and
  * rewrites the spec to point at the copy.
  *
  * Without this, a spec could only reference media already sitting in
  * `og/public/` — which is a strange thing to demand of a command-line tool.
- * `--image ~/shot.png` should work, so it does. Anything that is already a URL,
- * or that does not exist on disk, is passed through untouched and left for
- * `staticFile` to resolve.
+ * `--image ~/shot.png` should work, so it does. A URL is left alone, and so is
+ * a path that already names something inside `og/public/`, which `staticFile`
+ * resolves on its own.
+ *
+ * A `src` that is none of those stops the run. It used to fall through to
+ * `staticFile`, which fails inside the page rather than out here: the plate
+ * comes back empty and the card renders — slightly wrong, with no error
+ * anywhere. Since a relative path is read from wherever the command was run,
+ * that is a mistake worth making loud.
  */
 async function stageMedia(jobs: Job[]): Promise<void> {
 	const staged = new Map<string, string>()
@@ -253,7 +282,16 @@ async function stageMedia(jobs: Job[]): Promise<void> {
 		if (!source || source.kind === 'scene') continue
 
 		const local = resolve(source.src)
-		if (!existsSync(local) || !statSync(local).isFile()) continue
+
+		if (!existsSync(local) || !statSync(local).isFile()) {
+			if (isUrl(source.src) || existsSync(join(publicDir, source.src))) continue
+
+			fail(
+				`No ${source.kind} at \`${source.src}\` for ${basename(job.out)}.\n` +
+					`  Looked in ${process.cwd()} and og/public/ — a relative src is ` +
+					`read from where the command runs, not from the spec file.`,
+			)
+		}
 
 		if (!used) {
 			await rm(inbox, { recursive: true, force: true })
@@ -297,8 +335,6 @@ async function main() {
 
 	const scale = Number(values.scale)
 	if (!Number.isFinite(scale) || scale <= 0) fail(`--scale must be a positive number.`)
-
-	const imageFormat = values.format === 'jpeg' ? 'jpeg' : 'png'
 
 	const onBrowserLog = values.verbose
 		? (log: { type: string; text: string }) => console.log(`  [page:${log.type}] ${log.text}`)

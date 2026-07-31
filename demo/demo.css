@@ -125,7 +125,8 @@ code {
   padding: 0.1em 0.35em;
   border-radius: calc(var(--brand-radius) / 4);
   background: var(--surface);
-  color: var(--brand-teal);
+  /* Mode-aware: the brand teal on the light surface is too pale to read. */
+  color: var(--tok-tag);
 }
 
 a {
@@ -1368,10 +1369,23 @@ kbd {
   flex: none;
 }
 
+/*
+ * The tint is a ramp step, and ramp steps are baked at build time — so a
+ * callout sits on a dark ground in *both* modes. Its ink therefore has to be
+ * the dark mode's slot rather than the active one: `--text-strong` follows the
+ * page, which in light mode put dark text on that dark tint and made every
+ * alert on every page unreadable.
+ */
 .doc-gha p:last-child {
   margin: 0;
-  color: var(--text-strong);
+  color: var(--dark-text-strong);
   font-size: 0.9rem;
+}
+
+/* Same reason — an inline chip inside a callout keeps the dark mode's pair. */
+.doc-gha code {
+  background: var(--dark-surface);
+  color: var(--brand-teal);
 }
 
 /* Deprecated, and styled to look it: neutral, unaccented, quiet. */
@@ -1521,23 +1535,71 @@ kbd {
  * Syntax colours. Each is a brand hue rather than an editor theme, which is
  * the point: a code block is part of the brand, not an escape from it.
  */
+/*
+ * The syntax palette is mode-aware for the same reason the rest of the page
+ * is: the brand hues were chosen against the dark ground, and on the light one
+ * they wash out — `brand.green` on `light.surface-sunken` is around 2:1, which
+ * is a colour you can see but not read.
+ *
+ * Light mode therefore takes the 700 step of each colour's own ramp. Same hue,
+ * dark enough to read, and still recognisably the token it came from — which
+ * is exactly the case for ramping the accents.
+ */
+:root {
+  --tok-kw: var(--brand-purple);
+  --tok-str: var(--brand-green);
+  --tok-fn: var(--brand-yellow);
+  --tok-type: var(--brand-blue);
+  --tok-tag: var(--brand-teal);
+  --tok-num: var(--brand-orange);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --tok-kw: var(--ramp-purple-700);
+    --tok-str: var(--ramp-green-700);
+    --tok-fn: var(--ramp-yellow-700);
+    --tok-type: var(--ramp-blue-700);
+    --tok-tag: var(--ramp-teal-700);
+    --tok-num: var(--ramp-orange-700);
+  }
+}
+
+:root[data-theme="light"] {
+  --tok-kw: var(--ramp-purple-700);
+  --tok-str: var(--ramp-green-700);
+  --tok-fn: var(--ramp-yellow-700);
+  --tok-type: var(--ramp-blue-700);
+  --tok-tag: var(--ramp-teal-700);
+  --tok-num: var(--ramp-orange-700);
+}
+
+:root[data-theme="dark"] {
+  --tok-kw: var(--brand-purple);
+  --tok-str: var(--brand-green);
+  --tok-fn: var(--brand-yellow);
+  --tok-type: var(--brand-blue);
+  --tok-tag: var(--brand-teal);
+  --tok-num: var(--brand-orange);
+}
+
 .tok-kw {
-  color: var(--brand-purple);
+  color: var(--tok-kw);
 }
 .tok-str {
-  color: var(--brand-green);
+  color: var(--tok-str);
 }
 .tok-fn {
-  color: var(--brand-yellow);
+  color: var(--tok-fn);
 }
 .tok-type {
-  color: var(--brand-blue);
+  color: var(--tok-type);
 }
 .tok-tag {
-  color: var(--brand-teal);
+  color: var(--tok-tag);
 }
 .tok-num {
-  color: var(--brand-orange);
+  color: var(--tok-num);
 }
 .tok-punc {
   color: var(--text-faint);
@@ -1717,6 +1779,114 @@ kbd {
   margin-top: calc(var(--brand-space) * 0.6);
   font-size: 0.8rem;
   color: var(--text-muted);
+}
+
+/* ---------- og gallery (og.html) ---------- */
+
+.og-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+  gap: calc(var(--brand-space) * 1.5);
+  align-items: start;
+}
+
+/*
+ * Two tracks at most. The effects and source groups are comparisons — three
+ * across would put the pair on separate rows on a wide screen, which is the
+ * one thing a comparison must not do.
+ */
+.og-grid-pair {
+  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+}
+
+.og-card {
+  margin: 0;
+  display: grid;
+  gap: calc(var(--brand-space) * 0.75);
+}
+
+/*
+ * The frame carries the card's own aspect ratio, so a lazy image reserves its
+ * box before it arrives and the page never jumps. The checkerboard shows
+ * through until then — and stays visible for a missing asset, which is the
+ * state you are in before `pnpm og:demo` has ever run.
+ */
+.og-frame {
+  aspect-ratio: 1200 / 630;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: calc(var(--brand-radius) / 2);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      var(--surface) 0 8px,
+      var(--surface-sunken) 8px 16px
+    );
+}
+
+.og-frame-square {
+  aspect-ratio: 1 / 1;
+}
+
+.og-frame-wide {
+  aspect-ratio: 16 / 9;
+}
+
+.og-frame-loop {
+  aspect-ratio: 800 / 420;
+}
+
+.og-frame :where(img, video) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.og-card figcaption {
+  display: grid;
+  gap: calc(var(--brand-space) * 0.4);
+}
+
+.og-title {
+  margin: 0;
+  font-family: var(--fonts-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--brand-teal);
+}
+
+.og-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+
+.og-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--brand-space) * 0.35);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.og-tag {
+  padding: 0.15em 0.6em;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--fonts-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+/* Callouts standing in a grid track next to a card rather than under it. */
+.og-aside {
+  display: grid;
+  gap: var(--brand-space);
+  align-content: start;
 }
 
 /* ---------- mermaid ---------- */
