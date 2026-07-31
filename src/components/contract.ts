@@ -86,11 +86,11 @@ const gha: ComponentSpec = {
 	},
 	variantProp: 'keyword',
 	bindings: {
-		NOTE: { tint: 'ramp.blue-950', accent: 'ramp.blue-300', body: 'ramp.dark-200' },
-		TIP: { tint: 'ramp.green-950', accent: 'ramp.green-300', body: 'ramp.dark-200' },
-		IMPORTANT: { tint: 'ramp.purple-950', accent: 'ramp.purple-300', body: 'ramp.dark-200' },
-		WARNING: { tint: 'ramp.orange-950', accent: 'ramp.orange-300', body: 'ramp.dark-200' },
-		CAUTION: { tint: 'ramp.red-950', accent: 'ramp.red-300', body: 'ramp.dark-200' },
+		NOTE: { tint: 'tint-blue', accent: 'accent-blue', body: 'text-strong' },
+		TIP: { tint: 'tint-green', accent: 'accent-green', body: 'text-strong' },
+		IMPORTANT: { tint: 'tint-purple', accent: 'accent-purple', body: 'text-strong' },
+		WARNING: { tint: 'tint-orange', accent: 'accent-orange', body: 'text-strong' },
+		CAUTION: { tint: 'tint-red', accent: 'accent-red', body: 'text-strong' },
 		/* Applies to every keyword — see fonts.legible in the design book. */
 		'*': { font: 'fonts.legible' },
 	},
@@ -117,9 +117,9 @@ const button: ComponentSpec = {
 	},
 	variantProp: 'variant',
 	bindings: {
-		default: { surface: 'brand.purple', ink: 'ramp.purple-950', hover: 'ramp.purple-400', border: 'brand.purple' },
-		secondary: { surface: 'transparent', ink: 'brand.light', hover: 'ramp.dark-700', border: 'ramp.dark-600' },
-		ghost: { surface: 'transparent', ink: 'ramp.dark-400', hover: 'ramp.dark-700', border: 'transparent' },
+		default: { surface: 'action', ink: 'action-ink', hover: 'action-hover', border: 'action' },
+		secondary: { surface: 'transparent', ink: 'text', hover: 'surface-raised', border: 'line' },
+		ghost: { surface: 'transparent', ink: 'text-muted', hover: 'surface-raised', border: 'transparent' },
 		/*
 		 * Not a variant — a state override. `.button:disabled` in demo.css
 		 * replaces surface, ink and border identically whichever variant is
@@ -127,7 +127,7 @@ const button: ComponentSpec = {
 		 * second variant axis because a BOOLEAN component property can toggle
 		 * visibility but cannot repaint a fill.
 		 */
-		disabled: { surface: 'transparent', ink: 'ramp.dark-500', border: 'ramp.dark-700' },
+		disabled: { surface: 'transparent', ink: 'text-faint', border: 'line-soft' },
 	},
 }
 
@@ -155,7 +155,7 @@ const badge: ComponentSpec = {
 	bindings: Object.fromEntries(
 		['purple', 'red', 'orange', 'yellow', 'green', 'teal', 'blue'].map((hue) => [
 			hue,
-			{ tint: `ramp.${hue}-950`, ink: `ramp.${hue}-300`, border: `ramp.${hue}-800` },
+			{ tint: `tint-${hue}`, ink: `accent-${hue}`, border: `accent-${hue}` },
 		]),
 	),
 }
@@ -191,23 +191,55 @@ const code: ComponentSpec = {
 	},
 	variantProp: 'lang',
 	bindings: {
-		tsx: { surface: 'ramp.dark-950', chrome: 'ramp.dark-700', gutter: 'ramp.dark-500', highlight: 'ramp.dark-800', rule: 'brand.yellow' },
-		diff: { surface: 'ramp.dark-950', chrome: 'ramp.dark-700', gutter: 'ramp.dark-500', add: 'ramp.green-950', remove: 'ramp.red-950' },
+		tsx: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', highlight: 'surface', rule: 'accent-yellow' },
+		diff: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', add: 'tint-green', remove: 'tint-red' },
 	},
 }
 
 export const components: readonly ComponentSpec[] = [gha, button, badge, code]
 
-/** Every token path any component binds — the set Figma must have before M4. */
+/**
+ * **Every component binds theme slots, not ramp steps.**
+ *
+ * A bare name (`tint-blue`, `text-body`) is a *theme slot*: it must exist in
+ * both the `light` and `dark` scopes, and therefore follows the mode wherever
+ * it is used. A dotted path (`fonts.legible`) is a fixed token that is the same
+ * in both modes, and is allowed only where that is genuinely true.
+ *
+ * The distinction is enforced at build time by `boundTokenPaths`, which
+ * expands every bare name into both modes. Binding `ramp.blue-950` directly
+ * still resolves — it is a real token — but it silently locks the component to
+ * one mode, and that is exactly the mistake this rule exists to prevent: it is
+ * invisible until someone flips the theme.
+ */
 export function boundTokenPaths(specs: readonly ComponentSpec[] = components) {
 	const paths = new Set<string>()
+
 	for (const spec of specs) {
-		for (const slots of Object.values(spec.bindings)) {
-			for (const path of Object.values(slots)) {
+		for (const [variant, slots] of Object.entries(spec.bindings)) {
+			for (const [slot, value] of Object.entries(slots)) {
 				/* `transparent` is a CSS keyword, not a token. */
-				if (path !== 'transparent') paths.add(path)
+				if (value === 'transparent') continue
+
+				if (value.includes('.')) {
+					/* A fixed token. Legal, but only for genuinely mode-invariant
+					   things — a font family, not a colour. */
+					if (value.startsWith('ramp.') || value.startsWith('brand.')) {
+						throw new Error(
+							`${spec.name} binds ${value} for ${variant}.${slot}. Colours must bind a theme ` +
+								`slot so they follow the mode — use the matching light/dark slot instead.`,
+						)
+					}
+					paths.add(value)
+					continue
+				}
+
+				/* A theme slot has to exist in both modes or the switch is a no-op. */
+				paths.add(`light.${value}`)
+				paths.add(`dark.${value}`)
 			}
 		}
 	}
+
 	return [...paths].sort()
 }
