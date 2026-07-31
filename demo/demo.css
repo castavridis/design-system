@@ -192,11 +192,13 @@ code {
   padding: 0.1em 0.35em;
   border-radius: calc(var(--brand-radius) / 4);
   background: var(--surface);
-  color: var(--brand-teal);
+  /* The slot, not the brand colour: `Prose` declares `code: accent-teal`, and
+     this is what renders it. Identical in dark, legible in light. */
+  color: var(--accent-teal);
 }
 
 a {
-  color: var(--brand-teal);
+  color: var(--accent-teal);
 }
 
 :where(button, a, summary, [tabindex]):focus-visible {
@@ -1317,7 +1319,7 @@ kbd {
 }
 
 .doc-prose li::marker {
-  color: var(--brand-orange);
+  color: var(--accent-orange);
 }
 
 .doc-prose blockquote {

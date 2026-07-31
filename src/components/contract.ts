@@ -458,6 +458,87 @@ const entries: ComponentSpec = {
 	},
 }
 
+/**
+ * The markdown primitives, as one specimen: headings, body, rules, lists,
+ * inline code and links. `brand-book`, not `pmndrs-docs` — there is no `Prose`
+ * component to mirror. It is the page's own demonstration that the type scale
+ * and the neutral ramp hold together, which is why it earns a declaration.
+ */
+const prose: ComponentSpec = {
+	name: 'pmndrs-prose',
+	react: 'Prose',
+	source: 'brand-book',
+	description: 'The markdown primitives: headings, paragraphs, links, inline code, rules and lists.',
+	props: {},
+	bindings: {
+		'*': {
+			heading: 'text',
+			headingFont: 'fixed:fonts.serif',
+			body: 'text-body',
+			rule: 'line-soft',
+			marker: 'accent-orange',
+			link: 'accent-teal',
+			code: 'accent-teal',
+			codeSurface: 'surface',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/** Quoted passage, set apart by a rule rather than a box. */
+const blockquote: ComponentSpec = {
+	name: 'pmndrs-blockquote',
+	react: 'Blockquote',
+	source: 'pmndrs-docs',
+	description: 'Quoted passage, set apart by a rule rather than a box.',
+	props: {},
+	bindings: {
+		'*': { rule: 'line', body: 'text-muted' },
+	},
+}
+
+/**
+ * Tables. The zebra stripe is `surface-raised` rather than a tinted overlay,
+ * because an overlay would have to know what it sits on and a raised surface
+ * already does.
+ */
+const table: ComponentSpec = {
+	name: 'pmndrs-table',
+	react: 'Table',
+	source: 'pmndrs-docs',
+	description: 'Scrolls horizontally rather than squashing its columns.',
+	props: {},
+	bindings: {
+		'*': {
+			wrapBorder: 'line-soft',
+			headSurface: 'surface-sunken',
+			headInk: 'text-muted',
+			headBorder: 'line',
+			cell: 'text-muted',
+			cellBorder: 'line-soft',
+			zebra: 'surface-raised',
+			firstCell: 'text',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * Deprecated, and styled to look it: no accent at all. Superseded by
+ * `Gha[keyword="NOTE"]`, and kept because a deprecated component still has to
+ * look deliberate — an unstyled one reads as broken rather than retired.
+ */
+const hint: ComponentSpec = {
+	name: 'pmndrs-hint',
+	react: 'Hint',
+	source: 'pmndrs-docs',
+	description: 'Deprecated callout, superseded by Gha[keyword="NOTE"].',
+	props: {},
+	bindings: {
+		'*': { surface: 'surface-raised', border: 'line', body: 'text-muted' },
+	},
+}
+
 export const components: readonly ComponentSpec[] = [
 	gha,
 	button,
@@ -471,6 +552,10 @@ export const components: readonly ComponentSpec[] = [
 	keypoints,
 	details,
 	entries,
+	prose,
+	blockquote,
+	table,
+	hint,
 ]
 
 /**

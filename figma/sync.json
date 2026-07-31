@@ -749,6 +749,36 @@
 			"contract": "pmndrs-entries",
 			"note": "the thumbnail is a gradient with bound stops, fixed: because a screenshot does not follow the mode",
 			"boundTo": "theme/* (mode-aware)"
+		},
+		"Prose": {
+			"id": "154:691",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-prose",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Blockquote": {
+			"id": "154:694",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-blockquote",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Table": {
+			"id": "154:731",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-table",
+			"note": "cells are fixed-width columns: Figma auto-layout has no colspan, and a table is the one place where the grid is the component",
+			"boundTo": "theme/* (mode-aware)"
+		},
+		"Hint": {
+			"id": "154:734",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-hint",
+			"note": "deprecated — kept so a retired component still looks deliberate",
+			"boundTo": "theme/* (mode-aware)"
 		}
 	},
 	"pages": {
