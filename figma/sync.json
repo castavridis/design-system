@@ -612,5 +612,23 @@
 			"ramp.blue-900": "#1a5165",
 			"ramp.blue-950": "#0b3444"
 		}
+	},
+	"components": {
+		"Gha": {
+			"id": "92:38",
+			"type": "COMPONENT_SET",
+			"variantProp": "keyword",
+			"variants": [
+				"NOTE",
+				"TIP",
+				"IMPORTANT",
+				"WARNING",
+				"CAUTION"
+			],
+			"properties": {
+				"title": "title#92:0"
+			},
+			"contract": "pmndrs-gha"
+		}
 	}
 }
