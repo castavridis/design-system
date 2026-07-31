@@ -6,14 +6,19 @@
 		"fonts": "VariableCollectionId:83:3",
 		"radius": "VariableCollectionId:86:2",
 		"ramp": "VariableCollectionId:87:2",
-		"space": "VariableCollectionId:99:2"
+		"space": "VariableCollectionId:99:2",
+		"theme": "VariableCollectionId:106:2"
 	},
 	"modes": {
 		"brand": "83:0",
 		"fonts": "83:1",
 		"radius": "86:0",
 		"ramp": "87:0",
-		"space": "99:0"
+		"space": "99:0",
+		"theme": {
+			"Dark": "106:0",
+			"Light": "106:1"
+		}
 	},
 	"variables": {
 		"brand.dark": {
@@ -633,7 +638,8 @@
 				"CAUTION"
 			],
 			"contract": "pmndrs-gha",
-			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)"
+			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)",
+			"boundTo": "theme/* (mode-aware)"
 		},
 		"Button": {
 			"id": "101:14",
@@ -650,7 +656,8 @@
 				]
 			},
 			"contract": "pmndrs-button",
-			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill"
+			"note": "disabled is a variant axis, not a BOOLEAN property \u2014 a boolean can toggle visibility but cannot repaint a fill",
+			"boundTo": "theme/* (mode-aware)"
 		},
 		"Badge": {
 			"id": "103:16",
@@ -667,7 +674,8 @@
 				]
 			},
 			"contract": "pmndrs-badge",
-			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale"
+			"note": "pill radius and em-based padding are intentionally literal \u2014 neither is a step on a scale",
+			"boundTo": "theme/* (mode-aware)"
 		}
 	}
 }

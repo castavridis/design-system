@@ -189,3 +189,24 @@ dark.set('text-muted', ref('ramp.dark-400'))
 dark.set('text-faint', ref('ramp.dark-500'))
 dark.set('text-body', ref('ramp.dark-300'))
 dark.set('text-strong', ref('ramp.dark-200'))
+
+/*
+ * Accent pairs, per mode.
+ *
+ * A brand accent is tuned for a dark ground — `brand.yellow` on white is
+ * unreadable — so a mode switch cannot just repaint the surface underneath it.
+ * Each hue therefore resolves to a different *step* of its own ramp per mode,
+ * which is the whole reason the ramps exist.
+ *
+ * Dark uses 300 on 950, worst case 8.26:1 across the seven hues. Light uses
+ * 800 on 50: the obvious mirror, 700 on 50, fails AA on yellow at 4.23:1
+ * because the ramps aren't symmetric — seeds sit at different steps per hue.
+ * 800 clears every hue at 6.03:1 or better with one rule rather than a
+ * per-hue exception table.
+ */
+for (const hue of ['purple', 'red', 'orange', 'yellow', 'green', 'teal', 'blue']) {
+  light.set(`accent-${hue}`, ref(`ramp.${hue}-800`))
+  light.set(`tint-${hue}`, ref(`ramp.${hue}-50`))
+  dark.set(`accent-${hue}`, ref(`ramp.${hue}-300`))
+  dark.set(`tint-${hue}`, ref(`ramp.${hue}-950`))
+}
