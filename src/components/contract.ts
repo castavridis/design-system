@@ -193,6 +193,22 @@ const code: ComponentSpec = {
 	bindings: {
 		tsx: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', highlight: 'surface', rule: 'accent-yellow' },
 		diff: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', add: 'tint-green', remove: 'tint-red' },
+		/*
+		 * Syntax colours, shared by both languages. These were missing until the
+		 * drift audit found Figma binding five slots the contract never declared —
+		 * the contract described the block's chrome and forgot the code inside it.
+		 */
+		'*': {
+			langLabel: 'accent-orange',
+			keyword: 'accent-purple',
+			string: 'accent-green',
+			fn: 'accent-yellow',
+			type: 'accent-blue',
+			tag: 'accent-teal',
+			number: 'accent-orange',
+			punctuation: 'text-faint',
+			plain: 'text-body',
+		},
 	},
 }
 
@@ -229,6 +245,7 @@ const header: ComponentSpec = {
 			searchSurface: 'surface-sunken',
 			searchBorder: 'line',
 			searchInk: 'text-muted',
+			searchKbd: 'text-faint',
 			markFrom: 'fixed:brand.yellow',
 			markVia: 'fixed:brand.teal',
 			markTo: 'fixed:brand.purple',
