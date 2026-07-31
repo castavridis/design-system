@@ -65,6 +65,16 @@ It also demonstrates the live-reference behaviour: dragging the
 `--brand-radius`, without a rebuild — and includes an interactive gradient
 generator that disables any option which would break the adjacency rule.
 
+Below that is a **component waterfall**: the MDX component vocabulary
+documented at [docs.pmnd.rs](https://docs.pmnd.rs/llms-full.txt) — `Intro`,
+`Keypoints`, the five `Gha` alert keywords, `Code` with line numbers and diffs,
+`Sandpack`, `Mermaid`, `Entries`, `Contributors` and the rest — built as plain
+HTML on nothing but these tokens. It's the page's real proof: surfaces,
+hairlines and muted text all come from the neutral ramp, and each callout takes
+its tint from one accent ramp's `950` and its rule from that ramp's `300`. No
+component hard-codes a colour, and the page makes no network requests, so
+avatars and thumbnails are drawn from ramp steps rather than fetched.
+
 ## Colour notation
 
 Brand colours are authored in `oklch()` — `L% C H`, the polar form of OKLAB —
@@ -79,6 +89,67 @@ variant or rotating a hue is a one-value edit.
 One caveat: `tokens.w3c.json` still emits `colorSpace: "srgb"` with components
 and a hex, because design-book's W3C renderer converts on the way out. The
 values are correct, just not expressed in OKLCH.
+
+## Colour ramps
+
+Every brand colour — the seven accents **and** the two neutrals — expands into
+an eleven-step tonal scale, `50` through `950`, under the `ramp` scope:
+
+```css
+.callout {
+	background: var(--ramp-blue-950);
+	border-inline-start: 3px solid var(--ramp-blue-300);
+	color: var(--ramp-dark-200);
+}
+```
+
+The steps come from `rampStops()`, which drives design-book's dittotones
+engine. They're placed by *perceived* lightness rather than mixed toward white
+and black, so `purple-300` and `teal-300` read as the same brightness — that's
+what makes a ramp usable as a scale instead of nine unrelated tints.
+
+The neutrals are ramped for the same reason the accents are, and arguably a
+better one: `brand.dark` and `brand.light` are the page ground, and a ground
+colour needs its own greys more than any accent does — surfaces, hairlines,
+muted text. Both are warm (hue ≈ 87), so their ramps stay warm instead of
+drifting to a blue-grey that would sit oddly against the rest of the palette.
+
+**A seed keeps its own value**, at whichever step it perceptually belongs to —
+which is *not* always the middle:
+
+```js
+import { rampSeeds, rampPath, tokens } from 'pmndrs-design-tokens'
+
+rampSeeds.purple                  // '500'
+rampSeeds.teal                    // '300' — teal is much lighter than purple
+rampSeeds.dark                    // '700'
+
+tokens[rampPath('teal', '300')]   // '#00f7a3' === tokens['brand.teal']
+```
+
+So `rampSeeds` is how you step *relative to the brand colour* — "two steps
+darker than the brand teal" — instead of assuming 500 and landing somewhere
+else. The build fails if a seed ever stops round-tripping through its own ramp,
+rather than shipping a silently wrong answer.
+
+```js
+import { rampNames, rampShades, rampPath, cssVar } from 'pmndrs-design-tokens'
+
+rampNames    // ['dark', 'light', 'purple', 'red', 'orange', ...]
+rampShades   // ['50', '100', '200', ..., '950']
+
+cssVar(rampPath('orange', '400'))  // 'var(--ramp-orange-400)'
+rampPath('orange', '42')           // RangeError — not a step
+```
+
+Ramp names are read off the `brand` scope rather than hand-listed, so adding a
+brand colour produces its ramp on the next build.
+
+One thing to know: ramp steps are **computed at build time** and emit as
+literal values. Overriding `--brand-purple` in a theme re-renders anything that
+references it live (see below), but it will *not* recompute
+`--ramp-purple-*` — those are baked. Theme the ramp steps directly if you need
+them to move.
 
 ## Consuming
 

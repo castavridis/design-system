@@ -11,7 +11,8 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join, resolve } from 'node:path'
 
 import { Renderer } from 'design-book'
-import { book } from '../src/pmndrs-design-book.js'
+import type { W3DesignTokensMap, W3TokenEntry } from 'design-book'
+import { book, rampNames, rampShades } from '../src/pmndrs-design-book.js'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(root, 'dist')
@@ -54,9 +55,17 @@ const gradientExclusions = new Set(['brand.dark', 'brand.light'])
  * Token paths whose value is a colour, according to the book itself. Asking
  * `inspect` beats pattern-matching the rendered value, which would silently
  * miss colours the moment the authored notation changes (hex -> oklab -> oklch -> ...).
+ *
+ * Two shapes count. A literal colour reports `tokenType: 'color'`; a computed
+ * one — every ramp step is a `ramp()` call — reports `tokenType: 'function'`
+ * and declares its `returnType` instead. Checking only the first would drop
+ * the entire ramp scope on the floor.
  */
 function colorPaths(paths: string[]) {
-	return paths.filter((path) => book.inspect(path)?.tokenType === 'color')
+	return paths.filter((path) => {
+		const token = book.inspect(path)
+		return token?.tokenType === 'color' || token?.returnType === 'color'
+	})
 }
 
 /**
@@ -70,7 +79,44 @@ function gradientPalette(paths: string[]) {
 	)
 }
 
-const jsonModule = (tokens: Record<string, string>) => {
+/**
+ * For each ramp, the step whose value *is* the brand colour.
+ *
+ * The dittotones engine places a seed at whichever step it perceptually
+ * belongs to rather than forcing it to the middle, so `brand.purple` lands on
+ * `500` while the much lighter `brand.teal` lands on `300`. Knowing that step
+ * is what lets a consumer walk a ramp relative to the brand value — "two steps
+ * darker than the brand teal" — instead of guessing at 500.
+ *
+ * Found by comparing rendered hex rather than assumed: if a future seed
+ * doesn't survive its own ramp exactly, the build says so instead of shipping
+ * a wrong answer.
+ */
+function rampSeedShades(w3c: W3DesignTokensMap) {
+	const hex = (group: string, name: string) => {
+		const value = (w3c[group] as Record<string, W3TokenEntry> | undefined)?.[name]?.$value
+		return typeof value === 'object' && value && 'hex' in value
+			? String((value as { hex?: string }).hex).toLowerCase()
+			: undefined
+	}
+
+	return Object.fromEntries(
+		rampNames.map((name) => {
+			const seed = hex('brand', name)
+			const shade = rampShades.find((step) => hex('ramp', `${name}-${step}`) === seed)
+
+			if (!shade) {
+				throw new Error(
+					`brand.${name} (${seed}) does not appear in its own ramp. The ramp engine no longer round-trips its seed — check the design-book version before shipping.`,
+				)
+			}
+
+			return [name, shade]
+		}),
+	)
+}
+
+const jsonModule = (tokens: Record<string, string>, seedShades: Record<string, string>) => {
 	const paths = Object.keys(tokens)
 	const union = paths.map((p) => `'${p}'`).join('\n\t| ')
 
@@ -109,6 +155,40 @@ export function cssVar(path, fallback) {
  * the values are authored in.
  */
 export const colorPaths = Object.freeze(${JSON.stringify(colors, null, '\t')})
+
+/** Ramp names — one per brand colour, accents and neutrals alike. */
+export const rampNames = Object.freeze(${JSON.stringify(rampNames, null, '\t')})
+
+/** Ramp steps, light to dark. */
+export const rampShades = Object.freeze(${JSON.stringify(rampShades, null, '\t')})
+
+/**
+ * Ramp name -> the step that holds the brand colour exactly. The engine places
+ * a seed by perceived lightness rather than at a fixed step, so this is 500 for
+ * \`purple\` but 300 for the much lighter \`teal\`. Use it to walk a ramp
+ * relative to the brand value instead of assuming the middle.
+ */
+export const rampSeeds = Object.freeze(${JSON.stringify(seedShades, null, '\t')})
+
+/**
+ * \`('purple', '500')\` -> \`'ramp.purple-500'\`. Compose it with \`tokens\`
+ * or \`cssVar\` rather than building the string by hand, so a typo fails here
+ * instead of silently resolving to \`undefined\` further down.
+ */
+export function rampPath(name, shade) {
+\tif (!rampNames.includes(name)) {
+\t\tthrow new RangeError(
+\t\t\t\`'\${name}' is not a ramp. Choose one of: \${rampNames.join(', ')}\`,
+\t\t)
+\t}
+\tif (!rampShades.includes(shade)) {
+\t\tthrow new RangeError(
+\t\t\t\`'\${shade}' is not a ramp step. Choose one of: \${rampShades.join(', ')}\`,
+\t\t)
+\t}
+
+\treturn \`ramp.\${name}-\${shade}\`
+}
 
 /** Stop positions, as percentages along the gradient line. */
 export const gradientStops = Object.freeze(${JSON.stringify(gradientStops)})
@@ -222,6 +302,36 @@ export type ColorPath =
  */
 export declare const colorPaths: readonly ColorPath[]
 
+/** A colour that has a ramp — every brand colour, neutrals included. */
+export type RampName =
+\t| ${rampNames.map((n) => `'${n}'`).join('\n\t| ')}
+
+/** A step of a ramp, light to dark. */
+export type RampShade =
+\t| ${rampShades.map((s) => `'${s}'`).join('\n\t| ')}
+
+/** A single ramp step, e.g. \`'ramp.purple-500'\`. A subset of \`ColorPath\`. */
+export type RampPath = \`ramp.\${RampName}-\${RampShade}\`
+
+/** Ramp names — one per brand colour, accents and neutrals alike. */
+export declare const rampNames: readonly RampName[]
+
+/** Ramp steps, light to dark. */
+export declare const rampShades: readonly RampShade[]
+
+/**
+ * Ramp name -> the step that holds the brand colour exactly. The engine places
+ * a seed by perceived lightness rather than at a fixed step, so this is 500 for
+ * \`purple\` but 300 for the much lighter \`teal\`.
+ */
+export declare const rampSeeds: Readonly<Record<RampName, RampShade>>
+
+/**
+ * \`('purple', '500')\` -> \`'ramp.purple-500'\`. Compose it with \`tokens\`
+ * or \`cssVar\` rather than building the string by hand.
+ */
+export declare function rampPath(name: RampName, shade: RampShade): RampPath
+
 /** A brand colour eligible for a gradient stop. Excludes the neutrals. */
 export type GradientColor =
 \t| ${paletteUnion}
@@ -274,13 +384,17 @@ async function build() {
 	await mkdir(outDir, { recursive: true })
 
 	const tokens = new Renderer(book, 'json').renderJsonObject()
-	const { js, dts } = jsonModule(tokens)
+
+	/* Rendered once and reused: it's the only output that carries hex for every
+	   colour, which is what `rampSeedShades` compares against. */
+	const w3c = book.render('w3-design-tokens')
+	const { js, dts } = jsonModule(tokens, rampSeedShades(JSON.parse(w3c) as W3DesignTokensMap))
 
 	const artifacts: Array<[string, string]> = [
 		['tokens.css', `${banner}\n${book.render('css-variables')}\n`],
 		['fonts.css', fontsStylesheet()],
 		['tokens.json', `${JSON.stringify(tokens, null, '\t')}\n`],
-		['tokens.w3c.json', `${book.render('w3-design-tokens')}\n`],
+		['tokens.w3c.json', `${w3c}\n`],
 		['tokens.js', js],
 		['tokens.d.ts', dts],
 	]

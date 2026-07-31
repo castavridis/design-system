@@ -5,6 +5,27 @@
  * token system owns.
  */
 
+/*
+ * Surfaces, hairlines and muted text, read off the neutral ramp instead of
+ * mixed by hand. `brand.dark` *is* `ramp.dark-700`, so the ground this page
+ * used before is still on the scale — it now just has documented neighbours
+ * above and below it to build elevation from, which is the whole argument for
+ * ramping the neutrals rather than only the accents.
+ */
+:root {
+  --page: var(--ramp-dark-900);
+  --surface: var(--ramp-dark-800);
+  --surface-raised: var(--ramp-dark-700);
+  --surface-sunken: var(--ramp-dark-950);
+
+  --line: var(--ramp-dark-600);
+  --line-soft: var(--ramp-dark-700);
+
+  --text: var(--brand-light);
+  --text-muted: var(--ramp-dark-400);
+  --text-faint: var(--ramp-dark-500);
+}
+
 *,
 *::before,
 *::after {
@@ -14,8 +35,8 @@
 body {
   margin: 0;
   padding: 0;
-  background: var(--brand-dark);
-  color: var(--brand-light);
+  background: var(--page);
+  color: var(--text);
   font-family: var(--fonts-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -26,12 +47,17 @@ code {
   font-size: 0.9em;
   padding: 0.1em 0.35em;
   border-radius: calc(var(--brand-radius) / 4);
-  background: color-mix(in oklab, var(--brand-light) 12%, transparent);
+  background: var(--surface);
   color: var(--brand-teal);
 }
 
 a {
   color: var(--brand-teal);
+}
+
+:where(button, a, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
 }
 
 /* ---------- hero ---------- */
@@ -72,7 +98,7 @@ a {
 .lede {
   margin: 0 auto;
   max-width: 56ch;
-  color: color-mix(in oklab, var(--brand-light) 78%, var(--brand-dark));
+  color: var(--ramp-dark-300);
 }
 
 .hero-actions {
@@ -86,31 +112,58 @@ a {
 .button {
   display: inline-block;
   padding: calc(var(--brand-space) * 0.6) calc(var(--brand-space) * 1.25);
-  border: 1px solid color-mix(in oklab, var(--brand-light) 35%, transparent);
+  border: 1px solid var(--line);
   border-radius: var(--brand-radius);
   background: transparent;
-  color: var(--brand-light);
+  color: var(--text);
   font-family: var(--fonts-sans);
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
+  cursor: pointer;
   transition:
     transform 120ms ease,
-    background-color 120ms ease;
+    background-color 120ms ease,
+    border-color 120ms ease;
 }
 
 .button:hover {
   transform: translateY(-2px);
-  background: color-mix(in oklab, var(--brand-light) 10%, transparent);
+  background: var(--surface-raised);
 }
 
 .button-primary {
   background: var(--brand-purple);
   border-color: var(--brand-purple);
-  color: var(--brand-dark);
+  color: var(--ramp-purple-950);
 }
 
+/* One step along the ramp, rather than a mix invented at the call site. */
 .button-primary:hover {
-  background: color-mix(in oklab, var(--brand-purple) 85%, var(--brand-light));
+  background: var(--ramp-purple-400);
+  border-color: var(--ramp-purple-400);
+}
+
+.button-quiet {
+  border-color: transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.button-quiet:hover {
+  color: var(--text);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  border-color: var(--line-soft);
+  background: transparent;
+  color: var(--text-faint);
+}
+
+.button:disabled:hover {
+  transform: none;
+  background: transparent;
 }
 
 /* ---------- sections ---------- */
@@ -123,20 +176,20 @@ main {
 
 section {
   padding-block: calc(var(--brand-space) * 3);
-  border-top: 1px solid color-mix(in oklab, var(--brand-light) 15%, transparent);
+  border-top: 1px solid var(--line-soft);
 }
 
 section h2 {
   font-family: var(--fonts-serif);
   font-size: clamp(1.5rem, 4vw, 2rem);
   margin: 0 0 calc(var(--brand-space) * 0.5);
-  color: var(--brand-light);
+  color: var(--text);
 }
 
 .section-note {
   margin: 0 0 calc(var(--brand-space) * 1.5);
   max-width: 62ch;
-  color: color-mix(in oklab, var(--brand-light) 72%, var(--brand-dark));
+  color: var(--ramp-dark-300);
 }
 
 /* ---------- palette ---------- */
@@ -152,7 +205,7 @@ section h2 {
   padding: 0;
   border-radius: var(--brand-radius);
   overflow: hidden;
-  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+  background: var(--surface);
   font: inherit;
   color: inherit;
   text-align: left;
@@ -180,12 +233,12 @@ section h2 {
 
 .swatch-path {
   display: block;
-  color: var(--brand-light);
+  color: var(--text);
 }
 
 .swatch-value {
   display: block;
-  color: color-mix(in oklab, var(--brand-light) 60%, var(--brand-dark));
+  color: var(--text-muted);
   /* oklch() values are long — let them wrap rather than clip the chip. */
   overflow-wrap: anywhere;
 }
@@ -193,6 +246,106 @@ section h2 {
 .swatch[data-copied] .swatch-value::after {
   content: " copied";
   color: var(--brand-green);
+}
+
+/* ---------- ramps ---------- */
+
+.ramps {
+  display: grid;
+  gap: calc(var(--brand-space) * 0.75);
+}
+
+.ramp {
+  display: grid;
+  gap: calc(var(--brand-space) * 0.35);
+}
+
+.ramp-head {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--brand-space) * 0.5);
+  font-family: var(--fonts-mono);
+  font-size: 0.8rem;
+}
+
+.ramp-name {
+  color: var(--text);
+}
+
+.ramp-seed {
+  color: var(--text-muted);
+}
+
+.ramp-steps {
+  display: grid;
+  /*
+   * Eleven columns wherever they fit; below that the ramp wraps rather than
+   * shrinking each step into an unreadable sliver.
+   */
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+  gap: 2px;
+}
+
+@media (max-width: 44rem) {
+  .ramp-steps {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.ramp-step {
+  border: 0;
+  padding: calc(var(--brand-space) * 0.4) calc(var(--brand-space) * 0.25);
+  min-height: 4.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.25rem;
+  background: var(--step);
+  color: var(--step-ink);
+  font-family: var(--fonts-mono);
+  font-size: 0.65rem;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 120ms ease;
+}
+
+.ramp-steps > .ramp-step:first-child {
+  border-start-start-radius: calc(var(--brand-radius) / 2);
+  border-end-start-radius: calc(var(--brand-radius) / 2);
+}
+
+.ramp-steps > .ramp-step:last-child {
+  border-start-end-radius: calc(var(--brand-radius) / 2);
+  border-end-end-radius: calc(var(--brand-radius) / 2);
+}
+
+.ramp-step:hover {
+  transform: translateY(-2px);
+}
+
+.ramp-step-shade {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.ramp-step-hex {
+  opacity: 0.75;
+}
+
+/* The step that holds the brand colour exactly. */
+.ramp-step[data-seed] {
+  outline: 2px solid var(--step-ink);
+  outline-offset: -5px;
+}
+
+.ramp-step[data-copied] .ramp-step-hex::after {
+  content: " ✓";
+}
+
+.ramps-note {
+  margin-top: calc(var(--brand-space) * 1.5);
+  margin-bottom: 0;
 }
 
 /* ---------- gradient generator ---------- */
@@ -225,15 +378,15 @@ section h2 {
 .gradient-field-label {
   font-family: var(--fonts-mono);
   font-size: 0.75rem;
-  color: color-mix(in oklab, var(--brand-light) 65%, var(--brand-dark));
+  color: var(--text-muted);
 }
 
 .gradient-select {
   padding: calc(var(--brand-space) * 0.5) calc(var(--brand-space) * 0.6);
-  border: 1px solid color-mix(in oklab, var(--brand-light) 25%, transparent);
+  border: 1px solid var(--line);
   border-radius: calc(var(--brand-radius) / 2);
-  background: var(--brand-dark);
-  color: var(--brand-light);
+  background: var(--surface);
+  color: var(--text);
   font-family: var(--fonts-mono);
   font-size: 0.85rem;
 }
@@ -245,7 +398,7 @@ section h2 {
 
 /* Options that would collide with an adjacent stop. */
 .gradient-select option:disabled {
-  color: color-mix(in oklab, var(--brand-light) 35%, var(--brand-dark));
+  color: var(--text-faint);
 }
 
 .gradient-actions {
@@ -271,7 +424,7 @@ section h2 {
   margin: 0;
   padding: calc(var(--brand-space) * 1.25);
   border-radius: var(--brand-radius);
-  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+  background: var(--surface);
 }
 
 .specimen-sample {
@@ -281,7 +434,7 @@ section h2 {
 }
 
 .specimen figcaption {
-  color: color-mix(in oklab, var(--brand-light) 60%, var(--brand-dark));
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
@@ -330,9 +483,9 @@ section h2 {
 
 .card {
   padding: calc(var(--brand-space) * 1.25);
-  border: 1px solid color-mix(in oklab, var(--brand-light) 20%, transparent);
+  border: 1px solid var(--line-soft);
   border-radius: var(--brand-radius);
-  background: color-mix(in oklab, var(--brand-light) 6%, transparent);
+  background: var(--surface);
 }
 
 .card h3 {
@@ -343,7 +496,7 @@ section h2 {
 
 .card p {
   margin: 0;
-  color: color-mix(in oklab, var(--brand-light) 75%, var(--brand-dark));
+  color: var(--ramp-dark-300);
 }
 
 /* ---------- snippets ---------- */
@@ -358,7 +511,7 @@ section h2 {
   margin: 0;
   border-radius: var(--brand-radius);
   overflow: hidden;
-  background: color-mix(in oklab, var(--brand-light) 8%, transparent);
+  background: var(--surface);
 }
 
 .snippet figcaption {
@@ -366,8 +519,7 @@ section h2 {
   font-size: 0.8rem;
   font-family: var(--fonts-mono);
   color: var(--brand-orange);
-  border-bottom: 1px solid
-    color-mix(in oklab, var(--brand-light) 15%, transparent);
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .snippet pre {
@@ -379,10 +531,1238 @@ section h2 {
 .snippet code {
   background: none;
   padding: 0;
-  color: var(--brand-light);
+  color: var(--text);
   font-size: 0.8rem;
   line-height: 1.7;
   white-space: pre;
+}
+
+/* ==================================================================== */
+/* Component waterfall                                                  */
+/* ==================================================================== */
+
+.waterfall {
+  display: grid;
+  gap: calc(var(--brand-space) * 2.5);
+}
+
+.wf-group {
+  margin: calc(var(--brand-space) * 1.5) 0 0;
+  padding-bottom: calc(var(--brand-space) * 0.5);
+  border-bottom: 1px solid var(--line-soft);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-orange);
+}
+
+.wf-group:first-child {
+  margin-top: 0;
+}
+
+.spec {
+  display: grid;
+  gap: var(--brand-space);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/*
+ * Wide enough for two tracks: the description parks itself alongside the
+ * specimen and stays put while the specimen scrolls past it.
+ */
+@media (min-width: 60rem) {
+  .spec {
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: calc(var(--brand-space) * 2);
+  }
+
+  .spec-head {
+    position: sticky;
+    top: var(--brand-space);
+    align-self: start;
+  }
+}
+
+.spec-head h4 {
+  margin: 0 0 calc(var(--brand-space) * 0.35);
+  font-family: var(--fonts-sans);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.spec-head h4 code {
+  background: none;
+  padding: 0;
+  font-size: 1em;
+  color: var(--brand-teal);
+}
+
+.spec-head p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.spec-tag {
+  margin-inline-start: 0.4em;
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  background: var(--ramp-red-950);
+  color: var(--ramp-red-300);
+  font-family: var(--fonts-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: 0.15em;
+}
+
+.spec-stage {
+  padding: calc(var(--brand-space) * 1.25);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--brand-radius);
+  background: var(--surface);
+}
+
+/* For specimens that supply their own frame — chrome, code, sandboxes. */
+.spec-stage-flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.spec-stage-stack {
+  display: grid;
+  gap: var(--brand-space);
+}
+
+/* ---------- header ---------- */
+
+.doc-header {
+  display: flex;
+  align-items: center;
+  gap: var(--brand-space);
+  flex-wrap: wrap;
+  padding: calc(var(--brand-space) * 0.75) var(--brand-space);
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--line);
+}
+
+.doc-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.5);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.doc-brand-mark {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--brand-yellow),
+    var(--brand-teal) 45%,
+    var(--brand-purple)
+  );
+}
+
+.doc-brand-name {
+  font-family: var(--fonts-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.doc-brand-name span {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.doc-header-nav {
+  display: flex;
+  gap: calc(var(--brand-space) * 0.9);
+  margin-inline-end: auto;
+  font-size: 0.85rem;
+}
+
+.doc-header-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding-block: 0.15em;
+  border-bottom: 2px solid transparent;
+}
+
+.doc-header-nav a:hover {
+  color: var(--text);
+}
+
+.doc-header-nav a.is-active {
+  color: var(--text);
+  border-bottom-color: var(--brand-teal);
+}
+
+.doc-search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.5);
+  padding: 0.35em 0.7em;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--brand-radius) / 2);
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.doc-search-trigger:hover {
+  color: var(--text);
+  border-color: var(--brand-teal);
+}
+
+kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--brand-radius) / 4);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--fonts-mono);
+  font-size: 0.75em;
+}
+
+/* ---------- nav ---------- */
+
+.doc-nav {
+  display: grid;
+  gap: calc(var(--brand-space) * 0.5);
+  max-width: 20rem;
+  font-size: 0.9rem;
+}
+
+.doc-nav-cat > summary {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.4);
+  padding: 0.25em 0;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.doc-nav-cat > summary::-webkit-details-marker {
+  display: none;
+}
+
+.doc-nav-cat > summary::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-inline-start: 5px solid currentColor;
+  border-block: 4px solid transparent;
+  color: var(--text-faint);
+  transition: transform 120ms ease;
+}
+
+.doc-nav-cat[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.doc-nav-cat ul {
+  margin: 0;
+  padding: 0 0 0 calc(var(--brand-space) * 0.6);
+  list-style: none;
+  border-inline-start: 1px solid var(--line-soft);
+}
+
+.doc-nav-cat li a {
+  display: block;
+  padding: 0.2em 0.5em;
+  border-radius: calc(var(--brand-radius) / 3);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.doc-nav-cat li a:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.doc-nav-cat li a.is-current {
+  background: var(--ramp-teal-950);
+  color: var(--brand-teal);
+}
+
+/* ---------- search ---------- */
+
+.doc-search {
+  max-width: 30rem;
+  border: 1px solid var(--line);
+  border-radius: var(--brand-radius);
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+
+.doc-search-field {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.6);
+  padding: calc(var(--brand-space) * 0.75) var(--brand-space);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.doc-search-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid var(--text-faint);
+  border-radius: 50%;
+  position: relative;
+  flex: none;
+}
+
+.doc-search-icon::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 100%;
+  width: 0.4rem;
+  height: 2px;
+  background: var(--text-faint);
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.doc-search-query {
+  flex: 1;
+  font-family: var(--fonts-mono);
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.doc-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-inline-start: 1px;
+  background: var(--brand-teal);
+  vertical-align: -0.15em;
+  animation: doc-blink 1.1s steps(1) infinite;
+}
+
+@keyframes doc-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.doc-search-results {
+  margin: 0;
+  padding: calc(var(--brand-space) * 0.4);
+  list-style: none;
+  display: grid;
+  gap: 2px;
+}
+
+.doc-search-results li {
+  display: grid;
+  gap: 0.15em;
+  padding: calc(var(--brand-space) * 0.5) calc(var(--brand-space) * 0.6);
+  border-radius: calc(var(--brand-radius) / 2);
+}
+
+.doc-search-results li.is-active {
+  background: var(--surface);
+  box-shadow: inset 2px 0 0 var(--brand-teal);
+}
+
+.doc-search-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.doc-search-title mark {
+  background: var(--ramp-yellow-950);
+  color: var(--brand-yellow);
+  border-radius: 2px;
+  padding-inline: 0.1em;
+}
+
+.doc-search-path {
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.doc-search-excerpt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- toc ---------- */
+
+.doc-toc {
+  max-width: 18rem;
+  font-size: 0.85rem;
+}
+
+.doc-toc-label {
+  margin: 0 0 calc(var(--brand-space) * 0.5);
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.doc-toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: 1px solid var(--line-soft);
+}
+
+.doc-toc li a {
+  display: block;
+  padding: 0.25em 0 0.25em calc(var(--brand-space) * 0.75);
+  margin-inline-start: -1px;
+  border-inline-start: 1px solid transparent;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.doc-toc li a:hover {
+  color: var(--text);
+}
+
+.doc-toc li a.is-current {
+  border-inline-start-color: var(--brand-teal);
+  color: var(--brand-teal);
+}
+
+.doc-toc li.is-nested a {
+  padding-inline-start: calc(var(--brand-space) * 1.5);
+  font-size: 0.95em;
+}
+
+/* ---------- intro ---------- */
+
+.doc-intro {
+  padding-inline-start: var(--brand-space);
+  border-inline-start: 3px solid var(--brand-purple);
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: var(--ramp-dark-200);
+}
+
+.doc-intro p {
+  margin: 0 0 0.6em;
+}
+
+.doc-intro p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- keypoints ---------- */
+
+.doc-keypoints {
+  padding: calc(var(--brand-space) * 1.1) calc(var(--brand-space) * 1.25);
+  border: 1px solid var(--ramp-teal-800);
+  border-radius: var(--brand-radius);
+  background: var(--ramp-teal-950);
+}
+
+.doc-keypoints-title {
+  margin: 0 0 calc(var(--brand-space) * 0.6);
+  font-family: var(--fonts-serif);
+  font-size: 1.1rem;
+  color: var(--brand-teal);
+}
+
+.doc-keypoints ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4em;
+}
+
+.doc-keypoints li {
+  position: relative;
+  padding-inline-start: 1.5em;
+  color: var(--ramp-dark-200);
+}
+
+.doc-keypoints li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.2em;
+  inset-block-start: 0.6em;
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: var(--brand-teal);
+}
+
+/* ---------- details ---------- */
+
+.doc-details {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--brand-radius);
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+
+.doc-details > summary {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.5);
+  padding: calc(var(--brand-space) * 0.75) var(--brand-space);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.doc-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.doc-details > summary::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-inline-start: 5px solid currentColor;
+  border-block: 4px solid transparent;
+  color: var(--brand-orange);
+  transition: transform 120ms ease;
+}
+
+.doc-details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.doc-details-body {
+  padding: 0 var(--brand-space) var(--brand-space);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.doc-details-body p {
+  margin-top: 0;
+}
+
+/* ---------- entries ---------- */
+
+.doc-entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--brand-space);
+}
+
+.doc-entries h5 {
+  margin: 0 0 calc(var(--brand-space) * 0.5);
+  padding-bottom: calc(var(--brand-space) * 0.35);
+  border-bottom: 1px solid var(--line-soft);
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.doc-entries ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25em;
+  font-size: 0.9rem;
+}
+
+.doc-entries li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.doc-entries a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.doc-entries a:hover {
+  color: var(--brand-teal);
+}
+
+/* The thumb `Entries` shows when a page embeds a CodeSandbox. */
+.doc-entry-thumb {
+  width: 1.6rem;
+  height: 1.1rem;
+  flex: none;
+  border-radius: 3px;
+  background: linear-gradient(
+    120deg,
+    var(--ramp-blue-400),
+    var(--ramp-purple-500)
+  );
+}
+
+/* ---------- prose ---------- */
+
+.doc-prose > :first-child {
+  margin-top: 0;
+}
+
+.doc-prose > :last-child {
+  margin-bottom: 0;
+}
+
+.doc-prose h2,
+.doc-prose h3,
+.doc-prose h4 {
+  font-family: var(--fonts-serif);
+  color: var(--text);
+  line-height: 1.2;
+  margin: 1.4em 0 0.5em;
+}
+
+.doc-prose h2 {
+  font-size: 1.6rem;
+}
+.doc-prose h3 {
+  font-size: 1.25rem;
+}
+.doc-prose h4 {
+  font-size: 1.05rem;
+}
+
+.doc-prose p {
+  margin: 0 0 1em;
+  color: var(--ramp-dark-300);
+}
+
+.doc-prose hr {
+  margin: 1.5em 0;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.doc-prose ul,
+.doc-prose ol {
+  margin: 0 0 1em;
+  padding-inline-start: 1.4em;
+  color: var(--ramp-dark-300);
+}
+
+.doc-prose li {
+  margin-block: 0.25em;
+}
+
+.doc-prose li::marker {
+  color: var(--brand-orange);
+}
+
+.doc-prose blockquote {
+  margin: 0;
+  padding-inline-start: var(--brand-space);
+  border-inline-start: 3px solid var(--line);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.doc-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- table ---------- */
+
+.doc-table-wrap {
+  /* Wide tables scroll inside their own box rather than widening the page. */
+  overflow-x: auto;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--brand-radius);
+}
+
+.doc-table {
+  width: 100%;
+  min-width: 30rem;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.doc-table th {
+  padding: calc(var(--brand-space) * 0.6) var(--brand-space);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.doc-table td {
+  padding: calc(var(--brand-space) * 0.6) var(--brand-space);
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text-muted);
+  vertical-align: top;
+}
+
+.doc-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.doc-table tbody tr:nth-child(even) {
+  background: var(--surface-raised);
+}
+
+.doc-table td:first-child {
+  color: var(--text);
+}
+
+/*
+ * Sunk rather than raised: the default `code` background is `--surface`, which
+ * is exactly the odd-row colour, so the chip would vanish on every other row.
+ */
+.doc-table code {
+  background: var(--surface-sunken);
+}
+
+/* ---------- gha alerts ---------- */
+
+/*
+ * One accent ramp per keyword. The tint is always the `950` step and the rule
+ * and label the `300` — so a sixth keyword would only need to name a hue, not
+ * negotiate a new pair of colours.
+ */
+.doc-gha[data-keyword="note"] {
+  --gha: var(--ramp-blue-300);
+  --gha-tint: var(--ramp-blue-950);
+}
+.doc-gha[data-keyword="tip"] {
+  --gha: var(--ramp-green-300);
+  --gha-tint: var(--ramp-green-950);
+}
+.doc-gha[data-keyword="important"] {
+  --gha: var(--ramp-purple-300);
+  --gha-tint: var(--ramp-purple-950);
+}
+.doc-gha[data-keyword="warning"] {
+  --gha: var(--ramp-orange-300);
+  --gha-tint: var(--ramp-orange-950);
+}
+.doc-gha[data-keyword="caution"] {
+  --gha: var(--ramp-red-300);
+  --gha-tint: var(--ramp-red-950);
+}
+
+.doc-gha {
+  padding: calc(var(--brand-space) * 0.75) var(--brand-space);
+  border-inline-start: 3px solid var(--gha);
+  border-radius: calc(var(--brand-radius) / 3);
+  background: var(--gha-tint);
+}
+
+.doc-gha-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  margin: 0 0 0.35em;
+  color: var(--gha);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.doc-gha-icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.doc-gha p:last-child {
+  margin: 0;
+  color: var(--ramp-dark-200);
+  font-size: 0.9rem;
+}
+
+/* Deprecated, and styled to look it: neutral, unaccented, quiet. */
+.doc-hint {
+  padding: calc(var(--brand-space) * 0.75) var(--brand-space);
+  border: 1px dashed var(--line);
+  border-radius: calc(var(--brand-radius) / 3);
+  background: var(--surface-raised);
+  color: var(--text-muted);
+}
+
+.doc-hint p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- code ---------- */
+
+.doc-code-block {
+  margin: 0;
+  background: var(--surface-sunken);
+}
+
+.doc-code-block figcaption {
+  display: flex;
+  align-items: center;
+  gap: var(--brand-space);
+  padding: calc(var(--brand-space) * 0.5) var(--brand-space);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--surface-raised);
+  font-family: var(--fonts-mono);
+  font-size: 0.72rem;
+}
+
+.doc-code-lang {
+  color: var(--brand-orange);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.doc-code-meta {
+  color: var(--text-muted);
+}
+
+.doc-code-copy {
+  margin-inline-start: auto;
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--brand-radius) / 4);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.doc-code-copy:hover {
+  color: var(--text);
+  border-color: var(--brand-teal);
+}
+
+/*
+ * `white-space: normal` on the block and `pre` on each line: the newlines
+ * *between* lines in the source then collapse away instead of doubling the
+ * leading, while the indentation *inside* a line is preserved.
+ */
+.doc-code {
+  margin: 0;
+  padding: calc(var(--brand-space) * 0.75) 0;
+  overflow-x: auto;
+  white-space: normal;
+  font-family: var(--fonts-mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--text);
+  tab-size: 2;
+}
+
+.doc-code code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.doc-code .ln {
+  display: block;
+  min-height: 1.7em;
+  padding-inline: var(--brand-space);
+  white-space: pre;
+}
+
+.doc-code-numbered {
+  counter-reset: line;
+  padding-inline-start: 0;
+}
+
+.doc-code-numbered .ln {
+  counter-increment: line;
+  padding-inline-start: calc(var(--brand-space) * 3.25);
+  position: relative;
+}
+
+.doc-code-numbered .ln::before {
+  content: counter(line);
+  position: absolute;
+  inset-inline-start: 0;
+  width: calc(var(--brand-space) * 2.5);
+  text-align: end;
+  color: var(--text-faint);
+  user-select: none;
+}
+
+/* A highlighted range, per `{1,4-6}`. */
+.doc-code .ln.is-hl {
+  background: var(--ramp-dark-800);
+  box-shadow: inset 3px 0 0 var(--brand-yellow);
+}
+
+/* diff */
+.doc-code .ln.is-add {
+  background: var(--ramp-green-950);
+  color: var(--ramp-green-200);
+}
+
+.doc-code .ln.is-del {
+  background: var(--ramp-red-950);
+  color: var(--ramp-red-200);
+}
+
+.doc-code .ln.is-meta {
+  color: var(--text-faint);
+}
+
+.doc-code .ln.is-hunk {
+  color: var(--brand-blue);
+}
+
+.doc-code-inline {
+  padding: calc(var(--brand-space) * 0.6) var(--brand-space);
+  border-radius: calc(var(--brand-radius) / 3);
+  background: var(--surface-sunken);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/*
+ * Syntax colours. Each is a brand hue rather than an editor theme, which is
+ * the point: a code block is part of the brand, not an escape from it.
+ */
+.tok-kw {
+  color: var(--brand-purple);
+}
+.tok-str {
+  color: var(--brand-green);
+}
+.tok-fn {
+  color: var(--brand-yellow);
+}
+.tok-type {
+  color: var(--brand-blue);
+}
+.tok-tag {
+  color: var(--brand-teal);
+}
+.tok-num {
+  color: var(--brand-orange);
+}
+.tok-punc {
+  color: var(--text-faint);
+}
+
+/* ---------- sandpack ---------- */
+
+.doc-sandpack {
+  background: var(--surface-sunken);
+}
+
+.doc-sandpack-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 calc(var(--brand-space) * 0.5);
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--surface-raised);
+}
+
+.doc-sandpack-tabs button {
+  padding: calc(var(--brand-space) * 0.5) calc(var(--brand-space) * 0.75);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-muted);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.doc-sandpack-tabs button[aria-selected="true"] {
+  color: var(--text);
+  border-bottom-color: var(--brand-teal);
+}
+
+.doc-sandpack-template {
+  margin-inline-start: auto;
+  padding-inline: calc(var(--brand-space) * 0.5);
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+
+.doc-sandpack-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .doc-sandpack-body {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+}
+
+.doc-sandpack-preview {
+  position: relative;
+  min-height: 13rem;
+  border-inline-start: 1px solid var(--line-soft);
+  background: var(--ramp-blue-950);
+  overflow: hidden;
+}
+
+/* Stands in for the drei `Cloud` the documented example renders. */
+.doc-sandpack-cloud {
+  position: absolute;
+  inset: 12% 8%;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      55% 60% at 32% 55%,
+      var(--ramp-blue-100) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 55% at 62% 45%,
+      var(--ramp-purple-200) 0%,
+      transparent 72%
+    ),
+    radial-gradient(70% 70% at 50% 60%, var(--ramp-blue-400) 0%, transparent 75%);
+  filter: blur(6px);
+  opacity: 0.85;
+}
+
+.doc-sandpack-status {
+  position: absolute;
+  inset-block-end: calc(var(--brand-space) * 0.5);
+  inset-inline-start: calc(var(--brand-space) * 0.75);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  color: var(--ramp-blue-200);
+}
+
+.doc-dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--brand-teal);
+}
+
+/* ---------- codesandbox ---------- */
+
+.doc-csb {
+  margin: 0;
+  max-width: 26rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--brand-radius);
+  overflow: hidden;
+  background: var(--surface-raised);
+}
+
+.doc-csb-thumb {
+  aspect-ratio: 16 / 9;
+  background:
+    radial-gradient(
+      40% 55% at 30% 35%,
+      var(--ramp-yellow-300) 0%,
+      transparent 60%
+    ),
+    radial-gradient(45% 60% at 72% 60%, var(--ramp-red-400) 0%, transparent 65%),
+    linear-gradient(140deg, var(--ramp-purple-800), var(--ramp-blue-950));
+}
+
+.doc-csb figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: calc(var(--brand-space) * 0.7) var(--brand-space);
+  border-top: 1px solid var(--line-soft);
+}
+
+.doc-csb-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.doc-csb-id {
+  margin-inline-start: auto;
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* ---------- img ---------- */
+
+.doc-img {
+  margin: 0;
+  max-width: 30rem;
+}
+
+.doc-img-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1200 / 630;
+  border-radius: calc(var(--brand-radius) / 2);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      var(--ramp-dark-800) 0 8px,
+      var(--ramp-dark-900) 8px 16px
+    );
+  border: 1px solid var(--line-soft);
+}
+
+.doc-img-ratio {
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.doc-img figcaption {
+  margin-top: calc(var(--brand-space) * 0.6);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- mermaid ---------- */
+
+.doc-mermaid {
+  margin: 0;
+}
+
+.doc-mermaid svg {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  margin-inline: auto;
+  height: auto;
+  overflow: visible;
+}
+
+.doc-mermaid .mm-nodes rect,
+.doc-mermaid .mm-nodes .mm-diamond {
+  fill: var(--surface-raised);
+  stroke: var(--brand-teal);
+  stroke-width: 1.5;
+}
+
+.doc-mermaid text {
+  fill: var(--text);
+  font-family: var(--fonts-sans);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.doc-mermaid .mm-labels text {
+  fill: var(--text-faint);
+  font-family: var(--fonts-mono);
+  font-size: 9px;
+}
+
+.doc-mermaid .mm-edges path,
+.doc-mermaid .mm-lifelines path {
+  fill: none;
+  stroke: var(--ramp-dark-500);
+  stroke-width: 1.5;
+}
+
+.doc-mermaid .mm-lifelines path {
+  stroke-dasharray: 3 4;
+}
+
+.doc-mermaid .mm-edges path.is-dashed {
+  stroke-dasharray: 5 4;
+}
+
+.doc-mermaid marker path {
+  fill: var(--ramp-dark-500);
+  stroke: none;
+}
+
+/* ---------- grid (deprecated) ---------- */
+
+.doc-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: calc(var(--brand-space) * 0.5);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.doc-grid li {
+  padding: calc(var(--brand-space) * 0.75);
+  border: 1px dashed var(--line);
+  border-radius: calc(var(--brand-radius) / 3);
+  background: var(--surface-raised);
+  font-family: var(--fonts-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ---------- people ---------- */
+
+.doc-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--brand-space) * 0.5);
+}
+
+.doc-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  background: var(--avatar);
+  color: var(--avatar-ink);
+  font-family: var(--fonts-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.doc-people-lg .doc-avatar {
+  width: 3.25rem;
+  height: 3.25rem;
+  font-size: 0.8rem;
+}
+
+/* ---------- buttons & badges ---------- */
+
+.doc-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.75);
+}
+
+.doc-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--brand-space) * 0.5);
+}
+
+.doc-badge {
+  padding: 0.25em 0.75em;
+  border-radius: 999px;
+  border: 1px solid var(--badge-line);
+  background: var(--badge-tint);
+  color: var(--badge);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 /* ---------- footer ---------- */
@@ -392,10 +1772,10 @@ footer {
   margin-inline: auto;
   padding: calc(var(--brand-space) * 2) var(--brand-space)
     calc(var(--brand-space) * 4);
-  border-top: 1px solid color-mix(in oklab, var(--brand-light) 15%, transparent);
+  border-top: 1px solid var(--line-soft);
   font-family: var(--fonts-mono);
   font-size: 0.8rem;
-  color: color-mix(in oklab, var(--brand-light) 55%, var(--brand-dark));
+  color: var(--text-muted);
 }
 
 footer p {
@@ -403,7 +1783,10 @@ footer p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     transition: none !important;
+    animation: none !important;
   }
 }
