@@ -35,6 +35,20 @@ fonts.set('mono', string('"Geist Mono", ui-monospace, monospace'))
 fonts.set('sans', string('"Geist", system-ui, sans-serif'))
 fonts.set('serif', string('"Faculty Glyphic", serif'))
 
+// Spacing beyond the base rhythm.
+//
+// Pulled from Figma: the Gha component set was given a vertical auto-layout
+// with a 24px gap, which is the space between stacked alerts. 24 is exactly
+// 1.5x `brand.space`, so it goes in as a ratio rather than a literal — the
+// same reasoning as the radius scale below, and the tell is the same: an exact
+// multiple is a system, a near-multiple is a one-off.
+//
+// It arrived in Figma as a raw number with no variable bound to it. Pushing
+// this back and binding it closes that: the gap becomes a token on both sides
+// instead of a magic 24 that only agrees by coincidence.
+const space = book.addScope('space')
+space.set('stack', spacingScale(ref('brand.space'), { multiplier: 1.5 })) // 24px
+
 // Corner radii.
 //
 // Pulled from Figma, where they were already decided as `Base Radius` 16,

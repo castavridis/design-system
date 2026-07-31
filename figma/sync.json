@@ -5,13 +5,15 @@
 		"brand": "VariableCollectionId:83:2",
 		"fonts": "VariableCollectionId:83:3",
 		"radius": "VariableCollectionId:86:2",
-		"ramp": "VariableCollectionId:87:2"
+		"ramp": "VariableCollectionId:87:2",
+		"space": "VariableCollectionId:99:2"
 	},
 	"modes": {
 		"brand": "83:0",
 		"fonts": "83:1",
 		"radius": "86:0",
-		"ramp": "87:0"
+		"ramp": "87:0",
+		"space": "99:0"
 	},
 	"variables": {
 		"brand.dark": {
@@ -481,6 +483,10 @@
 		"ramp.blue-950": {
 			"id": "VariableID:87:101",
 			"collection": "ramp"
+		},
+		"space.stack": {
+			"id": "VariableID:99:3",
+			"collection": "space"
 		}
 	},
 	"prefer": {
@@ -491,8 +497,8 @@
 		"ramp"
 	],
 	"lastSync": {
-		"syncId": "20260731T183145Z",
-		"at": "2026-07-31T18:31:45.026Z",
+		"syncId": "20260731T185905Z",
+		"at": "2026-07-31T18:59:05.151Z",
 		"values": {
 			"brand.dark": "#36342f",
 			"brand.light": "#eae5da",
@@ -610,7 +616,8 @@
 			"ramp.blue-700": "#187993",
 			"ramp.blue-800": "#1a6277",
 			"ramp.blue-900": "#1a5165",
-			"ramp.blue-950": "#0b3444"
+			"ramp.blue-950": "#0b3444",
+			"space.stack": "24"
 		}
 	},
 	"components": {
@@ -626,7 +633,7 @@
 				"CAUTION"
 			],
 			"contract": "pmndrs-gha",
-			"titleProp": "direct text override (not a component property \u2014 a set-level TEXT property has one default and cannot vary per keyword)"
+			"titleProp": "direct text override (not a component property — a set-level TEXT property has one default and cannot vary per keyword)"
 		}
 	}
 }

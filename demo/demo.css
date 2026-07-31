@@ -632,9 +632,14 @@ section h2 {
   overflow: hidden;
 }
 
+/*
+ * Gap pulled from Figma, where the Gha component set was given a 24px vertical
+ * auto-layout. Expressed through the token rather than as 24px: it is exactly
+ * 1.5x the base rhythm, so it moves when --brand-space is themed.
+ */
 .spec-stage-stack {
   display: grid;
-  gap: var(--brand-space);
+  gap: var(--space-stack);
 }
 
 /* ---------- header ---------- */

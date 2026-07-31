@@ -76,6 +76,9 @@ function scopesFor(collection, leaf, figmaType) {
 	/* Every member of the radius scale is a corner radius, whatever it's called. */
 	if (collection === 'radius') return SCOPE_BY_NAME.radius
 
+	/* Likewise every member of the spacing scale is a gap. */
+	if (collection === 'space') return SCOPE_BY_NAME.space
+
 	if (collection === 'ramp') {
 		const base = leaf.slice(0, leaf.lastIndexOf('-'))
 		return RAMP_NEUTRALS.has(base)
