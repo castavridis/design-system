@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Figma sync — pmndrs design tokens</title>
+    <meta
+      name="description"
+      content="Quickstart for the Figma round trip: the commands, the loop, and the rules the build enforces."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/dist/fonts.css" />
+    <link rel="stylesheet" href="/dist/tokens.css" />
+    <link rel="stylesheet" href="/demo/demo.css" />
+  </head>
+  <body>
+    <button type="button" class="theme-toggle" data-theme-toggle>
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-label" data-theme-label>Theme</span>
+    </button>
+
+    <header class="hero">
+      <p class="eyebrow">figma sync</p>
+      <h1>Tokens, both<br />directions.</h1>
+      <p class="lede">
+        The design book pushes to Figma, Figma pulls back, and a build-time
+        guard stops either side drifting. This page is the quickstart —
+        <a href="/">the brand book</a> is next door.
+      </p>
+    </header>
+
+    <main>
+      <section id="quickstart">
+        <h2>Quickstart</h2>
+        <p class="section-note">
+          Four commands. Each is safe to run repeatedly — the push updates in
+          place rather than duplicating, and the pull writes nothing until you
+          ask it to.
+        </p>
+
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pnpm figma:emit</code></td>
+                <td>
+                  Builds the tokens, then flattens them into
+                  <code>dist/figma-tokens.json</code> — the plan every other
+                  command reads.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm figma:push</code></td>
+                <td>
+                  Generates the Plugin API script that upserts variables.
+                  <code>--scopes=brand,fonts</code> narrows it;
+                  <code>--record &lt;result&gt;</code> folds the returned ids
+                  back into <code>figma/sync.json</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm figma:pull &lt;snapshot&gt;</code></td>
+                <td>
+                  Three-way diff against the last agreed state. Writes a report
+                  to <code>figma/syncs/</code>. Dry run unless you pass
+                  <code>--apply</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>pnpm figma:audit &lt;snapshot&gt;</code></td>
+                <td>
+                  Compares components against the contract. Exits non-zero on
+                  drift, so it can gate a pipeline.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="doc-gha" data-keyword="note">
+          <p class="doc-gha-label">Note</p>
+          <p>
+            Snapshots come from Figma through the MCP tools, which are
+            agent-facing rather than callable from Node. So the capture happens
+            in a session and the scripts consume the JSON — that split is why
+            every decision is testable offline.
+          </p>
+        </div>
+      </section>
+
+      <section id="loop">
+        <h2>The loop</h2>
+        <p class="section-note">
+          You edit both sides, so conflicts are the normal path rather than an
+          exception. The base advances on <em>every</em> settled write — if it
+          only advanced on pull, a push would leave it stale and the next sync
+          would report a conflict that never happened.
+        </p>
+
+        <div class="doc-entries">
+          <section>
+            <h5>code → figma</h5>
+            <ul>
+              <li>Edit <code>src/pmndrs-design-book.ts</code></li>
+              <li><code>pnpm figma:emit</code></li>
+              <li><code>pnpm figma:push</code>, run it, record the ids</li>
+            </ul>
+          </section>
+          <section>
+            <h5>figma → code</h5>
+            <ul>
+              <li>Tweak variables or components in Figma</li>
+              <li>Capture a snapshot</li>
+              <li><code>pnpm figma:pull</code>, read the report</li>
+              <li>Re-run with <code>--apply</code> when it looks right</li>
+            </ul>
+          </section>
+          <section>
+            <h5>keeping honest</h5>
+            <ul>
+              <li><code>pnpm figma:audit</code> for component drift</li>
+              <li><code>pnpm test</code> — 33 offline tests</li>
+              <li><code>pnpm typecheck</code></li>
+            </ul>
+          </section>
+        </div>
+      </section>
+
+      <section id="rules">
+        <h2>What the build refuses</h2>
+        <p class="section-note">
+          Three rules are enforced rather than documented and hoped for. Each
+          one exists because the mistake it catches is invisible — the artifacts
+          all render correctly right up until someone changes context.
+        </p>
+
+        <div class="spec-stage-stack">
+          <div class="doc-gha" data-keyword="important">
+            <p class="doc-gha-label">Components bind theme slots, never ramp steps</p>
+            <p>
+              A bare name like <code>tint-blue</code> is a theme slot and must
+              exist in both modes. <code>ramp.blue-950</code> fails the build:
+              it resolves perfectly and silently locks the component to one
+              mode. Write <code>fixed:brand.purple</code> when a colour
+              genuinely must not change — the prefix is required, because
+              "this one doesn't move" is a decision worth writing down.
+            </p>
+          </div>
+
+          <div class="doc-gha" data-keyword="warning">
+            <p class="doc-gha-label">Derived tokens are push-only</p>
+            <p>
+              Ramp steps are computed by <code>rampStops()</code>. A Figma edit
+              to one cannot be expressed in the book and would die on the next
+              build, so pull reports it and refuses. Edit the seed, not the
+              step.
+            </p>
+          </div>
+
+          <div class="doc-gha" data-keyword="caution">
+            <p class="doc-gha-label">Colours re-author in OKLCH, never bare hex</p>
+            <p>
+              The book is authored in <code>oklch()</code> deliberately. A pull
+              that wrote <code>color('#00e180')</code> would dismantle that one
+              token at a time while every rendered artifact stayed correct, so
+              the conversion is built in and verified against all nine brand
+              seeds.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="state">
+        <h2>Where things stand</h2>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Tokens</h3>
+            <p>
+              175 in the book. 118 pushed across five Figma collections, plus a
+              <code>theme</code> collection with Dark and Light modes.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Components</h3>
+            <p>
+              5 of 24 built in Figma — Gha, Button, Badge, Code, Header. All
+              mode-aware, zero unbound paints.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Not done</h3>
+            <p>
+              <code>figma:adopt</code> for per-component pulls, 19 remaining
+              specimens, and Code Connect — which waits for a React target in
+              <code>@pmndrs/docs</code>.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="files">
+        <h2>Files worth knowing</h2>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Path</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src/pmndrs-design-book.ts</code></td>
+                <td>The only writable source of truth for tokens</td>
+              </tr>
+              <tr>
+                <td><code>src/components/contract.ts</code></td>
+                <td>
+                  Component props and their per-slot bindings. Prop names mirror
+                  <code>@pmndrs/docs</code> so the eventual port is generation,
+                  not redesign
+                </td>
+              </tr>
+              <tr>
+                <td><code>figma/sync.json</code></td>
+                <td>
+                  Committed. Variable and component ids, the resolution policy,
+                  and the last-agreed values a three-way diff needs
+                </td>
+              </tr>
+              <tr>
+                <td><code>figma/syncs/</code></td>
+                <td>One reconciliation report per pull</td>
+              </tr>
+              <tr>
+                <td><code>scripts/figma/</code></td>
+                <td>
+                  Pure logic — reconcile, audit, oklch — with no Figma calls, so
+                  it is all testable offline
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Styled entirely by <code>dist/tokens.css</code> ·
+        <a href="/">brand book</a>
+      </p>
+    </footer>
+
+    <script type="module" src="/demo/theme.js"></script>
+  </body>
+</html>
