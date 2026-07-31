@@ -34,6 +34,14 @@ const fonts = book.addScope('fonts')
 fonts.set('mono', string('"Geist Mono", ui-monospace, monospace'))
 fonts.set('sans', string('"Geist", system-ui, sans-serif'))
 fonts.set('serif', string('"Faculty Glyphic", serif'))
+/*
+ * Pulled from Figma, where the Gha alerts were switched to it. Atkinson
+ * Hyperlegible is a legibility-first typeface, and an alert is exactly where
+ * that matters — it carries the information a reader must not miss. Scoped to
+ * that use rather than replacing `fonts.sans`, because the Button labels in the
+ * same file were deliberately left on Geist.
+ */
+fonts.set('legible', string('"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif'))
 
 // Spacing beyond the base rhythm.
 //

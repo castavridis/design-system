@@ -32,6 +32,7 @@ const webfonts = [
 	'Faculty Glyphic', // fonts.serif — single weight
 	'Geist:wght@100..900', // fonts.sans — variable
 	'Geist Mono:wght@100..900', // fonts.mono — variable
+	'Atkinson Hyperlegible Next:wght@200..800', // fonts.legible — variable
 ]
 
 function fontsStylesheet() {

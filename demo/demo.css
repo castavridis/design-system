@@ -1267,6 +1267,8 @@ kbd {
 }
 
 .doc-gha {
+  /* Pulled from Figma: alerts use the legibility face, not the body sans. */
+  font-family: var(--fonts-legible);
   padding: calc(var(--brand-space) * 0.75) var(--brand-space);
   border-inline-start: 3px solid var(--gha);
   border-radius: calc(var(--brand-radius) / 3);

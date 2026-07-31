@@ -53,7 +53,8 @@ export interface ComponentSpec {
 	 * Token path per semantic slot, per variant value. `bindings.NOTE.accent`
 	 * is the token the NOTE variant's rule and label bind to.
 	 *
-	 * Keyed by variant value, or by `'*'` when the component has no variants.
+	 * Keyed by variant value, or by `'*'` for slots that apply to every variant
+	 * (and for components that have no variants at all).
 	 */
 	bindings: Record<string, Record<string, string>>
 }
@@ -90,6 +91,8 @@ const gha: ComponentSpec = {
 		IMPORTANT: { tint: 'ramp.purple-950', accent: 'ramp.purple-300', body: 'ramp.dark-200' },
 		WARNING: { tint: 'ramp.orange-950', accent: 'ramp.orange-300', body: 'ramp.dark-200' },
 		CAUTION: { tint: 'ramp.red-950', accent: 'ramp.red-300', body: 'ramp.dark-200' },
+		/* Applies to every keyword — see fonts.legible in the design book. */
+		'*': { font: 'fonts.legible' },
 	},
 }
 
