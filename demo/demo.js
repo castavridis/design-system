@@ -244,18 +244,13 @@ applySpace();
  */
 const accentRamps = gradientColors.map(label);
 
-/* Badges: one per accent ramp, all on the same 300/800/950 recipe. */
-const badgeHost = document.querySelector("[data-badges]");
-
-for (const name of accentRamps) {
-  const badge = document.createElement("span");
-  badge.className = "doc-badge";
-  badge.textContent = name;
-  badge.style.setProperty("--badge", cssVar(rampPath(name, "300")));
-  badge.style.setProperty("--badge-tint", cssVar(rampPath(name, "950")));
-  badge.style.setProperty("--badge-line", cssVar(rampPath(name, "800")));
-  badgeHost.append(badge);
-}
+/*
+ * Badges used to be generated here. They are now `<pmndrs-badge ramp="teal">`
+ * in the markup, rendered by demo/elements.js from the component contract —
+ * the same declaration that will drive their Figma variants and Code Connect
+ * map. Generating them from a local loop meant the recipe lived in three
+ * places and agreed by luck.
+ */
 
 /*
  * `Contributors` and `Backers` call the GitHub and Open Collective APIs. This

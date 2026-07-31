@@ -13,6 +13,7 @@ import { dirname, join, resolve } from 'node:path'
 import { Renderer } from 'design-book'
 import type { W3DesignTokensMap, W3TokenEntry } from 'design-book'
 import { book, rampNames, rampShades } from '../src/pmndrs-design-book.js'
+import { boundTokenPaths, components } from '../src/components/contract.js'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(root, 'dist')
@@ -390,8 +391,29 @@ async function build() {
 	const w3c = book.render('w3-design-tokens')
 	const { js, dts } = jsonModule(tokens, rampSeedShades(JSON.parse(w3c) as W3DesignTokensMap))
 
+	/*
+	 * A component that binds a token which doesn't exist fails silently — the
+	 * CSS variable resolves to nothing and the element renders unstyled, which
+	 * is easy to miss in one specimen among twenty-seven. Cheaper to fail the
+	 * build, and it catches a renamed or deleted token immediately.
+	 */
+	const missing = boundTokenPaths().filter((path) => !(path in tokens))
+	if (missing.length > 0) {
+		throw new Error(
+			`Component contract binds tokens that don't exist: ${missing.join(', ')}. ` +
+				`Fix src/components/contract.ts or restore them in the design book.`,
+		)
+	}
+
+	const contract = { components, boundTokenPaths: boundTokenPaths() }
+
 	const artifacts: Array<[string, string]> = [
 		['tokens.css', `${banner}\n${book.render('css-variables')}\n`],
+		['component-contract.json', `${JSON.stringify(contract, null, '\t')}\n`],
+		[
+			'component-contract.js',
+			`${banner}\n\n/** Component APIs and their per-variant token bindings. */\nexport const components = Object.freeze(${JSON.stringify(components, null, '\t')})\n\n/** Every token path the components bind, verified to exist at build time. */\nexport const boundTokenPaths = Object.freeze(${JSON.stringify(boundTokenPaths(), null, '\t')})\n`,
+		],
 		['fonts.css', fontsStylesheet()],
 		['tokens.json', `${JSON.stringify(tokens, null, '\t')}\n`],
 		['tokens.w3c.json', `${w3c}\n`],

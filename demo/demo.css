@@ -1748,6 +1748,19 @@ kbd {
   gap: calc(var(--brand-space) * 0.75);
 }
 
+/*
+ * The custom elements are layout-transparent: `display: contents` removes their
+ * own box so the node they render *is* the flex/grid item, exactly as the
+ * hand-written markup was. Without this a wrapper sits between the container
+ * and the component, and gaps apply to the wrapper instead of the thing you
+ * can see.
+ */
+pmndrs-gha,
+pmndrs-button,
+pmndrs-badge {
+  display: contents;
+}
+
 .doc-badges {
   display: flex;
   flex-wrap: wrap;
