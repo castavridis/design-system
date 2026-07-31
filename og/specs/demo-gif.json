@@ -1,0 +1,13 @@
+{
+	"eyebrow": "pmndrs",
+	"title": "In motion",
+	"subtitle": "The same loop, in the format that pastes anywhere.",
+	"meta": "--gif",
+	"accent": "purple",
+	"width": 400,
+	"height": 210,
+	"source": { "kind": "scene", "name": "ramp-orbit" },
+	"seed": 5,
+	"atSeconds": 0,
+	"loopSeconds": 4
+}

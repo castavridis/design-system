@@ -469,19 +469,67 @@
               ></video>
             </div>
             <figcaption>
-              <p class="og-title">4s loop, 800×420</p>
+              <p class="og-title">--mp4 · 800×420 · 30fps · 751 KB</p>
               <p class="og-note">
-                Rendered with <code>--mp4</code>. GIF is the format that pastes
-                into a README and animates in a feed, but at 1200×630 for six
-                seconds it lands around 23 MB — cut the box and the loop, which
-                is what the format wants.
+                Every frame, full rate, at the box a card actually wants. If the
+                target takes video, this is the one to send.
               </p>
               <ul class="og-tags">
                 <li class="og-tag">loopSeconds 4</li>
                 <li class="og-tag">seed 5</li>
+                <li class="og-tag">120 frames</li>
               </ul>
             </figcaption>
           </figure>
+
+          <figure class="og-card">
+            <div class="og-frame og-frame-loop">
+              <!--
+                A GIF animates itself: no poster, no controls, and nothing to
+                pause it — which is why og.js swaps in the still when the reader
+                asks for reduced motion.
+              -->
+              <img
+                src="/demo/og/loop.gif"
+                width="400"
+                height="210"
+                loading="lazy"
+                decoding="async"
+                data-gif
+                data-still="/demo/og/loop-poster.jpg"
+                alt="The same four-second loop as an animated GIF, at half the width."
+              />
+            </div>
+            <figcaption>
+              <p class="og-title">--gif · 400×210 · 8fps · 1.1 MB</p>
+              <p class="og-note">
+                The same spec and the same seed, rendered with
+                <code>--gif</code>. A quarter of the pixels and a quarter of the
+                frames, and still half again the bytes — that is the format, not
+                the scene. Match the mp4's box and it passes 4 MB.
+              </p>
+              <ul class="og-tags">
+                <li class="og-tag">--fps 7.5</li>
+                <li class="og-tag">30 frames</li>
+                <li class="og-tag">endless</li>
+              </ul>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="og-grid og-grid-pair">
+          <div class="og-aside">
+            <div class="doc-gha" data-keyword="note">
+              <p class="doc-gha-label">Why the GIF is the smaller picture</p>
+              <p>
+                It is not a fair fight and it is not meant to be: GIF caps at
+                256 colours per frame and cannot reference the frame before it
+                the way a video codec does. A scene that is mostly gradient and
+                bloom is its worst case, so the box comes down until the file is
+                sane. Everything else about the card is identical.
+              </p>
+            </div>
+          </div>
 
           <div class="og-aside">
             <div class="doc-gha" data-keyword="tip">
@@ -738,7 +786,7 @@
       <section id="rules">
         <h2>What will bite you</h2>
         <p class="section-note">
-          Four failures cost real time to find in building this, and none of
+          Five failures cost real time to find in building this, and none of
           them announce themselves. They are written up in full in
           <code>og/README.md</code>; the short version is here because the first
           one is a rule you have to follow when adding a scene.
@@ -776,6 +824,18 @@
               cards above are not empty.
             </p>
           </div>
+          <div class="doc-gha" data-keyword="caution">
+            <p class="doc-gha-label">And a timer is not a settle condition</p>
+            <p>
+              Holding the capture open for a fixed window asks how long to wait,
+              not whether anything happened — so when the WebGL context came up
+              slowly, every redraw in the window painted nothing and the capture
+              took a blank canvas. Being a race, it landed on the first frame
+              captured, which for the GIF above is the frame a platform shows as
+              the card. The window is now a minimum, and the release waits for
+              the renderer to report triangles actually drawn.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -793,8 +853,8 @@
           <article class="card">
             <h3>pnpm og:demo</h3>
             <p>
-              Renders the loop and its poster, then
-              <code>specs/demo.json</code>, then
+              Five passes: the mp4 loop, its poster, the GIF, then
+              <code>specs/demo.json</code> and
               <code>specs/demo-media.json</code> — in that order, because the
               media cards are sourced from what the earlier passes wrote.
             </p>
@@ -802,9 +862,11 @@
           <article class="card">
             <h3>--format jpeg</h3>
             <p>
-              The gallery is JPEG at a quarter of the bytes;
+              The stills are JPEG at a quarter of the bytes;
               <code>pnpm og</code> emits PNG by default, which is what you want
-              for a card you actually ship.
+              for a card you actually ship. The GIF is the heaviest file here —
+              sixteen times the largest still, and half again the mp4 it is a
+              smaller copy of.
             </p>
           </article>
           <article class="card">

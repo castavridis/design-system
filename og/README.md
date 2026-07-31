@@ -97,24 +97,28 @@ title.
 `--format jpeg` renders stills as JPEG and names them `.jpg`, whatever the
 manifest said. PNG is the default and is what you want for a card you ship —
 flat type over a gradient is exactly what it is good at. JPEG is for a page
-that *displays* a lot of cards at once: the gallery is thirteen stills and a
-clip, at about a quarter of the bytes.
+that *displays* a lot of cards at once: the gallery is thirteen stills, a clip
+and a GIF, and the stills are about a quarter of the bytes.
 
 ### The gallery manifests
 
-`pnpm og:demo` renders `/demo/og.html` in four passes, in this order, because
+`pnpm og:demo` renders `/demo/og.html` in five passes, in this order, because
 the last one consumes what the others write:
 
 | | |
 | --- | --- |
 | `specs/demo-loop.json --mp4` | the animated loop, into `demo/og/loop.mp4` |
-| `specs/demo-loop.json` | the same frame as a still — the video's `poster` |
+| `specs/demo-loop.json` | the same frame as a still — the video's `poster`, and the GIF's stand-in under reduced motion |
+| `specs/demo-gif.json --gif --fps 7.5` | the same loop as a GIF, in a smaller box |
 | `specs/demo.json` | ten cards — every scene, theme, size, and the effect pair |
 | `specs/demo-media.json` | the image and video cards, sourced from the above |
 
-That ordering is why it is four commands rather than one manifest: media is
+That ordering is why it is five commands rather than one manifest: media is
 staged into the bundle *before* any card in a run renders, so a card cannot
 consume a file that same run is about to write.
+
+The GIF is its own spec rather than a flag on the loop's, because the box has
+to come down with the format — see below.
 
 ## Animated cards
 
@@ -137,7 +141,14 @@ the format wants:
 
 ```jsonc
 { "width": 600, "height": 315, "loopSeconds": 4 }   // ≈3 MB at 10fps
+{ "width": 400, "height": 210, "loopSeconds": 4 }   // 1.1 MB at 7.5fps — the gallery's
 ```
+
+The gallery pairs the two formats on the same spec and seed, which is the
+clearest statement of the cost: 800×420 at 30fps is 751 KB as mp4, while the
+GIF at a quarter of the pixels and a quarter of the frames is 1.1 MB. GIF caps
+at 256 colours a frame and cannot reference the frame before it, and a scene
+made of gradients and bloom is the worst thing you can hand it.
 
 `--fps` thins the clip by dropping frames rather than slowing it down, so
 motion keeps its speed — but only whole divisors of 30 are reachable
@@ -183,7 +194,18 @@ validated against, so nothing else needs touching.
 
 ## Things that will bite you
 
-Four failures cost real time to find and none of them announce themselves.
+Five failures cost real time to find and none of them announce themselves.
+
+**A timer is not a settle condition.** `<Settle>` used to hold the capture open
+for a fixed window and then let go, which asks how long to wait rather than
+whether anything happened. On a cold start the WebGL context can still be
+coming up when the window closes; every redraw inside it paints nothing, and
+the capture takes a blank canvas with the HTML overlay on top. It is a race, so
+it lands on the first frame captured — frame zero of an animation, the one a
+platform shows as the card — and it reproduced about one run in two. The window
+is now a minimum, and the release also waits for `gl.info.render` to report
+that a draw actually put triangles on screen. This is why an animated card is
+byte-identical across runs and was not before.
 
 **Fonts must be WOFF, not WOFF2.** The 3D wordmark is typeset by troika, which
 parses the file itself instead of handing it to the browser, and its parser

@@ -26,10 +26,25 @@ if (tag) {
  * page nothing. Controls appear in exchange — the motion stays available, it
  * just has to be asked for.
  */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const loop = document.querySelector('video[data-loop]')
 
-if (loop && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (loop && reduced) {
 	loop.autoplay = false
 	loop.controls = true
 	loop.pause()
+}
+
+/*
+ * The GIF gets the blunter treatment, because a GIF is blunter: it carries its
+ * own clock, so there is no autoplay to withhold and no control to offer — the
+ * only way to stop it is to not load it. Swapping the `src` for the still does
+ * that, and it is the same frame at the same seed, so the figure still shows
+ * what it claims to. Which is the honest argument for `--mp4`: everything this
+ * script has to take away from the GIF, the video hands over.
+ */
+const gif = document.querySelector('img[data-gif]')
+
+if (gif && reduced) {
+	gif.src = gif.dataset.still
 }
