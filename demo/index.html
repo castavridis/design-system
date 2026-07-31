@@ -17,6 +17,15 @@
     <link rel="stylesheet" href="/demo/demo.css" />
   </head>
   <body>
+    <!--
+      Rendered in markup rather than injected by JS so it exists before the
+      module loads — an injected toggle flashes in late on a page this long.
+    -->
+    <button type="button" class="theme-toggle" data-theme-toggle>
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-label" data-theme-label>Theme</span>
+    </button>
+
     <header class="hero">
       <p class="eyebrow">design tokens</p>
       <h1>Define once.<br />Ship everywhere.</h1>

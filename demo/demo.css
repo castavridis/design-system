@@ -1875,3 +1875,67 @@ footer p {
     animation: none !important;
   }
 }
+
+
+/* ---------- theme toggle ---------- */
+
+/*
+ * Fixed rather than in the hero: the page is ~13,000px tall, and a control you
+ * have to scroll back to the top to reach may as well not exist.
+ */
+.theme-toggle {
+  position: fixed;
+  inset-block-start: var(--brand-space);
+  inset-inline-end: var(--brand-space);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--brand-space) * 0.4);
+  padding: calc(var(--brand-space) * 0.4) calc(var(--brand-space) * 0.7);
+  border: 1px solid var(--line);
+  border-radius: var(--brand-radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--brand-teal);
+  background: var(--surface-raised);
+}
+
+/*
+ * Sun in dark mode, moon in light — the icon shows the mode you are switching
+ * *to*, which is what the label says too. Drawn in CSS so it themes with
+ * everything else and costs no request.
+ */
+.theme-toggle-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background: var(--brand-orange);
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--brand-orange);
+  transition: background-color 120ms ease;
+}
+
+:root[data-theme="light"] .theme-toggle-icon,
+:root:not([data-theme]) .theme-toggle-icon {
+  background: var(--brand-orange);
+}
+
+/* In light mode the control offers dark — show a crescent instead of a sun. */
+.theme-toggle[data-target="dark"] .theme-toggle-icon {
+  background: var(--brand-purple);
+  box-shadow: inset -3px 0 0 var(--surface);
+}
+
+@media (max-width: 32rem) {
+  .theme-toggle-label {
+    display: none;
+  }
+}
