@@ -539,6 +539,105 @@ const hint: ComponentSpec = {
 	},
 }
 
+/** Relative images, with intrinsic dimensions written in at build time. */
+const img: ComponentSpec = {
+	name: 'pmndrs-img',
+	react: 'Img',
+	source: 'pmndrs-docs',
+	description: 'Relative image with intrinsic width and height, so nothing shifts while it loads.',
+	props: {
+		src: { type: 'string', description: 'Resolved against the article\'s own folder.' },
+	},
+	bindings: {
+		'*': {
+			frame: 'surface-sunken',
+			border: 'line-soft',
+			checker: 'surface',
+			ratio: 'text-muted',
+			caption: 'text-muted',
+			mono: 'fixed:fonts.mono',
+		},
+	},
+}
+
+/**
+ * The editable sandbox: file tabs, source, live preview.
+ *
+ * The preview is the only place in the contract where several slots are
+ * `fixed:` on purpose. It stands in for a rendered three.js scene — a picture
+ * of a cloud — and a picture does not change colour when the OS setting does.
+ * Everything that is *chrome* around it still follows the mode.
+ */
+const sandpack: ComponentSpec = {
+	name: 'pmndrs-sandpack',
+	react: 'Sandpack',
+	source: 'pmndrs-docs',
+	description: 'Editable sandbox: file tabs, source, live preview.',
+	props: {
+		template: { type: 'string', default: 'react-ts', description: 'Sandbox template.' },
+		active: { type: 'string', description: 'Which file tab is selected.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-sunken',
+			tabsSurface: 'surface-raised',
+			tabsBorder: 'line-soft',
+			tab: 'text-muted',
+			tabActive: 'text',
+			tabRule: 'accent-teal',
+			template: 'text-faint',
+			previewBorder: 'line-soft',
+			dot: 'accent-teal',
+			mono: 'fixed:fonts.mono',
+			/* The rendered scene. A picture, not a surface. */
+			sky: 'fixed:ramp.blue-950',
+			cloudFrom: 'fixed:ramp.blue-100',
+			cloudTo: 'fixed:ramp.purple-200',
+			status: 'fixed:ramp.blue-200',
+		},
+	},
+}
+
+/** Embedded example, referenced by id. Its thumbnail is artwork, so `fixed:`. */
+const codesandbox: ComponentSpec = {
+	name: 'pmndrs-codesandbox',
+	react: 'Codesandbox',
+	source: 'pmndrs-docs',
+	description: 'Embedded CodeSandbox example, referenced by id.',
+	props: {
+		id: { type: 'string', description: 'The sandbox id.' },
+	},
+	bindings: {
+		'*': {
+			surface: 'surface-raised',
+			border: 'line-soft',
+			title: 'text',
+			id: 'text-muted',
+			mono: 'fixed:fonts.mono',
+			thumbFrom: 'fixed:ramp.yellow-300',
+			thumbVia: 'fixed:ramp.red-400',
+			thumbTo: 'fixed:ramp.blue-950',
+		},
+	},
+}
+
+/**
+ * Deprecated, and its own argument for why: a fixed column count leaves the
+ * last cell short on an odd item count. Superseded by utility classes.
+ */
+const grid: ComponentSpec = {
+	name: 'pmndrs-grid',
+	react: 'Grid',
+	source: 'pmndrs-docs',
+	description: 'Fixed-column list layout, superseded by utility classes.',
+	props: {
+		cols: { type: 'number', default: 2, description: 'Column count.' },
+	},
+	bindings: {
+		'*': { surface: 'surface-raised', border: 'line', ink: 'text-muted', mono: 'fixed:fonts.mono' },
+	},
+}
+
 export const components: readonly ComponentSpec[] = [
 	gha,
 	button,
@@ -556,6 +655,10 @@ export const components: readonly ComponentSpec[] = [
 	blockquote,
 	table,
 	hint,
+	img,
+	sandpack,
+	codesandbox,
+	grid,
 ]
 
 /**

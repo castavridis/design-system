@@ -1645,7 +1645,7 @@ kbd {
 
 .doc-sandpack-tabs button[aria-selected="true"] {
   color: var(--text);
-  border-bottom-color: var(--brand-teal);
+  border-bottom-color: var(--accent-teal);
 }
 
 .doc-sandpack-template {
@@ -1713,7 +1713,7 @@ kbd {
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
-  background: var(--brand-teal);
+  background: var(--accent-teal);
 }
 
 /* ---------- codesandbox ---------- */

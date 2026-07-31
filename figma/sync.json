@@ -779,6 +779,37 @@
 			"contract": "pmndrs-hint",
 			"note": "deprecated — kept so a retired component still looks deliberate",
 			"boundTo": "theme/* (mode-aware)"
+		},
+		"Img": {
+			"id": "155:534",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-img",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Sandpack": {
+			"id": "155:561",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-sandpack",
+			"note": "the preview is fixed: artwork — a picture of a rendered scene, which does not follow the mode",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Codesandbox": {
+			"id": "155:567",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-codesandbox",
+			"note": "thumbnail is a bound three-stop gradient, fixed: for the same reason",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
+		},
+		"Grid": {
+			"id": "155:588",
+			"type": "COMPONENT",
+			"variantProps": {},
+			"contract": "pmndrs-grid",
+			"note": "deprecated: the odd item out leaves the last cell short, which was half the reason it went",
+			"boundTo": "theme/* (mode-aware); artwork bound to ramp/* and declared fixed:"
 		}
 	},
 	"pages": {
