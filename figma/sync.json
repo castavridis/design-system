@@ -4,12 +4,14 @@
 	"collections": {
 		"brand": "VariableCollectionId:83:2",
 		"fonts": "VariableCollectionId:83:3",
-		"radius": "VariableCollectionId:86:2"
+		"radius": "VariableCollectionId:86:2",
+		"ramp": "VariableCollectionId:87:2"
 	},
 	"modes": {
 		"brand": "83:0",
 		"fonts": "83:1",
-		"radius": "86:0"
+		"radius": "86:0",
+		"ramp": "87:0"
 	},
 	"variables": {
 		"brand.dark": {
@@ -83,6 +85,402 @@
 		"radius.small": {
 			"id": "VariableID:86:5",
 			"collection": "radius"
+		},
+		"ramp.dark-50": {
+			"id": "VariableID:87:3",
+			"collection": "ramp"
+		},
+		"ramp.dark-100": {
+			"id": "VariableID:87:4",
+			"collection": "ramp"
+		},
+		"ramp.dark-200": {
+			"id": "VariableID:87:5",
+			"collection": "ramp"
+		},
+		"ramp.dark-300": {
+			"id": "VariableID:87:6",
+			"collection": "ramp"
+		},
+		"ramp.dark-400": {
+			"id": "VariableID:87:7",
+			"collection": "ramp"
+		},
+		"ramp.dark-500": {
+			"id": "VariableID:87:8",
+			"collection": "ramp"
+		},
+		"ramp.dark-600": {
+			"id": "VariableID:87:9",
+			"collection": "ramp"
+		},
+		"ramp.dark-700": {
+			"id": "VariableID:87:10",
+			"collection": "ramp"
+		},
+		"ramp.dark-800": {
+			"id": "VariableID:87:11",
+			"collection": "ramp"
+		},
+		"ramp.dark-900": {
+			"id": "VariableID:87:12",
+			"collection": "ramp"
+		},
+		"ramp.dark-950": {
+			"id": "VariableID:87:13",
+			"collection": "ramp"
+		},
+		"ramp.light-50": {
+			"id": "VariableID:87:14",
+			"collection": "ramp"
+		},
+		"ramp.light-100": {
+			"id": "VariableID:87:15",
+			"collection": "ramp"
+		},
+		"ramp.light-200": {
+			"id": "VariableID:87:16",
+			"collection": "ramp"
+		},
+		"ramp.light-300": {
+			"id": "VariableID:87:17",
+			"collection": "ramp"
+		},
+		"ramp.light-400": {
+			"id": "VariableID:87:18",
+			"collection": "ramp"
+		},
+		"ramp.light-500": {
+			"id": "VariableID:87:19",
+			"collection": "ramp"
+		},
+		"ramp.light-600": {
+			"id": "VariableID:87:20",
+			"collection": "ramp"
+		},
+		"ramp.light-700": {
+			"id": "VariableID:87:21",
+			"collection": "ramp"
+		},
+		"ramp.light-800": {
+			"id": "VariableID:87:22",
+			"collection": "ramp"
+		},
+		"ramp.light-900": {
+			"id": "VariableID:87:23",
+			"collection": "ramp"
+		},
+		"ramp.light-950": {
+			"id": "VariableID:87:24",
+			"collection": "ramp"
+		},
+		"ramp.purple-50": {
+			"id": "VariableID:87:25",
+			"collection": "ramp"
+		},
+		"ramp.purple-100": {
+			"id": "VariableID:87:26",
+			"collection": "ramp"
+		},
+		"ramp.purple-200": {
+			"id": "VariableID:87:27",
+			"collection": "ramp"
+		},
+		"ramp.purple-300": {
+			"id": "VariableID:87:28",
+			"collection": "ramp"
+		},
+		"ramp.purple-400": {
+			"id": "VariableID:87:29",
+			"collection": "ramp"
+		},
+		"ramp.purple-500": {
+			"id": "VariableID:87:30",
+			"collection": "ramp"
+		},
+		"ramp.purple-600": {
+			"id": "VariableID:87:31",
+			"collection": "ramp"
+		},
+		"ramp.purple-700": {
+			"id": "VariableID:87:32",
+			"collection": "ramp"
+		},
+		"ramp.purple-800": {
+			"id": "VariableID:87:33",
+			"collection": "ramp"
+		},
+		"ramp.purple-900": {
+			"id": "VariableID:87:34",
+			"collection": "ramp"
+		},
+		"ramp.purple-950": {
+			"id": "VariableID:87:35",
+			"collection": "ramp"
+		},
+		"ramp.red-50": {
+			"id": "VariableID:87:36",
+			"collection": "ramp"
+		},
+		"ramp.red-100": {
+			"id": "VariableID:87:37",
+			"collection": "ramp"
+		},
+		"ramp.red-200": {
+			"id": "VariableID:87:38",
+			"collection": "ramp"
+		},
+		"ramp.red-300": {
+			"id": "VariableID:87:39",
+			"collection": "ramp"
+		},
+		"ramp.red-400": {
+			"id": "VariableID:87:40",
+			"collection": "ramp"
+		},
+		"ramp.red-500": {
+			"id": "VariableID:87:41",
+			"collection": "ramp"
+		},
+		"ramp.red-600": {
+			"id": "VariableID:87:42",
+			"collection": "ramp"
+		},
+		"ramp.red-700": {
+			"id": "VariableID:87:43",
+			"collection": "ramp"
+		},
+		"ramp.red-800": {
+			"id": "VariableID:87:44",
+			"collection": "ramp"
+		},
+		"ramp.red-900": {
+			"id": "VariableID:87:45",
+			"collection": "ramp"
+		},
+		"ramp.red-950": {
+			"id": "VariableID:87:46",
+			"collection": "ramp"
+		},
+		"ramp.orange-50": {
+			"id": "VariableID:87:47",
+			"collection": "ramp"
+		},
+		"ramp.orange-100": {
+			"id": "VariableID:87:48",
+			"collection": "ramp"
+		},
+		"ramp.orange-200": {
+			"id": "VariableID:87:49",
+			"collection": "ramp"
+		},
+		"ramp.orange-300": {
+			"id": "VariableID:87:50",
+			"collection": "ramp"
+		},
+		"ramp.orange-400": {
+			"id": "VariableID:87:51",
+			"collection": "ramp"
+		},
+		"ramp.orange-500": {
+			"id": "VariableID:87:52",
+			"collection": "ramp"
+		},
+		"ramp.orange-600": {
+			"id": "VariableID:87:53",
+			"collection": "ramp"
+		},
+		"ramp.orange-700": {
+			"id": "VariableID:87:54",
+			"collection": "ramp"
+		},
+		"ramp.orange-800": {
+			"id": "VariableID:87:55",
+			"collection": "ramp"
+		},
+		"ramp.orange-900": {
+			"id": "VariableID:87:56",
+			"collection": "ramp"
+		},
+		"ramp.orange-950": {
+			"id": "VariableID:87:57",
+			"collection": "ramp"
+		},
+		"ramp.yellow-50": {
+			"id": "VariableID:87:58",
+			"collection": "ramp"
+		},
+		"ramp.yellow-100": {
+			"id": "VariableID:87:59",
+			"collection": "ramp"
+		},
+		"ramp.yellow-200": {
+			"id": "VariableID:87:60",
+			"collection": "ramp"
+		},
+		"ramp.yellow-300": {
+			"id": "VariableID:87:61",
+			"collection": "ramp"
+		},
+		"ramp.yellow-400": {
+			"id": "VariableID:87:62",
+			"collection": "ramp"
+		},
+		"ramp.yellow-500": {
+			"id": "VariableID:87:63",
+			"collection": "ramp"
+		},
+		"ramp.yellow-600": {
+			"id": "VariableID:87:64",
+			"collection": "ramp"
+		},
+		"ramp.yellow-700": {
+			"id": "VariableID:87:65",
+			"collection": "ramp"
+		},
+		"ramp.yellow-800": {
+			"id": "VariableID:87:66",
+			"collection": "ramp"
+		},
+		"ramp.yellow-900": {
+			"id": "VariableID:87:67",
+			"collection": "ramp"
+		},
+		"ramp.yellow-950": {
+			"id": "VariableID:87:68",
+			"collection": "ramp"
+		},
+		"ramp.green-50": {
+			"id": "VariableID:87:69",
+			"collection": "ramp"
+		},
+		"ramp.green-100": {
+			"id": "VariableID:87:70",
+			"collection": "ramp"
+		},
+		"ramp.green-200": {
+			"id": "VariableID:87:71",
+			"collection": "ramp"
+		},
+		"ramp.green-300": {
+			"id": "VariableID:87:72",
+			"collection": "ramp"
+		},
+		"ramp.green-400": {
+			"id": "VariableID:87:73",
+			"collection": "ramp"
+		},
+		"ramp.green-500": {
+			"id": "VariableID:87:74",
+			"collection": "ramp"
+		},
+		"ramp.green-600": {
+			"id": "VariableID:87:75",
+			"collection": "ramp"
+		},
+		"ramp.green-700": {
+			"id": "VariableID:87:76",
+			"collection": "ramp"
+		},
+		"ramp.green-800": {
+			"id": "VariableID:87:77",
+			"collection": "ramp"
+		},
+		"ramp.green-900": {
+			"id": "VariableID:87:78",
+			"collection": "ramp"
+		},
+		"ramp.green-950": {
+			"id": "VariableID:87:79",
+			"collection": "ramp"
+		},
+		"ramp.teal-50": {
+			"id": "VariableID:87:80",
+			"collection": "ramp"
+		},
+		"ramp.teal-100": {
+			"id": "VariableID:87:81",
+			"collection": "ramp"
+		},
+		"ramp.teal-200": {
+			"id": "VariableID:87:82",
+			"collection": "ramp"
+		},
+		"ramp.teal-300": {
+			"id": "VariableID:87:83",
+			"collection": "ramp"
+		},
+		"ramp.teal-400": {
+			"id": "VariableID:87:84",
+			"collection": "ramp"
+		},
+		"ramp.teal-500": {
+			"id": "VariableID:87:85",
+			"collection": "ramp"
+		},
+		"ramp.teal-600": {
+			"id": "VariableID:87:86",
+			"collection": "ramp"
+		},
+		"ramp.teal-700": {
+			"id": "VariableID:87:87",
+			"collection": "ramp"
+		},
+		"ramp.teal-800": {
+			"id": "VariableID:87:88",
+			"collection": "ramp"
+		},
+		"ramp.teal-900": {
+			"id": "VariableID:87:89",
+			"collection": "ramp"
+		},
+		"ramp.teal-950": {
+			"id": "VariableID:87:90",
+			"collection": "ramp"
+		},
+		"ramp.blue-50": {
+			"id": "VariableID:87:91",
+			"collection": "ramp"
+		},
+		"ramp.blue-100": {
+			"id": "VariableID:87:92",
+			"collection": "ramp"
+		},
+		"ramp.blue-200": {
+			"id": "VariableID:87:93",
+			"collection": "ramp"
+		},
+		"ramp.blue-300": {
+			"id": "VariableID:87:94",
+			"collection": "ramp"
+		},
+		"ramp.blue-400": {
+			"id": "VariableID:87:95",
+			"collection": "ramp"
+		},
+		"ramp.blue-500": {
+			"id": "VariableID:87:96",
+			"collection": "ramp"
+		},
+		"ramp.blue-600": {
+			"id": "VariableID:87:97",
+			"collection": "ramp"
+		},
+		"ramp.blue-700": {
+			"id": "VariableID:87:98",
+			"collection": "ramp"
+		},
+		"ramp.blue-800": {
+			"id": "VariableID:87:99",
+			"collection": "ramp"
+		},
+		"ramp.blue-900": {
+			"id": "VariableID:87:100",
+			"collection": "ramp"
+		},
+		"ramp.blue-950": {
+			"id": "VariableID:87:101",
+			"collection": "ramp"
 		}
 	},
 	"prefer": {
@@ -93,8 +491,8 @@
 		"ramp"
 	],
 	"lastSync": {
-		"syncId": "20260731T182256Z",
-		"at": "2026-07-31T18:22:56.765Z",
+		"syncId": "20260731T183145Z",
+		"at": "2026-07-31T18:31:45.026Z",
 		"values": {
 			"brand.dark": "#36342f",
 			"brand.light": "#eae5da",
@@ -113,7 +511,106 @@
 			"fonts.serif": "\"Faculty Glyphic\", serif",
 			"radius.base": "16",
 			"radius.input": "4",
-			"radius.small": "2"
+			"radius.small": "2",
+			"ramp.dark-50": "#fdfaf3",
+			"ramp.dark-100": "#f8f5ee",
+			"ramp.dark-200": "#e8e5de",
+			"ramp.dark-300": "#d6d4ce",
+			"ramp.dark-400": "#a5a39d",
+			"ramp.dark-500": "#75736d",
+			"ramp.dark-600": "#54524d",
+			"ramp.dark-700": "#36342f",
+			"ramp.dark-800": "#282621",
+			"ramp.dark-900": "#191712",
+			"ramp.dark-950": "#0c0a06",
+			"ramp.light-50": "#fffaef",
+			"ramp.light-100": "#faf5ea",
+			"ramp.light-200": "#eae5da",
+			"ramp.light-300": "#d9d4c9",
+			"ramp.light-400": "#a7a398",
+			"ramp.light-500": "#777369",
+			"ramp.light-600": "#565248",
+			"ramp.light-700": "#444037",
+			"ramp.light-800": "#29261d",
+			"ramp.light-900": "#1a170f",
+			"ramp.light-950": "#0d0a04",
+			"ramp.purple-50": "#fdf5ff",
+			"ramp.purple-100": "#fae9ff",
+			"ramp.purple-200": "#f5d4ff",
+			"ramp.purple-300": "#f0b1ff",
+			"ramp.purple-400": "#e783ff",
+			"ramp.purple-500": "#d855f9",
+			"ramp.purple-600": "#bf37df",
+			"ramp.purple-700": "#a12abc",
+			"ramp.purple-800": "#86249a",
+			"ramp.purple-900": "#70217d",
+			"ramp.purple-950": "#4a0b56",
+			"ramp.red-50": "#fff2f5",
+			"ramp.red-100": "#ffe7ed",
+			"ramp.red-200": "#ffd0df",
+			"ramp.red-300": "#ffa9c4",
+			"ramp.red-400": "#ff76a1",
+			"ramp.red-500": "#ff4980",
+			"ramp.red-600": "#ec2663",
+			"ramp.red-700": "#ca184f",
+			"ramp.red-800": "#a81745",
+			"ramp.red-900": "#8e183f",
+			"ramp.red-950": "#530720",
+			"ramp.orange-50": "#fffbec",
+			"ramp.orange-100": "#fff3cb",
+			"ramp.orange-200": "#ffe692",
+			"ramp.orange-300": "#ffd35e",
+			"ramp.orange-400": "#ffc043",
+			"ramp.orange-500": "#f7a037",
+			"ramp.orange-600": "#d97a2f",
+			"ramp.orange-700": "#b35626",
+			"ramp.orange-800": "#914321",
+			"ramp.orange-900": "#77371d",
+			"ramp.orange-950": "#441b0a",
+			"ramp.yellow-50": "#fcffe5",
+			"ramp.yellow-100": "#f8ffbf",
+			"ramp.yellow-200": "#f2ff81",
+			"ramp.yellow-300": "#ebff0f",
+			"ramp.yellow-400": "#ddee00",
+			"ramp.yellow-500": "#c5d300",
+			"ramp.yellow-600": "#a6a700",
+			"ramp.yellow-700": "#847c00",
+			"ramp.yellow-800": "#6e6200",
+			"ramp.yellow-900": "#5e5200",
+			"ramp.yellow-950": "#352d00",
+			"ramp.green-50": "#f8ffe5",
+			"ramp.green-100": "#effec4",
+			"ramp.green-200": "#dffc8d",
+			"ramp.green-300": "#caf543",
+			"ramp.green-400": "#b5e700",
+			"ramp.green-500": "#9bcd00",
+			"ramp.green-600": "#7fa300",
+			"ramp.green-700": "#647b00",
+			"ramp.green-800": "#536100",
+			"ramp.green-900": "#475204",
+			"ramp.green-950": "#262d00",
+			"ramp.teal-50": "#e9fff3",
+			"ramp.teal-100": "#c9ffe2",
+			"ramp.teal-200": "#93fdc8",
+			"ramp.teal-300": "#00f7a3",
+			"ramp.teal-400": "#00e180",
+			"ramp.teal-500": "#00c566",
+			"ramp.teal-600": "#00a251",
+			"ramp.teal-700": "#008143",
+			"ramp.teal-800": "#006736",
+			"ramp.teal-900": "#00552e",
+			"ramp.teal-950": "#003018",
+			"ramp.blue-50": "#edfeff",
+			"ramp.blue-100": "#cffcff",
+			"ramp.blue-200": "#a3f8ff",
+			"ramp.blue-300": "#65eeff",
+			"ramp.blue-400": "#2bdcf6",
+			"ramp.blue-500": "#17beda",
+			"ramp.blue-600": "#1798b6",
+			"ramp.blue-700": "#187993",
+			"ramp.blue-800": "#1a6277",
+			"ramp.blue-900": "#1a5165",
+			"ramp.blue-950": "#0b3444"
 		}
 	}
 }
