@@ -65,12 +65,24 @@ const GEOMETRY = [
 	/^layout\.type\.\w+\.size$/,
 	/^layout\.type\.\w+\.tracking$/,
 	/^layout\.type\.\w+\.leading$/,
+	/^layout\.type\.\w+\.opacity$/,
 	/^layout\.marks\.dot\.(size|glow)$/,
 	/^layout\.marks\.rule\.(width|height|radius)$/,
 	/^layout\.marks\.chip\.(padX|padY|radius)$/,
 ]
 
-export const isGeometry = (key: string) => GEOMETRY.some((pattern) => pattern.test(key))
+/**
+ * The scene type's media variant, which the template does not draw.
+ *
+ * Its three numbers only apply when a card's source is a photo or a video
+ * frame, and the template stands on a generated scene — so there is nothing on
+ * the canvas to measure them off. Left in the geometry set they would be
+ * reported as missing from Figma on every single pull.
+ */
+const NOT_DRAWN = /^layout\.overMedia\./
+
+export const isGeometry = (key: string) =>
+	!NOT_DRAWN.test(key) && GEOMETRY.some((pattern) => pattern.test(key))
 
 /** Fields that accept "nothing" as an answer. A measure means hug the content. */
 const NULLABLE = /\.measure$/

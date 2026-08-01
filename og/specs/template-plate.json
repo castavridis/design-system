@@ -6,5 +6,6 @@
 	"accent": "purple",
 	"source": { "kind": "scene", "name": "ramp-orbit" },
 	"atSeconds": 2.4,
+	"wordmark": "",
 	"plate": true
 }

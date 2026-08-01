@@ -75,12 +75,29 @@ export interface TypeStyle {
 	/** Title only — pixels given back per character past `threshold`. */
 	backoff?: number
 	threshold?: number
+	/** Scene type only — how far through the artwork it reads. */
+	opacity?: number
+	/**
+	 * Scene type only — world Z.
+	 *
+	 * Not a pixel, and deliberately not converted from one: depth is what puts
+	 * the wordmark *behind* the scene's geometry rather than in front of it, and
+	 * no screen measurement can express that.
+	 */
+	depth?: number
 }
 
 export interface Layout {
 	reference: { width: number; height: number }
-	blocks: Record<'brand' | 'meta' | 'message', Block>
-	type: Record<'wordmark' | 'chip' | 'eyebrow' | 'title' | 'subtitle', TypeStyle>
+	blocks: Record<'brand' | 'meta' | 'message' | 'scene', Block>
+	type: Record<'wordmark' | 'chip' | 'eyebrow' | 'title' | 'subtitle' | 'scene', TypeStyle>
+	/**
+	 * What the scene type does when it lands over a photo or a video frame
+	 * instead of a generated scene: nearer the camera, larger on screen, and
+	 * quieter, because it is competing with artwork rather than sitting inside
+	 * it. Only these three differ, so only these three are stated.
+	 */
+	overMedia: { size: number; opacity: number; depth: number }
 	marks: {
 		dot: { size: number; glow: number }
 		rule: { width: number; height: number; radius: number }
@@ -144,6 +161,25 @@ export function blockPosition(block: Block, scale: number): React.CSSProperties 
 	if (shiftX !== '0' || shiftY !== '0') style.transform = `translate(${shiftX}, ${shiftY})`
 
 	return style
+}
+
+/**
+ * A block's anchor point in canvas pixels.
+ *
+ * The same arithmetic `blockPosition` hands to CSS, done in numbers instead —
+ * because the scene's type is not laid out by the browser and needs the point
+ * itself to hand to the camera. Keeping both derivations here is what stops
+ * them drifting apart.
+ */
+export function screenPoint(block: Block, width: number, height: number, scale: number) {
+	const [vertical, horizontal] = block.anchor.split('-') as ['top' | 'middle' | 'bottom', Align | 'center']
+	const x = block.offset.x * scale
+	const y = block.offset.y * scale
+
+	return {
+		x: horizontal === 'left' ? x : horizontal === 'right' ? width - x : width / 2 + x,
+		y: vertical === 'top' ? y : vertical === 'bottom' ? height - y : height / 2 + y,
+	}
 }
 
 const justify: Record<Align, string> = { left: 'flex-start', center: 'center', right: 'flex-end' }

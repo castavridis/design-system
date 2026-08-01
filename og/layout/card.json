@@ -24,6 +24,14 @@
 			"direction": "column",
 			"gap": 12,
 			"align": "left"
+		},
+		"scene": {
+			"anchor": "middle-center",
+			"offset": { "x": 0, "y": -15.9 },
+			"measure": 868.1,
+			"direction": "column",
+			"gap": 0,
+			"align": "center"
 		}
 	},
 	"type": {
@@ -41,8 +49,19 @@
 			"measure": 0.76,
 			"ink": "ink"
 		},
-		"subtitle": { "font": "sans", "size": 26, "leading": 1.35, "measure": 0.58, "ink": "inkMuted" }
+		"subtitle": { "font": "sans", "size": 26, "leading": 1.35, "measure": 0.58, "ink": "inkMuted" },
+		"scene": {
+			"font": "serif",
+			"size": 164,
+			"tracking": -0.02,
+			"leading": 0.98,
+			"measure": 1,
+			"opacity": 0.16,
+			"depth": -3,
+			"ink": "ink"
+		}
 	},
+	"overMedia": { "size": 171.3, "opacity": 0.1, "depth": 0.05 },
 	"marks": {
 		"dot": { "size": 11.2, "glow": 22.4 },
 		"rule": { "width": 56, "height": 3, "radius": 2 },

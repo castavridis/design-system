@@ -8,10 +8,13 @@
  * recognisably from this generator whatever went into it.
  */
 
+import { useThree } from '@react-three/fiber'
 import { useRemotionEnvironment } from 'remotion'
 import type { RefObject } from 'react'
 import type { Palette } from '../lib/palette'
 import { mediaUrl } from '../lib/media'
+import { unitsPerPixel, worldFromScreen } from '../lib/project'
+import { cardLayout, screenPoint } from './layout'
 import type { ResolvedSpec } from '../lib/spec'
 import { scenes } from '../scenes/registry'
 import { ImagePlate, PreviewVideoPlate, RenderedVideoPlate } from '../sources/MediaPlates'
@@ -32,6 +35,29 @@ export interface CardSceneProps {
 export function CardScene({ spec, palette, time, videoRef }: CardSceneProps) {
 	const { isRendering } = useRemotionEnvironment()
 	const { source } = spec
+
+	/*
+	 * Where the scene's own type sits, converted from the layout's pixels with
+	 * the camera actually rendering this card.
+	 *
+	 * Over a generated scene the wordmark hangs behind the geometry and reads as
+	 * depth; over a photo or a video frame it comes forward, larger and quieter,
+	 * because there it is competing with the artwork instead of living in it.
+	 * Only the three values that differ are overridden.
+	 */
+	const camera = useThree((state) => state.camera)
+	const size = useThree((state) => state.size)
+
+	const { blocks, type, overMedia, reference } = cardLayout
+	const scene = source.kind === 'scene' ? type.scene : { ...type.scene, ...overMedia }
+	const measure = (scene.measure ?? 1) * (blocks.scene.measure ?? reference.width)
+
+	const scale = spec.width / reference.width
+	const anchor = screenPoint(blocks.scene, size.width, size.height, scale)
+	const depth = scene.depth ?? -3
+
+	const position = worldFromScreen(camera, size.width, size.height, anchor.x, anchor.y, depth)
+	const perPixel = unitsPerPixel(camera, size.width, size.height, depth)
 
 	// Looked up as a component and rendered as an element, not called as a
 	// function: a scene owns its own `useMemo`s, and calling it inline would
@@ -73,9 +99,12 @@ export function CardScene({ spec, palette, time, videoRef }: CardSceneProps) {
 			<BrandText
 				fontUrl={fontFiles.serif}
 				palette={palette}
-				position={source.kind === 'scene' ? [0, 0, -3] : [0, 0, 0.05]}
-				fontSize={source.kind === 'scene' ? 1.7 : 1.2}
-				opacity={source.kind === 'scene' ? 0.16 : 0.1}
+				position={[position.x, position.y, position.z]}
+				fontSize={scene.size * scale * perPixel}
+				maxWidth={measure * scale * perPixel}
+				opacity={scene.opacity ?? 0.16}
+				tracking={scene.tracking ?? 0}
+				leading={scene.leading ?? 1}
 			>
 				{spec.wordmark}
 			</BrandText>

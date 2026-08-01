@@ -52,6 +52,35 @@ test('geometry is what a designer drags, and nothing else', () => {
 	assert.ok(!isGeometry('layout.type.title.font'))
 })
 
+test('the type set inside the scene is a block like any other', () => {
+	const values = flatten(layout)
+
+	/* Authored in pixels, like everything else — the renderer converts to world
+	   units with the camera, so the designer never meets one. */
+	assert.equal(values['layout.blocks.scene.anchor'], 'middle-center')
+	assert.equal(values['layout.blocks.scene.offset.y'], '-15.9')
+	assert.equal(values['layout.type.scene.size'], '164')
+
+	assert.ok(isGeometry('layout.blocks.scene.offset.y'), 'drag it')
+	assert.ok(isGeometry('layout.type.scene.size'), 'resize it')
+	assert.ok(isGeometry('layout.type.scene.opacity'), 'a node opacity is set where you would expect')
+
+	/* Depth is world Z. No screen measurement can express "behind the
+	   geometry rather than in front of it", so it stays a typed field. */
+	assert.ok(!isGeometry('layout.type.scene.depth'))
+	assert.equal(values['layout.type.scene.depth'], '-3')
+})
+
+test('the media variant is never treated as geometry', () => {
+	/* The template stands on a generated scene, so there is nothing on the
+	   canvas to measure these off — classifying them as geometry would report
+	   them missing from Figma on every pull, forever. */
+	for (const key of ['layout.overMedia.size', 'layout.overMedia.opacity', 'layout.overMedia.depth']) {
+		assert.ok(!isGeometry(key), key)
+		assert.ok(key in flatten(layout), key)
+	}
+})
+
 test('placing a block and measuring it back are exact inverses', () => {
 	const reference = { width: 1200, height: 630 }
 	const size = { width: 320, height: 96 }

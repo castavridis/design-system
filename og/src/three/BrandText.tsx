@@ -23,6 +23,10 @@ export interface BrandTextProps {
 	fontSize?: number
 	opacity?: number
 	maxWidth?: number
+	/** `em`, like CSS letter-spacing — troika takes the same unit. */
+	tracking?: number
+	/** A multiple of the font size, like CSS line-height. */
+	leading?: number
 }
 
 export function BrandText({
@@ -33,6 +37,8 @@ export function BrandText({
 	fontSize = 1.6,
 	opacity = 0.16,
 	maxWidth = 9,
+	tracking = -0.02,
+	leading = 0.98,
 }: BrandTextProps) {
 	if (children.trim() === '') return null
 
@@ -47,8 +53,8 @@ export function BrandText({
 			anchorX="center"
 			anchorY="middle"
 			textAlign="center"
-			letterSpacing={-0.02}
-			lineHeight={0.98}
+			letterSpacing={tracking}
+			lineHeight={leading}
 			// drei suspends on the font load, and `<ThreeCanvas>` wraps its
 			// children in a Suspense boundary that holds the render open — so
 			// this cannot be captured half-typeset.

@@ -141,13 +141,21 @@ card the same design rather than the same pixel sizes in a wider box, and it is
 also what lets one Figma frame define all three: the frame is the reference box,
 so its coordinates and the JSON's numbers are the same numbers.
 
-The card is three anchored blocks — `brand`, `meta`, `message`. An anchor says
-which edge a block hangs from, so its content flows away from it: the message
-block hangs off the bottom and a three-line headline grows upward. `pnpm
-figma:template` draws the whole thing over a **plate** — the same card rendered
-with `"plate": true`, which switches the type layer off — and `--pull` brings a
-dragged block back. The root [README](../README.md#the-card-layout-in-figma) has
-the details.
+The card is four anchored blocks — `brand`, `meta`, `message` and `scene`. An
+anchor says which edge a block hangs from, so its content flows away from it:
+the message block hangs off the bottom and a three-line headline grows upward.
+`pnpm figma:template` draws the whole thing over a **plate** — the same card
+rendered with `"plate": true`, which switches the type layer off — and `--pull`
+brings a dragged block back. The root
+[README](../README.md#the-card-layout-in-figma) has the details.
+
+`scene` is the wordmark set with troika *inside* the render, so it is the one
+block whose native units are world units rather than pixels. It is still
+authored in pixels: `lib/project.ts` converts using the camera the card is
+actually rendered with, which matters because that camera looks down at the
+origin from slightly above it — world Y=0 is not the middle of the frame. Its
+`depth` stays in world Z, because no screen measurement can express "behind the
+geometry rather than in front of it".
 
 A layout edit moves every card, so `pnpm og:demo` follows a pull.
 

@@ -526,8 +526,8 @@
 		"ramp"
 	],
 	"lastSync": {
-		"syncId": "20260801T085737Z",
-		"at": "2026-08-01T08:57:37.118Z",
+		"syncId": "20260801T091426Z",
+		"at": "2026-08-01T09:14:26.180Z",
 		"values": {
 			"brand.dark": "#36342f",
 			"brand.light": "#eae5da",
@@ -879,7 +879,25 @@
 			"layout.marks.chip.padY": "6.4",
 			"layout.marks.chip.radius": "4",
 			"layout.marks.chip.fill": "0.78",
-			"layout.marks.chip.line": "0.16"
+			"layout.marks.chip.line": "0.16",
+			"layout.blocks.scene.anchor": "middle-center",
+			"layout.blocks.scene.offset.x": "0",
+			"layout.blocks.scene.offset.y": "-15.9",
+			"layout.blocks.scene.measure": "868.1",
+			"layout.blocks.scene.direction": "column",
+			"layout.blocks.scene.gap": "0",
+			"layout.blocks.scene.align": "center",
+			"layout.type.scene.font": "serif",
+			"layout.type.scene.size": "164",
+			"layout.type.scene.tracking": "-0.02",
+			"layout.type.scene.leading": "0.98",
+			"layout.type.scene.measure": "1",
+			"layout.type.scene.opacity": "0.16",
+			"layout.type.scene.depth": "-3",
+			"layout.type.scene.ink": "ink",
+			"layout.overMedia.size": "171.3",
+			"layout.overMedia.opacity": "0.1",
+			"layout.overMedia.depth": "0.05"
 		}
 	},
 	"components": {
@@ -1332,72 +1350,72 @@
 			"demo-loop": {
 				"id": "179:6",
 				"art": "179:7",
-				"sha": "719ca7a4e7a93931bd9f55af4c93aff741b40a8f3cedfd7cfebe805b232e8e67"
+				"sha": "b09a16bae7bf8f7e6b192a522a1361fd9d2776eb1628c4dfd97bffa087248401"
 			},
 			"demo-gif": {
 				"id": "179:48",
 				"art": "179:49",
-				"sha": "96712a7fcd56c4d34b27641f3364de80886428392bb9b3c62f9463ed7a032654"
+				"sha": "359e6f01299dfde68ec2d259d16a956f3d5d3a73272e6d18ad326ab9e0806bbd"
 			},
 			"demo/minimal": {
 				"id": "179:90",
 				"art": "179:91",
-				"sha": "ed2d9138e955669c6396951e230bd232944e04bedace005efe2086b1ecf9af47"
+				"sha": "05c1eecc91be69e90d24072f44ec5cb0b2b2f69f3266386fd9265b6affcb0701"
 			},
 			"demo/react-three-fiber": {
 				"id": "179:132",
 				"art": "179:133",
-				"sha": "3b4265380af8075a6dba8492bbee3e54beeba923b23ad01ee75a4e9af2538483"
+				"sha": "ca4a032f40661e9cea8fe447f37ba28c382971fbba462f68fb79e9e2d3cd6167"
 			},
 			"demo/drei": {
 				"id": "179:174",
 				"art": "179:175",
-				"sha": "e93477d44dd407b77db42f58c88963030a3a79f50710275fd431e3978110448a"
+				"sha": "6db0f38dfd68871c79e8ac9ef234c7da52bb7758a85aa18353cf7181dedbcd59"
 			},
 			"demo/postprocessing": {
 				"id": "185:2",
 				"art": "185:3",
-				"sha": "81a9cacbe01b06f853e31662a0155dd407fef4b8c52c14437ead4d3935621bb9"
+				"sha": "1a2dd9074dea19050aa849003a30417a5661b4f384eff8bd47f88b8b1c526f32"
 			},
 			"demo/design-tokens-light": {
 				"id": "185:44",
 				"art": "185:45",
-				"sha": "74c22d37b29cc933eb7a26a3f26f1f71758eafbf5f362a6e5fea8699d6f772d7"
+				"sha": "d737e6df278bcda5e3cd3ae949c4b4e7fabd17340d3c2e971aa3b03a93733640"
 			},
 			"demo/zustand-square": {
 				"id": "185:86",
 				"art": "185:87",
-				"sha": "b9e360ae2c71ebe94961e3ce1fb1c78c4228b56095c72328c4aa2688f5accb09"
+				"sha": "e19a9e11cfcb58ce5d2b5369437393ea85ce19a68697d792fa6a6dc6cd0a043b"
 			},
 			"demo/jotai-wide": {
 				"id": "185:128",
 				"art": "185:129",
-				"sha": "69160889cc1d154e2bca6d9678e20985b56e9b8edc4e05f3d297c3390d2634e9"
+				"sha": "569c3a5d4d37c9789c1f2f7742e18d7d5c046ad2baff5bb0c270e780fe216ae0"
 			},
 			"demo/effects-default": {
 				"id": "185:170",
 				"art": "185:171",
-				"sha": "cc45675feafe6d23ef146948371e0d12304b21b8c6333f4a9b4d3191b7c28a63"
+				"sha": "370ecd7269854fc8b6f77c8dfe7d894f2e826ee635c7beb4d724636548f108dc"
 			},
 			"demo/effects-none": {
 				"id": "186:2",
 				"art": "186:3",
-				"sha": "e0c0a5f5787f123754e9112aa1dd07905f8f78c7bb8619ab8f655fe13fdb4d51"
+				"sha": "95bc5158bd1a2eba0d2ac113564f18cff192c2ed6a56b91097a8c1a12106dfd6"
 			},
 			"demo/og-endpoint": {
 				"id": "186:44",
 				"art": "186:45",
-				"sha": "ebe0837c7025721387febcef947a6895a9179e0eb5ba5a6484286122186919dc"
+				"sha": "196cd1d0ac4f48e6c287c6d2eca61c94b8f038d2dd7de1303f0df85ac2927060"
 			},
 			"demo-media/source-image": {
 				"id": "186:86",
 				"art": "186:87",
-				"sha": "86e21897c9975fdac5883188a5bec5f58f0648cf8242adf1fc997411e897fd74"
+				"sha": "a388843c162a9320b10e7063ad21e19e64942043bdd796088fd8ca53fa583dce"
 			},
 			"demo-media/source-video": {
 				"id": "186:128",
 				"art": "186:129",
-				"sha": "f23e4bc964f86a09bfd8bf0e2af1a538ceee04c92adae7eb2ca1cbdfc2421216"
+				"sha": "ad4305e6de1e14472b8bce3372f6cb60a30ad32594531e92d4645e5ed55c38ca"
 			}
 		},
 		"rootId": "179:2"

@@ -271,8 +271,8 @@ pnpm figma:template --record <result.json>
 pnpm figma:template --pull <snapshot.json> [--apply]
 ```
 
-The card is **three anchored blocks** — `brand`, `meta`, `message` — and an
-anchor is the load-bearing idea. A block records which edge it hangs from and
+The card is **four anchored blocks** — `brand`, `meta`, `message` and `scene` —
+and an anchor is the load-bearing idea. A block records which edge it hangs from and
 how far in, so its text flows *away* from that anchor: the message block hangs
 off the bottom, so a three-line headline grows upward and the card still
 composes. Pinning each element at an absolute `y` would look identical for the
@@ -297,10 +297,31 @@ push's placement and the pull's measurement, because a push that drew a block
 somewhere the pull would read differently would walk it across the card a little
 further on every sync.
 
+The `scene` block is the one that had to earn its place, because it is the type
+set *inside* the render — real geometry at a depth, which is why it takes the
+bloom and sits behind the artwork instead of on top of it. Its native units are
+world units, and a designer looking at a 1200×630 rectangle does not think in
+those. So the layout authors it in pixels like everything else and the renderer
+converts, using the camera actually rendering the card rather than a restatement
+of it. That is not fussiness: the camera sits slightly above the origin and
+looks back down at it, so world Y=0 is *not* the middle of the frame and
+anything hand-derived would be a few pixels out, in a direction that changes
+with the card's aspect ratio.
+
+Two of its values stay in their own units on purpose. `depth` is world Z,
+because "behind the geometry rather than in front of it" is not something a
+screen measurement can say. And `overMedia` — a smaller, quieter, nearer
+placement — applies only when a card's source is a photo or a video frame; the
+template stands on a generated scene, so there is nothing on the canvas to
+measure those off and they stay typed fields.
+
 The backdrop is a **plate**: `"plate": true` renders the artwork with the type
-layer switched off. A backdrop carrying the finished card's own headline would
-put a second, baked-in title under the editable one, and moving the block in
-Figma would leave the old title sitting there.
+layer switched off, and the template's plate blanks the scene wordmark too. A
+backdrop carrying the finished card's own type would put a second, baked-in copy
+under the editable one, and moving the block in Figma would leave the old one
+sitting there. Figma still cannot show the one thing a flat backdrop can't —
+the scene's geometry passing *in front of* the wordmark — so the template shows
+where that type sits, not what covers it.
 
 Two things to know when editing. A layout change moves *every* card, so
 `pnpm og:demo` and a re-push of the artwork follow a pull. And Figma grows a
