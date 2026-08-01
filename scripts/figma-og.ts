@@ -264,6 +264,24 @@ function order(parent, nodes) {
   for (const node of nodes) if (node && node.parent === parent) parent.appendChild(node)
 }
 
+/**
+ * Forces a frame's subtree to recompute its resolved variable colours.
+ *
+ * Figma caches those, and rewriting the paints underneath does not reliably
+ * invalidate the cache: the frame renders flat #808080 — the fallback colour
+ * carried inside every bound paint — while the API reports the bindings intact
+ * and resolves them to the right colour. Toggling an explicit mode on and off
+ * makes it recompute, and restores whatever pin it found.
+ */
+function repaint(node, collection) {
+  if (!collection || !collection.modes.length) return
+  const pinned = (node.explicitVariableModes || {})[collection.id]
+  const other = collection.modes.find((m) => m.modeId !== pinned) || collection.modes[0]
+  node.setExplicitVariableModeForCollection(collection, other.modeId)
+  if (pinned) node.setExplicitVariableModeForCollection(collection, pinned)
+  else node.clearExplicitVariableModeForCollection(collection)
+}
+
 /* ---------- the card ---------- */
 
 const results = []
@@ -435,6 +453,8 @@ order(root, [heading, note, grid])
 // later batch is about to place. Reported, never deleted — a component may
 // still have instances, and detaching someone's work is not this script's call.
 const stale = grid.children.filter((n) => ALL_NAMES.indexOf(n.name) === -1).map((n) => n.name)
+
+repaint(root, themeCollection)
 
 figma.currentPage.selection = [root]
 

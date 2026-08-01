@@ -67,7 +67,9 @@ export function OgCard({ spec: input }: { spec: OgSpec }) {
 
 			<Scrim palette={palette} />
 			<Grain amount={spec.effects.noise} />
-			<Typography spec={spec} palette={palette} />
+			{/* A plate is the same card with nothing said on it — the backdrop the
+			    Figma layout template puts its own editable type over. */}
+			{spec.plate ? null : <Typography spec={spec} palette={palette} />}
 		</AbsoluteFill>
 	)
 }

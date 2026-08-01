@@ -20,8 +20,9 @@ dependency only.
 | `demo/` | Landing page that consumes the build output |
 | `demo/og/` | Rendered OG cards, checked in — the gallery at `/demo/og.html` |
 | `src/components/contract.ts` | Component props and their per-variant token bindings |
-| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page, og |
-| `figma/sync.json` | Committed sync state: variable, component, page and OG-card ids |
+| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page, og, template |
+| `figma/sync.json` | Committed sync state: variable, component, page, OG-card and template ids |
+| `og/layout/card.json` | The card layout, authored at 1200×630 — round-trips with the Figma template |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
 | `og/` | [OG image generator](og/README.md) — a separate workspace package |
@@ -241,6 +242,71 @@ default is both redundant and — in this file — enough to stop the renderer
 resolving that frame's own bound paints: the frame came back flat `#808080`, the
 fallback colour inside every bound paint, while its children rendered correctly.
 The push now says nothing when there is nothing to say.
+
+A related one, and the reason both pushes end with a `repaint()`: Figma caches a
+frame's resolved variable colours, and rewriting the paints underneath does not
+reliably invalidate that cache. A second push would leave the frame flat grey
+while the API reported every binding intact and resolved it to the right colour.
+Toggling an explicit mode on and off forces the recompute, costs nothing, and
+restores whatever pin it found.
+
+## The card layout in Figma
+
+The card round trip moves what a card *says*. This one moves where it says it —
+drag the headline block in the Figma template, pull, and every card the
+generator will ever render moves with it.
+
+That works because of one property of `og/layout/card.json`: it is authored at
+the reference box, 1200×630, and the renderer scales from there. So the template
+frame is exactly 1200×630 and the numbers in the JSON *are* the coordinates in
+Figma's inspector — no unit conversion to get wrong in either direction, and a
+template someone has resized is a loud error rather than a silently rescaled
+layout.
+
+```bash
+pnpm og:plate                    # the backdrop: a card with no type on it
+pnpm figma:template              # dist/figma-template.js + a summary
+pnpm figma:template --snapshot   # also the read-back program
+pnpm figma:template --record <result.json>
+pnpm figma:template --pull <snapshot.json> [--apply]
+```
+
+The card is **three anchored blocks** — `brand`, `meta`, `message` — and an
+anchor is the load-bearing idea. A block records which edge it hangs from and
+how far in, so its text flows *away* from that anchor: the message block hangs
+off the bottom, so a three-line headline grows upward and the card still
+composes. Pinning each element at an absolute `y` would look identical for the
+title it was drawn with and fall apart for the next one, and a generator only
+ever renders titles it has not seen.
+
+What comes back from geometry and what comes back from a typed field is a
+deliberate split, not a limitation:
+
+| | |
+| --- | --- |
+| geometry | where a block sits, how wide it is, what size and tracking the type is — everything a designer expresses by dragging |
+| fields | which edge a block hangs from, how its children stack, and the rule that shrinks a long headline |
+
+A block drawn 68px from the left of a 1200px frame and 68px from the right of it
+is the same rectangle; only the anchor says which of those the designer meant.
+So anchors live in a panel beside the template, in the same field rows the cards
+use, and everything else is measured off the canvas. Both halves flatten into
+one map of dotted keys, so the same three-way `reconcile` that settles a colour
+settles a layout — and `template.test.ts` round trips every anchor through the
+push's placement and the pull's measurement, because a push that drew a block
+somewhere the pull would read differently would walk it across the card a little
+further on every sync.
+
+The backdrop is a **plate**: `"plate": true` renders the artwork with the type
+layer switched off. A backdrop carrying the finished card's own headline would
+put a second, baked-in title under the editable one, and moving the block in
+Figma would leave the old title sitting there.
+
+Two things to know when editing. A layout change moves *every* card, so
+`pnpm og:demo` and a re-push of the artwork follow a pull. And Figma grows a
+hugging block downward from its top edge while the renderer grows a
+bottom-anchored one upward — so after resizing type, put the block's *bottom*
+edge where you want it, because that is the edge the pull measures.
 
 ## Colour notation
 

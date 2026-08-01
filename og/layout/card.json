@@ -1,0 +1,51 @@
+{
+	"reference": { "width": 1200, "height": 630 },
+	"blocks": {
+		"brand": {
+			"anchor": "top-left",
+			"offset": { "x": 68, "y": 68 },
+			"measure": null,
+			"direction": "row",
+			"gap": 9.6,
+			"align": "left"
+		},
+		"meta": {
+			"anchor": "top-right",
+			"offset": { "x": 68, "y": 68 },
+			"measure": null,
+			"direction": "row",
+			"gap": 0,
+			"align": "right"
+		},
+		"message": {
+			"anchor": "bottom-left",
+			"offset": { "x": 68, "y": 68 },
+			"measure": 1064,
+			"direction": "column",
+			"gap": 12,
+			"align": "left"
+		}
+	},
+	"type": {
+		"wordmark": { "font": "mono", "size": 20, "tracking": 0.04, "ink": "ink" },
+		"chip": { "font": "mono", "size": 17, "tracking": 0.02, "ink": "inkMuted" },
+		"eyebrow": { "font": "mono", "size": 19, "tracking": 0.16, "case": "upper", "ink": "accent" },
+		"title": {
+			"font": "serif",
+			"size": 94.8,
+			"min": 50.4,
+			"backoff": 1.9,
+			"threshold": 22,
+			"leading": 1.03,
+			"tracking": -0.015,
+			"measure": 0.76,
+			"ink": "ink"
+		},
+		"subtitle": { "font": "sans", "size": 26, "leading": 1.35, "measure": 0.58, "ink": "inkMuted" }
+	},
+	"marks": {
+		"dot": { "size": 11.2, "glow": 22.4 },
+		"rule": { "width": 56, "height": 3, "radius": 2 },
+		"chip": { "padX": 12, "padY": 6.4, "radius": 4, "fill": 0.78, "line": 0.16 }
+	}
+}

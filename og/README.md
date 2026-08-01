@@ -52,6 +52,7 @@ place they live.
   "seed": 1,                        // fixes every random placement
   "atSeconds": 2.4,                 // where on the timeline the card is sampled
   "loopSeconds": 6,                 // the period a scene repeats over
+  "plate": false,                   // true renders the artwork with no type on it
   "source": { "kind": "scene", "name": "ramp-orbit" },
   "effects": { "bloom": 0.9, "chromaticAberration": 0.0016, "noise": 0.045, "vignette": 0.5 }
 }
@@ -130,6 +131,25 @@ rest.
 
 A card whose output is an `.mp4` lands its poster still instead — Figma cannot
 hold a video, and the poster is already rendered beside it.
+
+### The layout
+
+Where a card puts its type is not in this file or in `Typography.tsx` — it is in
+`og/layout/card.json`, authored at a 1200×630 reference box and scaled by
+`width / reference.width` at render time. That is what makes a square and a 1920
+card the same design rather than the same pixel sizes in a wider box, and it is
+also what lets one Figma frame define all three: the frame is the reference box,
+so its coordinates and the JSON's numbers are the same numbers.
+
+The card is three anchored blocks — `brand`, `meta`, `message`. An anchor says
+which edge a block hangs from, so its content flows away from it: the message
+block hangs off the bottom and a three-line headline grows upward. `pnpm
+figma:template` draws the whole thing over a **plate** — the same card rendered
+with `"plate": true`, which switches the type layer off — and `--pull` brings a
+dragged block back. The root [README](../README.md#the-card-layout-in-figma) has
+the details.
+
+A layout edit moves every card, so `pnpm og:demo` follows a pull.
 
 ## Animated cards
 

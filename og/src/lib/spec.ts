@@ -97,6 +97,15 @@ export interface OgSpec {
 	/** Seeds every random placement in the scene. Same seed, same card. */
 	seed?: number
 	/**
+	 * Renders the artwork without the type layer.
+	 *
+	 * The card minus its words, which is what the Figma layout template needs
+	 * behind it: a backdrop carrying the finished card's own headline would put
+	 * a second, baked-in title under the editable one, and moving the block in
+	 * Figma would leave the old title sitting there.
+	 */
+	plate?: boolean
+	/**
 	 * Where on the timeline the card is sampled, in seconds — the card's one
 	 * time axis.
 	 *
@@ -201,6 +210,7 @@ export function resolveSpec(input: OgSpec): ResolvedSpec {
 		// the headline twice, so media starts with none.
 		wordmark: input.wordmark ?? (source.kind === 'scene' ? input.title : ''),
 		seed: input.seed ?? 1,
+		plate: input.plate ?? false,
 		loopSeconds: Math.max(0.5, input.loopSeconds ?? 6),
 		atSeconds: input.atSeconds ?? 2,
 	}

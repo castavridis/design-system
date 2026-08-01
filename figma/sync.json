@@ -518,6 +518,7 @@
 	},
 	"prefer": {
 		"og": "ask",
+		"layout": "ask",
 		"brand": "ask",
 		"fonts": "code"
 	},
@@ -525,8 +526,8 @@
 		"ramp"
 	],
 	"lastSync": {
-		"syncId": "20260801T082348Z",
-		"at": "2026-08-01T08:23:48.635Z",
+		"syncId": "20260801T085737Z",
+		"at": "2026-08-01T08:57:37.118Z",
 		"values": {
 			"brand.dark": "#36342f",
 			"brand.light": "#eae5da",
@@ -818,7 +819,67 @@
 			"og.demo-media/source-video.effects": "bloom=0.9, chromaticAberration=0.0016, noise=0.045, vignette=0.5",
 			"og.demo-media/source-video.seed": "1",
 			"og.demo-media/source-video.atSeconds": "1.2",
-			"og.demo-media/source-video.loopSeconds": "6"
+			"og.demo-media/source-video.loopSeconds": "6",
+			"layout.reference.width": "1200",
+			"layout.reference.height": "630",
+			"layout.blocks.brand.anchor": "top-left",
+			"layout.blocks.brand.offset.x": "68",
+			"layout.blocks.brand.offset.y": "68",
+			"layout.blocks.brand.measure": "",
+			"layout.blocks.brand.direction": "row",
+			"layout.blocks.brand.gap": "9.6",
+			"layout.blocks.brand.align": "left",
+			"layout.blocks.meta.anchor": "top-right",
+			"layout.blocks.meta.offset.x": "68",
+			"layout.blocks.meta.offset.y": "68",
+			"layout.blocks.meta.measure": "",
+			"layout.blocks.meta.direction": "row",
+			"layout.blocks.meta.gap": "0",
+			"layout.blocks.meta.align": "right",
+			"layout.blocks.message.anchor": "bottom-left",
+			"layout.blocks.message.offset.x": "68",
+			"layout.blocks.message.offset.y": "68",
+			"layout.blocks.message.measure": "1064",
+			"layout.blocks.message.direction": "column",
+			"layout.blocks.message.gap": "12",
+			"layout.blocks.message.align": "left",
+			"layout.type.wordmark.font": "mono",
+			"layout.type.wordmark.size": "20",
+			"layout.type.wordmark.tracking": "0.04",
+			"layout.type.wordmark.ink": "ink",
+			"layout.type.chip.font": "mono",
+			"layout.type.chip.size": "17",
+			"layout.type.chip.tracking": "0.02",
+			"layout.type.chip.ink": "inkMuted",
+			"layout.type.eyebrow.font": "mono",
+			"layout.type.eyebrow.size": "19",
+			"layout.type.eyebrow.tracking": "0.16",
+			"layout.type.eyebrow.case": "upper",
+			"layout.type.eyebrow.ink": "accent",
+			"layout.type.title.font": "serif",
+			"layout.type.title.size": "94.8",
+			"layout.type.title.min": "50.4",
+			"layout.type.title.backoff": "1.9",
+			"layout.type.title.threshold": "22",
+			"layout.type.title.leading": "1.03",
+			"layout.type.title.tracking": "-0.015",
+			"layout.type.title.measure": "0.76",
+			"layout.type.title.ink": "ink",
+			"layout.type.subtitle.font": "sans",
+			"layout.type.subtitle.size": "26",
+			"layout.type.subtitle.leading": "1.35",
+			"layout.type.subtitle.measure": "0.58",
+			"layout.type.subtitle.ink": "inkMuted",
+			"layout.marks.dot.size": "11.2",
+			"layout.marks.dot.glow": "22.4",
+			"layout.marks.rule.width": "56",
+			"layout.marks.rule.height": "3",
+			"layout.marks.rule.radius": "2",
+			"layout.marks.chip.padX": "12",
+			"layout.marks.chip.padY": "6.4",
+			"layout.marks.chip.radius": "4",
+			"layout.marks.chip.fill": "0.78",
+			"layout.marks.chip.line": "0.16"
 		}
 	},
 	"components": {
@@ -1271,12 +1332,12 @@
 			"demo-loop": {
 				"id": "179:6",
 				"art": "179:7",
-				"sha": "46b7cf5646aabf8da16668b7ac150f13ee0a1b33139945b04e0f58723d4c6ccd"
+				"sha": "719ca7a4e7a93931bd9f55af4c93aff741b40a8f3cedfd7cfebe805b232e8e67"
 			},
 			"demo-gif": {
 				"id": "179:48",
 				"art": "179:49",
-				"sha": "44eff7366ea7f833e243ae350b7d004331c8bfabf76e92aaf5f1e80ff4d9593f"
+				"sha": "96712a7fcd56c4d34b27641f3364de80886428392bb9b3c62f9463ed7a032654"
 			},
 			"demo/minimal": {
 				"id": "179:90",
@@ -1286,59 +1347,64 @@
 			"demo/react-three-fiber": {
 				"id": "179:132",
 				"art": "179:133",
-				"sha": "d2c15805e589c641f4d18385c8acd44d75dbc5448e4277484537b611bf5daa64"
+				"sha": "3b4265380af8075a6dba8492bbee3e54beeba923b23ad01ee75a4e9af2538483"
 			},
 			"demo/drei": {
 				"id": "179:174",
 				"art": "179:175",
-				"sha": "41c41e2013f5f4c1e3f07606a5bd6059430b8216f471091c486a4929c72fd77d"
+				"sha": "e93477d44dd407b77db42f58c88963030a3a79f50710275fd431e3978110448a"
 			},
 			"demo/postprocessing": {
 				"id": "185:2",
 				"art": "185:3",
-				"sha": "29d582bbf40c26dadfdb400042cf01e392fab5f655e26c6a5c62dd4c397c109c"
+				"sha": "81a9cacbe01b06f853e31662a0155dd407fef4b8c52c14437ead4d3935621bb9"
 			},
 			"demo/design-tokens-light": {
 				"id": "185:44",
 				"art": "185:45",
-				"sha": "c4ec54e52b7e0ce7df70dd8286c9ec74aa9bf04b87c0439c233df0b02084ef6c"
+				"sha": "74c22d37b29cc933eb7a26a3f26f1f71758eafbf5f362a6e5fea8699d6f772d7"
 			},
 			"demo/zustand-square": {
 				"id": "185:86",
 				"art": "185:87",
-				"sha": "e974c9165f38136c70fedb8241c8221bd546891f896ce4466a61bdd4763f750c"
+				"sha": "b9e360ae2c71ebe94961e3ce1fb1c78c4228b56095c72328c4aa2688f5accb09"
 			},
 			"demo/jotai-wide": {
 				"id": "185:128",
 				"art": "185:129",
-				"sha": "c873fe2bbc0483998c4672a15ea3f84a1b2220f916054395fe6e1fda45805d96"
+				"sha": "69160889cc1d154e2bca6d9678e20985b56e9b8edc4e05f3d297c3390d2634e9"
 			},
 			"demo/effects-default": {
 				"id": "185:170",
 				"art": "185:171",
-				"sha": "7cc9e4875c7324b4d7c95eb752fb196a5f2d8b5c2ba6804469c0d8da1f22b200"
+				"sha": "cc45675feafe6d23ef146948371e0d12304b21b8c6333f4a9b4d3191b7c28a63"
 			},
 			"demo/effects-none": {
 				"id": "186:2",
 				"art": "186:3",
-				"sha": "0dd618dd809137660b0c05c74fdf6245cfb85a49b3f32f08e3dfb3ba56f3bd94"
+				"sha": "e0c0a5f5787f123754e9112aa1dd07905f8f78c7bb8619ab8f655fe13fdb4d51"
 			},
 			"demo/og-endpoint": {
 				"id": "186:44",
 				"art": "186:45",
-				"sha": "2c846dcc51b3dbaeb485d565d83c8127ae7bc129f3fad787159abf468cce54ff"
+				"sha": "ebe0837c7025721387febcef947a6895a9179e0eb5ba5a6484286122186919dc"
 			},
 			"demo-media/source-image": {
 				"id": "186:86",
 				"art": "186:87",
-				"sha": "45705d1ddb0f70b012d5d67a87e7fda617c66afa87f170920c5a452b89a83a0e"
+				"sha": "86e21897c9975fdac5883188a5bec5f58f0648cf8242adf1fc997411e897fd74"
 			},
 			"demo-media/source-video": {
 				"id": "186:128",
 				"art": "186:129",
-				"sha": "fc9934dc351db2a3002643e3a360933fa1aa62138f2dc9263a5d852a212616cf"
+				"sha": "f23e4bc964f86a09bfd8bf0e2af1a538ceee04c92adae7eb2ca1cbdfc2421216"
 			}
 		},
 		"rootId": "179:2"
+	},
+	"template": {
+		"pageId": "175:6025",
+		"frameId": "196:2",
+		"panelId": "196:15"
 	}
 }
