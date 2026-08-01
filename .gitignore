@@ -6,3 +6,8 @@ public/
 .vercel/
 *.tsbuildinfo
 .DS_Store
+
+# Agent worktrees. `.claude/skills/` is tracked — it holds the sync workflow —
+# but each worktree under here is a full checkout of this repo, so committing
+# them would nest the repo inside itself.
+.claude/worktrees/
