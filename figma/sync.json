@@ -7,7 +7,8 @@
 		"radius": "VariableCollectionId:86:2",
 		"ramp": "VariableCollectionId:87:2",
 		"space": "VariableCollectionId:99:2",
-		"theme": "VariableCollectionId:106:2"
+		"theme": "VariableCollectionId:106:2",
+		"family": "VariableCollectionId:174:2"
 	},
 	"modes": {
 		"brand": "83:0",
@@ -18,7 +19,8 @@
 		"theme": {
 			"Dark": "106:0",
 			"Light": "106:1"
-		}
+		},
+		"family": "174:0"
 	},
 	"variables": {
 		"brand.dark": {
@@ -492,6 +494,26 @@
 		"space.stack": {
 			"id": "VariableID:99:3",
 			"collection": "space"
+		},
+		"family.mono": {
+			"id": "VariableID:174:3",
+			"collection": "family"
+		},
+		"family.sans": {
+			"id": "VariableID:174:4",
+			"collection": "family"
+		},
+		"family.serif": {
+			"id": "VariableID:174:5",
+			"collection": "family"
+		},
+		"family.legible": {
+			"id": "VariableID:174:6",
+			"collection": "family"
+		},
+		"fonts.legible": {
+			"id": "VariableID:174:7",
+			"collection": "fonts"
 		}
 	},
 	"prefer": {
@@ -502,8 +524,8 @@
 		"ramp"
 	],
 	"lastSync": {
-		"syncId": "20260731T185905Z",
-		"at": "2026-07-31T18:59:05.151Z",
+		"syncId": "20260801T060636Z",
+		"at": "2026-08-01T06:06:36.322Z",
 		"values": {
 			"brand.dark": "#36342f",
 			"brand.light": "#eae5da",
@@ -622,7 +644,12 @@
 			"ramp.blue-800": "#1a6277",
 			"ramp.blue-900": "#1a5165",
 			"ramp.blue-950": "#0b3444",
-			"space.stack": "24"
+			"space.stack": "24",
+			"family.mono": "Geist Mono",
+			"family.sans": "Geist",
+			"family.serif": "Faculty Glyphic",
+			"family.legible": "Atkinson Hyperlegible Next",
+			"fonts.legible": "\"Atkinson Hyperlegible Next\", \"Atkinson Hyperlegible\", system-ui, sans-serif"
 		}
 	},
 	"components": {

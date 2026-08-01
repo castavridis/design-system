@@ -168,7 +168,11 @@ for (const token of PLAN) {
       targetVar = await figma.variables.getVariableByIdAsync(KNOWN[token.aliasOf].id)
     }
     if (!targetVar) {
-      const targetName = token.aliasOf.replace(/\./g, '/')
+      // The escape is doubled because this line is inside the template literal
+      // that emits the program. A single backslash here reaches Figma as /./g,
+      // which matches every character -- brand.space becomes /////////// and
+      // the by-name fallback silently finds nothing.
+      const targetName = token.aliasOf.replace(/\\./g, '/')
       targetVar = allExisting.find((v) => v.name === targetName) || null
     }
     if (!targetVar) throw new Error('alias target not found: ' + token.aliasOf)
