@@ -20,8 +20,8 @@ dependency only.
 | `demo/` | Landing page that consumes the build output |
 | `demo/og/` | Rendered OG cards, checked in — the gallery at `/demo/og.html` |
 | `src/components/contract.ts` | Component props and their per-variant token bindings |
-| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page |
-| `figma/sync.json` | Committed sync state: variable, component and page-instance ids |
+| `scripts/figma/` | The Figma round trip's pure logic — reconcile, audit, page, og |
+| `figma/sync.json` | Committed sync state: variable, component, page and OG-card ids |
 | `dist/` | Generated artifacts (git-ignored, published to npm) |
 | `public/` | Assembled static site (git-ignored, deployed) |
 | `og/` | [OG image generator](og/README.md) — a separate workspace package |
@@ -58,6 +58,9 @@ scene, both themes, all three sizes, the effect chain, both media sources and a
 loop — next to the spec field it demonstrates, plus the `<meta>` tags that put
 one on a page. Its assets are the only binaries in the repo, checked in because
 the deploy has no browser to render them with. `pnpm og:demo` regenerates them.
+
+The same fourteen cards are a Figma page, and the spec fields under each one
+travel back into `og/specs/`. See [The OG cards in Figma](#the-og-cards-in-figma).
 
 ## Deploying
 
@@ -171,6 +174,73 @@ The audit compares composition rather than typography. It reports a block that
 moved or vanished, an instance of the wrong component, a variant swapped in
 Figma, and a **detached instance** — the one that looks right until the component
 changes and one copy quietly doesn't.
+
+## The OG cards in Figma
+
+The cards round-trip too, but not the way a component does — and the difference
+is the whole design. A Button's Figma counterpart is a drawing of the same thing
+the code draws, so the round trip's job is to stop the two drawings disagreeing.
+A card's artwork is a three.js render: bloom, fringing, a wordmark set in 3D.
+Figma cannot draw that, and a hand-made approximation would be exactly the
+second, unowned definition the rest of this directory exists to prevent.
+
+So the card is split between output and input. The **render** only ever travels
+out — it arrives as the image it is, and nothing done to it in Figma could be
+read back. The **spec** only ever travels in: twelve plain fields under the
+artwork, every one of them something a designer has an opinion about. Change the
+title or the accent on the card in Figma, pull it, and the edit lands in
+`og/specs/*.json`, where the next render reads it.
+
+```bash
+pnpm figma:og                    # dist/figma-og.json + one script per batch
+pnpm figma:og --snapshot         # also the read-back script
+pnpm figma:og --record <result.json,…>   # fold the ids in, print the upload plan
+pnpm figma:og --uploaded         # stamp the artwork as landed
+pnpm figma:og --pull <snapshot.json> [--apply]
+```
+
+Which cards exist is **read, not restated**: `og/package.json`'s `demo` script is
+the render plan — it names every spec file, whether it is a manifest, and where
+the output lands — so the templates are by construction exactly the cards `pnpm
+og:demo` produces. Add a card to the demo and it appears in Figma on the next
+push without anything being told about it. A spec with no render on disk is
+reported rather than pushed as an empty box.
+
+Two fields are folded so that one question has one answer. `size` is `og`,
+`square`, `wide` **or** a box like `800x420`, because `width`/`height` override
+the named size in a spec and a card cannot have both; `source` is
+`scene:ramp-orbit` or `image:…`, the tagged union flattened. Both are validated
+on the way back — an accent is checked against the ramps the design book
+actually defines, so a typo in Figma stops the pull instead of producing a card
+nobody ordered.
+
+A card is **updated in place, never rebuilt**. The demo page can afford to
+delete its children and draw them again because everything in it is derived from
+the spec; a card cannot. Its `art` node carries an image uploaded separately and
+absent from the push payload, so a node dropped and recreated would come back
+blank — and the cards are components, so deleting one detaches every instance
+and voids its Code Connect mapping. Children are matched by name and reused, and
+only their contents are rewritten.
+
+The artwork is the one thing the push cannot deliver itself: the plugin sandbox
+has no network back to this repo, and inlining megabytes of JPEG into the
+program is not an option. So images travel through `upload_assets`, addressed to
+the `art` node id the push hands back, and `figma/sync.json` records a hash of
+each file — a re-push that changed no pixels uploads nothing.
+
+Recording a push **advances the sync base**, and it has to. A push makes both
+sides agree, so what it wrote is the last agreed state; leaving the base empty
+would not merely lose information, because `reconcile` reads a missing base as
+"cannot tell who moved" and would report the first real Figma edit as a conflict
+needing a human rather than as the pull it plainly is.
+
+One Figma quirk is worth recording, because it cost an afternoon. The push used
+to pin the frame to the Dark theme mode, the way the demo page pins Light. Dark
+is the theme collection's *default* mode, and pinning a frame to its collection's
+default is both redundant and — in this file — enough to stop the renderer
+resolving that frame's own bound paints: the frame came back flat `#808080`, the
+fallback colour inside every bound paint, while its children rendered correctly.
+The push now says nothing when there is nothing to say.
 
 ## Colour notation
 

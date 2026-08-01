@@ -40,6 +40,7 @@
 		"figma:push": "tsx scripts/figma-push.ts",
 		"figma:page": "tsx scripts/figma-page.ts",
 		"figma:pull": "tsx scripts/figma-pull.ts",
+		"figma:og": "tsx scripts/figma-og.ts",
 		"figma:audit": "tsx scripts/figma-audit.ts",
 		"test": "tsx --test scripts/figma/*.test.ts",
 		"og": "pnpm run build && pnpm --filter @pmndrs/og render",

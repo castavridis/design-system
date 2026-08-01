@@ -120,6 +120,17 @@ consume a file that same run is about to write.
 The GIF is its own spec rather than a flag on the loop's, because the box has
 to come down with the format — see below.
 
+This table is also the card list the Figma round trip reads. `pnpm figma:og`
+parses the `demo` script out of `package.json` rather than keeping its own copy,
+so the templates it pushes are by construction exactly the cards rendered above:
+add a pass here and the card appears in Figma on the next push. The render
+travels out as an image; the twelve spec fields under it travel back into
+`specs/*.json`. The root [README](../README.md#the-og-cards-in-figma) has the
+rest.
+
+A card whose output is an `.mp4` lands its poster still instead — Figma cannot
+hold a video, and the poster is already rendered beside it.
+
 ## Animated cards
 
 `--gif` or `--mp4` renders one loop instead of a still. The loop is seamless:
