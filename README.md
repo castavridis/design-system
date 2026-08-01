@@ -274,8 +274,30 @@ import 'pmndrs-design-tokens/fonts'   // before the token stylesheet
 
 This is deliberately separate from `/css`: importing the token layer should
 never force a third-party request on a consumer who already has these families.
-The family list lives in `webfonts` at the top of `scripts/build.ts` and must
-be kept in step with the `fonts` scope in the design book.
+The families come from `families` in the design book, so the Google Fonts
+request cannot fall out of step with the tokens; only the weight axis each face
+is requested across lives in `scripts/build.ts`.
+
+**Two shapes per typeface** — `--fonts-*` is the full CSS stack and is what a
+stylesheet should use:
+
+```css
+h1 { font-family: var(--fonts-serif); } /* "Faculty Glyphic", serif */
+```
+
+`--family-*` is the bare family name, with no fallback chain:
+
+```css
+--family-serif: Faculty Glyphic;
+```
+
+That second form exists for Figma. A Figma text style takes a single
+`{ family, style }` and a `FONT_FAMILY` variable bound to it has to resolve to
+a font the file has loaded, so a stack cannot be bound — only `family.*` can.
+Both are generated from one entry in `families`, so the pair cannot drift.
+Reach for `--family-*` in code only when something needs the name by itself
+(an `@font-face` reference, a font-loading API); otherwise use `--fonts-*` and
+get the fallbacks.
 
 **JavaScript, when you need a concrete value** — canvas, WebGL, chart libraries,
 anything that can't read a CSS variable:

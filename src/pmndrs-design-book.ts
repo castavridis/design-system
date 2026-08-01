@@ -10,6 +10,71 @@ import {
 
 export const book = new DesignBook('pmndrs')
 
+/**
+ * The typefaces, named once.
+ *
+ * Every other mention of a typeface in this repo derives from this map: the
+ * `family` scope below, the CSS stacks in `fonts`, the Google Fonts request in
+ * `scripts/build.ts`, and the fonts the page generator loads in
+ * `scripts/figma-page.ts`. Before this existed, "Faculty Glyphic" was spelled
+ * in four files and nothing kept them in step.
+ *
+ * These are the names as the *font vendor* spells them, because that is what
+ * both `figma.loadFontAsync` and the Google Fonts `css2` endpoint match on. A
+ * self-hosted alias that differs from the vendor name does not belong here —
+ * it belongs in the fallback list of the matching stack.
+ */
+export const families = {
+  mono: 'Geist Mono',
+  sans: 'Geist',
+  serif: 'Faculty Glyphic',
+  legible: 'Atkinson Hyperlegible Next',
+} as const
+
+/**
+ * Typography, in the two shapes the two consumers can actually use.
+ *
+ * `family.*` is one family name and nothing else. This is the shape Figma
+ * needs: a text style's `fontName` is a single `{ family, style }`, and a
+ * FONT_FAMILY variable bound to it has to resolve to a font the file has
+ * loaded. Hand Figma a stack and the binding dangles.
+ *
+ * `fonts.*` is the full CSS stack, which is the shape a browser needs and the
+ * one `demo.css` has always used. It stays a literal rather than a reference
+ * because a fallback chain cannot be assembled from `var()` — substitution
+ * happens before the value is parsed, so the stack has to be composed here, at
+ * author time, by `stack()` below.
+ *
+ * Declared before the colours because `brand.headline` aliases `family.serif`,
+ * and `assertAliasOrder` in the Figma emitter requires a target to appear
+ * before whatever points at it.
+ */
+const family = book.addScope('family')
+for (const [key, name] of Object.entries(families)) family.set(key, string(name))
+
+/** `stack('Geist', 'system-ui', 'sans-serif')` -> `"Geist", system-ui, sans-serif`. */
+const stack = (head: string, ...fallbacks: string[]) =>
+  string([`"${head}"`, ...fallbacks].join(', '))
+
+const fonts = book.addScope('fonts')
+fonts.set('mono', stack(families.mono, 'ui-monospace', 'monospace'))
+fonts.set('sans', stack(families.sans, 'system-ui', 'sans-serif'))
+fonts.set('serif', stack(families.serif, 'serif'))
+/*
+ * Pulled from Figma, where the Gha alerts were switched to it. Atkinson
+ * Hyperlegible is a legibility-first typeface, and an alert is exactly where
+ * that matters — it carries the information a reader must not miss. Scoped to
+ * that use rather than replacing `fonts.sans`, because the Button labels in the
+ * same file were deliberately left on Geist.
+ *
+ * The extra fallback is the older release of the same face, which is what a
+ * machine with the typeface already installed is likely to have.
+ */
+fonts.set(
+  'legible',
+  stack(families.legible, '"Atkinson Hyperlegible"', 'system-ui', 'sans-serif'),
+)
+
 // Brand colors.
 // Authored in OKLCH — `L% C H`, the polar form of OKLAB. Lightness and chroma
 // are perceptually uniform, and hue is a single number, so deriving a tint or
@@ -25,23 +90,19 @@ brand.set('yellow', color('oklch(95.26% 0.215 115.42)')) // #EBFF0F
 brand.set('green', color('oklch(90.91% 0.1997 122.5)')) // #CAF543
 brand.set('teal', color('oklch(86.11% 0.1957 159.71)')) // #00F7A3
 brand.set('blue', color('oklch(82.26% 0.1358 210.55)')) // #2BDCF6
-brand.set('headline', string('Faculty Glyphic'))
+/*
+ * The headline face, as an alias rather than a second copy of the name.
+ *
+ * It predates the `family` scope and is the same value `family.serif` now
+ * holds, but it is not deleted: the Figma push only ever upserts, so dropping
+ * a token here would strand `brand/headline` in the file — still bound to
+ * whatever uses it, no longer reachable from code. Pointing it at the new
+ * token keeps the existing variable and its bindings alive and gives Figma a
+ * visible link back to the one place the typeface is named.
+ */
+brand.set('headline', ref('family.serif'))
 brand.set('space', px(16))
 brand.set('radius', ref('brand.space'))
-
-// Typography
-const fonts = book.addScope('fonts')
-fonts.set('mono', string('"Geist Mono", ui-monospace, monospace'))
-fonts.set('sans', string('"Geist", system-ui, sans-serif'))
-fonts.set('serif', string('"Faculty Glyphic", serif'))
-/*
- * Pulled from Figma, where the Gha alerts were switched to it. Atkinson
- * Hyperlegible is a legibility-first typeface, and an alert is exactly where
- * that matters — it carries the information a reader must not miss. Scoped to
- * that use rather than replacing `fonts.sans`, because the Button labels in the
- * same file were deliberately left on Geist.
- */
-fonts.set('legible', string('"Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif'))
 
 // Spacing beyond the base rhythm.
 //

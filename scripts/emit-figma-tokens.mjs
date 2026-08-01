@@ -60,6 +60,23 @@ const SCOPE_BY_TYPE = {
 	STRING: ['FONT_FAMILY'],
 }
 
+/**
+ * The `fonts` collection binds to nothing, on purpose.
+ *
+ * Its values are CSS font-family *stacks* — `"Faculty Glyphic", serif`. Figma
+ * has no stack concept: a text style takes one family, and a FONT_FAMILY
+ * variable bound to it must name a font the file has loaded. Left in the
+ * FONT_FAMILY scope these appeared in the picker beside the real families and
+ * produced bindings that could not resolve, which is the whole reason the
+ * `family` collection now exists.
+ *
+ * They stay as variables rather than being dropped because their code syntax
+ * is what Dev Mode should show a developer — `var(--fonts-serif)` is what the
+ * stylesheet actually writes. An empty scope list is how Figma expresses
+ * "exists, but is not offered for binding".
+ */
+const NO_BINDING = []
+
 /** Ramp leaves are `<name>-<shade>`; the neutral rule keys off `<name>`. */
 const RAMP_NEUTRALS = new Set(['dark', 'light'])
 
@@ -78,6 +95,9 @@ function scopesFor(collection, leaf, figmaType) {
 
 	/* Likewise every member of the spacing scale is a gap. */
 	if (collection === 'space') return SCOPE_BY_NAME.space
+
+	/* Stacks are for CSS; only the bare families in `family` are bindable. */
+	if (collection === 'fonts') return NO_BINDING
 
 	if (collection === 'ramp') {
 		const base = leaf.slice(0, leaf.lastIndexOf('-'))

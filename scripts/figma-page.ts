@@ -23,6 +23,7 @@ import { join, resolve } from 'node:path'
 import { flag, has } from './figma/args.js'
 import { describe, extractPage, instancesOf, paths, type PageSpec } from './figma/page.js'
 import { readState, writeState } from './figma/state.js'
+import { families } from '../src/pmndrs-design-book.js'
 
 const SOURCE = 'demo/index.html'
 const SPEC_PATH = resolve(process.cwd(), 'dist', 'figma-page.json')
@@ -30,6 +31,24 @@ const OUT_PATH = resolve(process.cwd(), 'dist', 'figma-page.js')
 const SNAPSHOT_PATH = resolve(process.cwd(), 'dist', 'figma-page-snapshot.js')
 
 const FRAME_NAME = SOURCE
+
+/**
+ * The faces the page loads, as Figma `{ family, style }` pairs.
+ *
+ * The families come from the design book — this file used to spell them out a
+ * second time, which is how a typeface could be renamed in the tokens and
+ * still be requested here under its old name. The *styles* stay local: which
+ * weight a heading or an alert is set in is a decision this page makes, not
+ * something the token book knows. `sansMedium` is the same family as `sans` at
+ * a different weight, which is exactly why family and style are separate.
+ */
+const FACES = {
+	serif: { family: families.serif, style: 'Regular' },
+	sans: { family: families.sans, style: 'Regular' },
+	sansMedium: { family: families.sans, style: 'Medium' },
+	mono: { family: families.mono, style: 'Regular' },
+	legible: { family: families.legible, style: 'ExtraBold' },
+}
 
 /**
  * The program that runs inside Figma.
@@ -52,13 +71,7 @@ const WIDTH = 1200
 // The families the token book names. A file that somehow lacks one falls back
 // to Inter rather than failing the whole page: a missing typeface is a visible
 // problem, not a reason to ship no layout at all.
-const WANTED = {
-  serif: { family: 'Faculty Glyphic', style: 'Regular' },
-  sans: { family: 'Geist', style: 'Regular' },
-  sansMedium: { family: 'Geist', style: 'Medium' },
-  mono: { family: 'Geist Mono', style: 'Regular' },
-  legible: { family: 'Atkinson Hyperlegible Next', style: 'ExtraBold' },
-}
+const WANTED = ${JSON.stringify(FACES)}
 const FALLBACK = { family: 'Inter', style: 'Regular' }
 /** Widest a text node is measured at before it is told to fill its parent. */
 const MAX_TEXT_WIDTH = WIDTH

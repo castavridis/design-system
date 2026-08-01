@@ -213,8 +213,14 @@ return {
 async function main() {
 	const state = await readState()
 
-	/* M1 pushes the authored scopes only. Widening to `ramp` is a flag change. */
-	const scopes = (flag('scopes') ?? 'brand,fonts').split(',')
+	/*
+	 * M1 pushes the authored scopes only. Widening to `ramp` is a flag change.
+	 *
+	 * `family` has to travel with `brand`: `brand.headline` aliases
+	 * `family.serif`, and while the push can resolve a target that already has a
+	 * recorded id, the very first push of the pair would dangle without it.
+	 */
+	const scopes = (flag('scopes') ?? 'family,brand,fonts').split(',')
 
 	let plan: { tokens: PlanToken[] }
 	try {
