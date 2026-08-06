@@ -132,11 +132,13 @@ space.set('stack', spacingScale(ref('brand.space'), { multiplier: 1.5 })) // 24p
 // `brand.radius` already had, extended to the scale.
 //
 // The ratios are exact, which is the tell that they were a system already:
-// 16 -> 4 is a quarter, 16 -> 2 an eighth.
+// 16 -> 4 is a quarter, 16 -> 2 an eighth, 16 -> 24 a half again.
 const radius = book.addScope('radius')
 radius.set('base', ref('brand.radius')) // 16px — frames, cards, panels
 radius.set('input', spacingScale(ref('brand.space'), { multiplier: 0.25 })) // 4px — 32px-high controls
 radius.set('small', spacingScale(ref('brand.space'), { multiplier: 0.125 })) // 2px — tightly packed chrome
+/* Drawn in Figma, and the same 1.5 the spacing scale already uses for `stack`. */
+radius.set('large', spacingScale(ref('brand.space'), { multiplier: 1.5 })) // 24px — the largest surfaces
 
 /**
  * Steps of every colour ramp, light to dark. The familiar 50–950 scale, so a
@@ -218,15 +220,22 @@ for (const name of rampNames) {
 // exercise rather than a new palette.
 //
 // Note the ladders run in opposite directions. On a dark ground, elevation
-// goes *lighter* (page 900 -> raised 700); on a light ground it goes *whiter*
-// (page 100 -> raised 50). That asymmetry is why light mode is not an
-// inversion of dark — a mirrored scale would sink raised surfaces instead of
-// lifting them.
+// goes *lighter* (page 900 -> raised 700); on a light ground it goes *whiter*.
+// That asymmetry is why light mode is not an inversion of dark — a mirrored
+// scale would sink raised surfaces instead of lifting them.
+//
+// The light ladder was brightened in Figma and pulled back here: the whole set
+// moves up a step, so sunken lands on the old page. It runs out of ramp at the
+// top — Figma reaches one step higher with a `light-25` that dittotones cannot
+// generate, so page, surface and raised all sit on `light-50` and the light
+// ladder is currently flat above sunken. See `figma/syncs/`.
 const light = book.addScope('light')
-light.set('page', ref('ramp.light-100'))
+light.set('page', ref('ramp.light-50'))
 light.set('surface', ref('ramp.light-50'))
 light.set('surface-raised', ref('ramp.light-50'))
-light.set('surface-sunken', ref('ramp.light-200'))
+light.set('surface-sunken', ref('ramp.light-100'))
+/* The ground a panel inverts to — dark mode's page, and vice versa. */
+light.set('page-inverted', ref('ramp.dark-950'))
 light.set('line', ref('ramp.light-300'))
 light.set('line-soft', ref('ramp.light-200'))
 light.set('text', ref('ramp.dark-900'))
@@ -243,6 +252,7 @@ dark.set('page', ref('ramp.dark-900'))
 dark.set('surface', ref('ramp.dark-800'))
 dark.set('surface-raised', ref('ramp.dark-700'))
 dark.set('surface-sunken', ref('ramp.dark-950'))
+dark.set('page-inverted', ref('ramp.light-50'))
 dark.set('line', ref('ramp.dark-600'))
 dark.set('line-soft', ref('ramp.dark-700'))
 dark.set('text', ref('brand.light'))
