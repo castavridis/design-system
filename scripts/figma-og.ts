@@ -140,7 +140,17 @@ await figma.loadFontAsync(FALLBACK)
 /* ---------- variables ---------- */
 
 const allVariables = await figma.variables.getLocalVariablesAsync()
-const variableByName = new Map(allVariables.map((v) => [v.name, v]))
+// Both keyings — see the note in scripts/figma-page.ts. A variable names its
+// collection as a prefix, or wears it by living in one; this file is the
+// second kind, and a lookup that only knew the first found nothing at all.
+const collectionNames = new Map(
+  (await figma.variables.getLocalVariableCollectionsAsync()).map((c) => [c.id, c.name]),
+)
+const variableByName = new Map()
+for (const v of allVariables) {
+  if (!variableByName.has(v.name)) variableByName.set(v.name, v)
+  variableByName.set((collectionNames.get(v.variableCollectionId) || '') + '/' + v.name, v)
+}
 const missingVariables = new Set()
 const problems = []
 

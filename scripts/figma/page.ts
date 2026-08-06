@@ -143,7 +143,8 @@ function readCode(el: Element) {
 	const pre = findTag(el, 'pre')
 	if (!pre) throw new Error('a Code block with no <pre>')
 
-	const props: Record<string, PropValue> = { lang }
+	/* The caption says the language; the contract calls the axis `type`. */
+	const props: Record<string, PropValue> = { type: lang }
 	let gutterStart: number | undefined
 
 	if (hasClass(pre, 'doc-code-numbered')) {
@@ -236,6 +237,19 @@ function asInstance(el: Element, specs: readonly ComponentSpec[]): InstanceBlock
 			name: spec.name,
 			component: spec.react,
 			props: validate(spec, { variant, disabled: false }),
+			text: { label: text(el) },
+		}
+	}
+
+	if (spec.react === 'Eyebrow') {
+		/* One text node, so the marked element's words are the whole override —
+		   without it the push would leave whatever the Figma component was drawn
+		   saying, and the two sides would disagree about the copy in silence. */
+		return {
+			kind: 'instance',
+			name: spec.name,
+			component: spec.react,
+			props: validate(spec, {}),
 			text: { label: text(el) },
 		}
 	}
@@ -419,13 +433,28 @@ export function extractPage(
 	for (const el of children(body)) {
 		if (hasClass(el, 'hero')) {
 			const headingEl = findTag(el, 'h1')
+			const eyebrowEl = findClass(el, 'eyebrow')
+
+			/*
+			 * The eyebrow is a component when the page says so, and loose text when
+			 * it doesn't — the marker is what makes it an instance, exactly as it
+			 * does for the buttons below it. The copy stays a hero field either way:
+			 * it is the page's words, and the instance carries them as an override.
+			 */
+			const eyebrowBlock = eyebrowEl && 'data-component' in eyebrowEl.attrs ? asInstance(eyebrowEl, specs) : null
+
 			blocks.push({
 				kind: 'hero',
-				eyebrow: text(findClass(el, 'eyebrow') ?? { text: '' }),
+				eyebrow: text(eyebrowEl ?? { text: '' }),
 				/* `<br />` is a line break in the mark, so it survives as one. */
 				heading: headingEl ? lines(headingEl) : [],
 				lede: text(findClass(el, 'lede') ?? { text: '' }),
 				children: [
+					...(eyebrowBlock ? [eyebrowBlock] : []),
+					/* The heading and the lede, in the box that holds them. Empty of
+					   blocks because the copy is the hero's own — the row exists so the
+					   frame Figma draws has an owner here. */
+					{ kind: 'row', name: 'hero-intro', children: [] },
 					{
 						kind: 'row',
 						name: 'hero-actions',

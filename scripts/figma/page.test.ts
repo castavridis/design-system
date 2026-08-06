@@ -94,7 +94,7 @@ test("Code's props are read out of the markup, not restated in an attribute", ()
 	  </div></article>`)
 
 	const code = instancesOf(out).find((i) => i.component === 'Code')
-	assert.deepEqual(code?.props, { lang: 'tsx', showLineNumbers: 150, highlight: '1,3-4' })
+	assert.deepEqual(code?.props, { type: 'tsx', showLineNumbers: 150, highlight: '1,3-4' })
 	assert.equal(code?.gutterStart, 150)
 })
 

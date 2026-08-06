@@ -91,7 +91,19 @@ await figma.loadFontAsync(FALLBACK)
 /* ---------- variables ---------- */
 
 const allVariables = await figma.variables.getLocalVariablesAsync()
-const variableByName = new Map(allVariables.map((v) => [v.name, v]))
+// Keyed both ways, because a variable wears its collection in one of two
+// places: as a prefix on its own name ('theme/page'), or as the collection it
+// sits in, under a bare name ('page' in 'theme'). Which one a file uses is
+// Figma's business — this file is the second kind — so qualify every variable
+// with its collection and keep its literal name as a fallback.
+const collectionNames = new Map(
+  (await figma.variables.getLocalVariableCollectionsAsync()).map((c) => [c.id, c.name]),
+)
+const variableByName = new Map()
+for (const v of allVariables) {
+  if (!variableByName.has(v.name)) variableByName.set(v.name, v)
+  variableByName.set((collectionNames.get(v.variableCollectionId) || '') + '/' + v.name, v)
+}
 const missingVariables = new Set()
 
 function variable(name) {
@@ -243,6 +255,19 @@ async function instance(block, path) {
       problems.push(path + ': ' + block.component + ' has no "' + layer + '" text layer')
       continue
     }
+    // A layer's copy can be driven by a TEXT component property — Eyebrow's is.
+    // Writing characters straight onto one of those is the wrong door: the
+    // property is what the instance renders, so an override placed on the layer
+    // is either refused or quietly overwritten by the property's value.
+    const property = target.componentPropertyReferences && target.componentPropertyReferences.characters
+    if (property) {
+      try {
+        inst.setProperties({ [property]: chars })
+      } catch (error) {
+        problems.push(path + ': ' + String(error.message || error))
+      }
+      continue
+    }
     await setCharacters(target, chars)
   }
 
@@ -346,11 +371,18 @@ async function render(parent, block, path) {
     case 'hero': {
       const box = frame('hero', { gap: 16, padY: 24 })
       add(parent, box)
-      box.appendChild(text(block.eyebrow, { font: 'mono', size: 12, slot: 'text-faint', letterSpacing: 1 }))
-      const heading = text(block.heading.join('\\n'), { font: 'legible', size: 72, slot: 'text', leading: 95 })
-      add(box, heading)
-      add(box, text(block.lede, { size: 18, slot: 'text-muted' }))
+      // Loose text only when the page hasn't marked its eyebrow as a component;
+      // when it has, the instance below carries the same words as an override.
+      const marked = (block.children || []).some((c) => c.kind === 'instance' && c.component === 'Eyebrow')
+      if (!marked) box.appendChild(text(block.eyebrow, { font: 'mono', size: 12, slot: 'text-faint', letterSpacing: 1 }))
       await children(box, block.children, path)
+      // The hero's own copy, in the frame the page declares for it. Filled after
+      // the children so it lands inside that frame rather than beside it.
+      const intro = box.children.find((n) => n.name === 'hero-intro')
+      if (intro) {
+        add(intro, text(block.heading.join('\\n'), { font: 'legible', size: 72, slot: 'text', leading: 95 }))
+        add(intro, text(block.lede, { size: 18, slot: 'text-muted' }))
+      }
       return box
     }
     case 'section': {
@@ -361,10 +393,12 @@ async function render(parent, block, path) {
       return box
     }
     case 'row': {
-      // Vertical where the page stacks (the waterfall, a spec's stage), a
-      // wrapping row everywhere else — which is what the CSS does too.
-      const stacked = block.name === 'waterfall' || block.name === 'stage'
-      const box = frame(block.name, { gap: stacked ? 48 : 12, row: !stacked, wrap: !stacked })
+      // Vertical where the page stacks (the hero's copy, the waterfall, a
+      // spec's stage), a wrapping row everywhere else — which is what the CSS
+      // does too. The gap goes with the stacking, so both live in one table.
+      const STACKED = { 'hero-intro': 12, waterfall: 48, stage: 48 }
+      const stacked = block.name in STACKED
+      const box = frame(block.name, { gap: stacked ? STACKED[block.name] : 12, row: !stacked, wrap: !stacked })
       add(parent, box)
       await children(box, block.children, path)
       return box

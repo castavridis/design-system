@@ -165,8 +165,10 @@ const badge: ComponentSpec = {
  * accepts — ```tsx {1,4-6} showLineNumbers=150 — rather than a `mode` enum,
  * which would have been a nicer variant axis but an invented API.
  *
- * `lang` is the variant property because `diff` changes the rendering rules,
- * not just the palette.
+ * `type` is the variant property because `diff` changes the rendering rules,
+ * not just the palette. The axis is spelled the way Figma spells it: the two
+ * sides diverged, the audit caught it, and Figma's name won — `lang` would have
+ * been wrong for `oneLiner` anyway, which is a shape rather than a language.
  */
 const code: ComponentSpec = {
 	name: 'pmndrs-code',
@@ -174,11 +176,12 @@ const code: ComponentSpec = {
 	source: 'pmndrs-docs',
 	description: 'Syntax-highlighted code, with optional line numbers, highlight ranges and diff rendering.',
 	props: {
-		lang: {
+		type: {
 			type: 'enum',
-			values: ['tsx', 'diff'],
+			values: ['tsx', 'diff', 'oneLiner'],
 			default: 'tsx',
-			description: 'Language. `diff` switches to add/remove line rendering.',
+			description:
+				'Language, or a shape. `diff` switches to add/remove line rendering; `oneLiner` is the chromeless single-line block the page renders as `.doc-code-inline`.',
 		},
 		showLineNumbers: {
 			type: 'number',
@@ -189,10 +192,12 @@ const code: ComponentSpec = {
 			description: 'Lines to emphasise, in fence syntax — e.g. `1,4-6`.',
 		},
 	},
-	variantProp: 'lang',
+	variantProp: 'type',
 	bindings: {
 		tsx: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', highlight: 'surface', rule: 'accent-yellow' },
 		diff: { surface: 'surface-sunken', chrome: 'surface-raised', gutter: 'text-faint', add: 'tint-green', remove: 'tint-red' },
+		/* No chrome bar, so no gutter and no caption — a ground and a copy icon. */
+		oneLiner: { surface: 'surface-sunken', icon: 'text-faint' },
 		/*
 		 * Syntax colours, shared by both languages. These were missing until the
 		 * drift audit found Figma binding five slots the contract never declared —
@@ -386,6 +391,26 @@ const intro: ComponentSpec = {
 }
 
 /**
+ * The line above the hero heading. One faint mono label and nothing else.
+ *
+ * Drawn in Figma first and pulled back here, which is the direction this one
+ * travelled: the hero used to draw its eyebrow as loose text, so there was
+ * nothing for the audit to compare and nothing for a designer to reuse. It is
+ * `brand-book` rather than `pmndrs-docs` — it belongs to this page, not to the
+ * MDX vocabulary.
+ */
+const eyebrow: ComponentSpec = {
+	name: 'pmndrs-eyebrow',
+	react: 'Eyebrow',
+	source: 'brand-book',
+	description: 'Small mono label above a hero heading.',
+	props: {},
+	bindings: {
+		'*': { label: 'text-faint' },
+	},
+}
+
+/**
  * Key takeaways. The `Gha` recipe — tint from one ramp, rule and label from the
  * same ramp's accent — applied to teal, because it is an aside rather than an
  * alert and teal is what this book uses for "pay attention" without alarm.
@@ -431,6 +456,10 @@ const details: ComponentSpec = {
 			marker: 'accent-orange',
 			summary: 'text',
 			body: 'text-muted',
+			/* The command chip in the body — `.doc-code-inline` in the page. The
+			   contract described the disclosure and forgot what it discloses. */
+			command: 'surface-sunken',
+			code: 'text-body',
 		},
 	},
 }
@@ -588,6 +617,9 @@ const sandpack: ComponentSpec = {
 			template: 'text-faint',
 			previewBorder: 'line-soft',
 			dot: 'accent-teal',
+			/* The source itself. Same omission the Code block had: chrome declared,
+			   contents forgotten. */
+			line: 'text-body',
 			mono: 'fixed:fonts.mono',
 			/* The rendered scene. A picture, not a surface. */
 			sky: 'fixed:ramp.blue-950',
@@ -723,6 +755,7 @@ export const components: readonly ComponentSpec[] = [
 	nav,
 	search,
 	toc,
+	eyebrow,
 	intro,
 	keypoints,
 	details,

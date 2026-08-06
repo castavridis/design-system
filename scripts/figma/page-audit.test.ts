@@ -124,7 +124,7 @@ test('props Figma cannot model as variants are not compared', () => {
 					component: block.component,
 					props:
 						block.component === 'Code'
-							? ({ lang: 'tsx' } as Record<string, string>)
+							? ({ type: 'tsx' } as Record<string, string>)
 							: ({ variant: 'default', disabled: 'False' } as Record<string, string>),
 				}
 			: { path, kind: 'frame' },

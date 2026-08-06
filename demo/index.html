@@ -40,14 +40,16 @@
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">design tokens</p>
-      <h1>Define once.<br />Ship everywhere.</h1>
-      <p class="lede">
-        This page is plain HTML. Every colour, font, space and radius below
-        comes from
-        <code>dist/tokens.css</code> — the same artifact a React, Svelte, Vue or
-        vanilla app would import.
-      </p>
+      <p class="eyebrow" data-component="Eyebrow">design tokens</p>
+      <div class="hero-intro">
+        <h1>Define once.<br />Ship everywhere.</h1>
+        <p class="lede">
+          This page is plain HTML. Every colour, font, space and radius below
+          comes from
+          <code>dist/tokens.css</code> — the same artifact a React, Svelte, Vue
+          or vanilla app would import.
+        </p>
+      </div>
       <!--
         `data-component` marks a block that *is* a contract component but is
         rendered as plain markup — here because these are links, and
@@ -56,9 +58,9 @@
         scripts/figma/page.ts turns each one into a Figma instance.
       -->
       <div class="hero-actions">
-        <a class="button button-primary" href="#palette">See the palette</a>
-        <a class="button" href="#ramps">Ramps</a>
-        <a class="button" href="#components">Components</a>
+        <a class="button button-primary" data-component="Button" href="#palette">See the palette</a>
+        <a class="button" data-component="Button" href="#ramps">Ramps</a>
+        <a class="button" data-component="Button" href="#components">Components</a>
       </div>
     </header>
 
