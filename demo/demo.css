@@ -1931,6 +1931,89 @@ kbd {
   align-content: start;
 }
 
+/* ---------- docs page (docs.html) ---------- */
+
+/*
+ * The vocabulary assembled rather than catalogued. Everything inside is a
+ * component the brand book already shows in isolation; this section only
+ * supplies the three-column shell they sit in and the boxes that mark what is
+ * missing.
+ */
+.docs-page {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--brand-radius);
+  background: var(--surface-sunken);
+  overflow: clip;
+}
+
+.docs-shell {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr) 12rem;
+  gap: calc(var(--brand-space) * 2);
+  padding: calc(var(--brand-space) * 1.5);
+  align-items: start;
+}
+
+.docs-article {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--brand-space) * 1.25);
+  /* `minmax(0, 1fr)` above lets the column shrink; this stops a long code line
+     from widening the grid instead of scrolling inside its own block. */
+  min-inline-size: 0;
+}
+
+.docs-cta {
+  margin: 0;
+}
+
+/* The rails are furniture at this size: below the two-column breakpoint the
+   article is the page, and a 14rem sidebar would leave it nothing. */
+@media (max-width: 60rem) {
+  .docs-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .docs-shell > .doc-nav,
+  .docs-shell > .doc-toc {
+    display: none;
+  }
+}
+
+/*
+ * A component Figma has and the contract does not.
+ *
+ * Deliberately a labelled box rather than an approximation — the same rule the
+ * Figma push follows in the other direction. Drawing a convincing version here
+ * would be a design with no owner on either side, and nothing could tell you
+ * it had drifted.
+ */
+.standin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--brand-space) * 0.25);
+  padding: calc(var(--brand-space) * 1.25);
+  border: 1px dashed var(--line);
+  border-radius: calc(var(--brand-radius) * 0.5);
+  background: var(--surface-raised);
+  text-align: center;
+}
+
+.standin::before {
+  content: attr(data-standin);
+  font-family: var(--fonts-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.standin::after {
+  content: attr(data-standin-note);
+  font-size: 0.6875rem;
+  color: var(--text-faint);
+}
+
 /* ---------- mermaid ---------- */
 
 .doc-mermaid {

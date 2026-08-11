@@ -41,16 +41,12 @@ function readableInk(hex) {
   return luminance > 0.18 ? "ramp.dark-950" : "ramp.light-50";
 }
 
-/** Copies `text`, flashing `element` via a `data-copied` attribute. */
-async function copyToClipboard(element, text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    element.dataset.copied = "";
-    setTimeout(() => delete element.dataset.copied, 1200);
-  } catch {
-    /* clipboard unavailable (insecure origin, denied permission) — ignore */
-  }
-}
+/*
+ * The blocks any page can carry — people, copy buttons, sandpack tabs — and the
+ * clipboard helper they share with the swatches below. Importing it for the
+ * side effect is the point: this page has those blocks too.
+ */
+import { copyToClipboard } from "./blocks.js";
 
 /* ---------- palette, generated from the token map ---------- */
 
@@ -238,69 +234,12 @@ applySpace();
 /* ---------- component waterfall ---------- */
 
 /*
- * The accent ramps — every ramp except the two neutrals. `gradientColors`
- * already draws exactly that distinction for gradients, so it's reused here
- * rather than restating which colours count as accents.
- */
-const accentRamps = gradientColors.map(label);
-
-/*
  * Badges used to be generated here. They are now `<pmndrs-badge ramp="teal">`
  * in the markup, rendered by demo/elements.js from the component contract —
  * the same declaration that will drive their Figma variants and Code Connect
  * map. Generating them from a local loop meant the recipe lived in three
  * places and agreed by luck.
  */
-
-/*
- * `Contributors` and `Backers` call the GitHub and Open Collective APIs. This
- * page makes no network requests, so it renders what those components render
- * without credentials: John Doe, repeated. The avatars cycle the accent ramps
- * rather than loading images.
- */
-for (const host of document.querySelectorAll("[data-people]")) {
-  const count = host.dataset.people === "backers" ? 5 : 8;
-
-  for (let i = 0; i < count; i++) {
-    const name = accentRamps[i % accentRamps.length];
-
-    const avatar = document.createElement("span");
-    avatar.className = "doc-avatar";
-    avatar.textContent = "JD";
-    avatar.title = "John Doe";
-    avatar.style.setProperty("--avatar", cssVar(rampPath(name, "400")));
-    avatar.style.setProperty("--avatar-ink", cssVar(rampPath(name, "950")));
-    host.append(avatar);
-  }
-}
-
-/* Copy buttons on code blocks. */
-for (const button of document.querySelectorAll("[data-copy]")) {
-  const code = button.closest("figure")?.querySelector("code");
-  if (!code) continue;
-
-  button.addEventListener("click", async () => {
-    await copyToClipboard(button, code.innerText);
-    button.textContent = "Copied";
-    setTimeout(() => (button.textContent = "Copy"), 1200);
-  });
-}
-
-/* Sandpack file tabs. */
-for (const tablist of document.querySelectorAll("[data-sandpack-tabs]")) {
-  const tabs = [...tablist.querySelectorAll('[role="tab"]')];
-
-  for (const tab of tabs) {
-    tab.addEventListener("click", () => {
-      for (const other of tabs) {
-        const selected = other === tab;
-        other.setAttribute("aria-selected", String(selected));
-        document.getElementById(other.getAttribute("aria-controls")).hidden =
-          !selected;
-      }
-    });
-  }
-}
 
 /* ---------- footer ---------- */
 

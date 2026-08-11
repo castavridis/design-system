@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docs page — pmndrs design tokens</title>
+    <meta
+      name="description"
+      content="A documentation page assembled from the component vocabulary, with labelled stand-ins where Figma has a component the contract does not."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/dist/fonts.css" />
+    <link rel="stylesheet" href="/dist/tokens.css" />
+    <link rel="stylesheet" href="/demo/demo.css" />
+  </head>
+  <body>
+    <button type="button" class="theme-toggle" data-theme-toggle>
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-label" data-theme-label>Theme</span>
+    </button>
+
+    <nav class="site-nav" aria-label="Demo pages">
+      <a href="/">Brand book</a>
+      <a href="/demo/og.html">OG images</a>
+      <a href="/demo/sync.html">Figma sync</a>
+      <a href="/demo/docs.html" aria-current="page">Docs page</a>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">docs page</p>
+      <h1>The vocabulary,<br />doing its job.</h1>
+      <p class="lede">
+        The brand book shows each component once, in isolation. This is the same
+        vocabulary assembled into the thing it exists for — a documentation
+        page, chrome and all, on nothing but
+        <code>dist/tokens.css</code>.
+      </p>
+    </header>
+
+    <main>
+      <section id="page">
+        <h2>A documentation page</h2>
+        <p class="section-note">
+          Every block below is a component the contract already declares, drawn
+          by the same CSS the brand book uses. Where the Figma file has a
+          component that code has no owner for, this page says so rather than
+          drawing a lookalike — the dashed blocks are stand-ins, and each names
+          what belongs there.
+        </p>
+
+        <div class="docs-page">
+          <header class="doc-header" data-component="Header">
+            <div class="doc-brand">
+              <span class="doc-brand-mark" aria-hidden="true"></span>
+              <span class="doc-brand-name">pmndrs<span>/docs</span></span>
+            </div>
+            <nav class="doc-header-nav">
+              <a class="is-active" href="#page">Docs</a>
+              <a href="#page">Showcase</a>
+              <a href="#page">Blog</a>
+            </nav>
+            <button type="button" class="doc-search-trigger">
+              <span class="doc-search-icon" aria-hidden="true"></span>
+              Search
+              <kbd>⌘K</kbd>
+            </button>
+          </header>
+
+          <div class="docs-shell">
+            <nav class="doc-nav" data-component="Nav">
+              <details class="doc-nav-cat" open>
+                <summary>Getting started</summary>
+                <ul>
+                  <li><a class="is-current" href="#page">Introduction</a></li>
+                  <li><a href="#page">Installation</a></li>
+                </ul>
+              </details>
+              <details class="doc-nav-cat" open>
+                <summary>Authoring</summary>
+                <ul>
+                  <li><a href="#page">Your first scene</a></li>
+                  <li><a href="#page">Hooks</a></li>
+                  <li><a href="#page">Events</a></li>
+                  <li><a href="#page">Loading assets</a></li>
+                </ul>
+              </details>
+              <details class="doc-nav-cat">
+                <summary>Advanced</summary>
+                <ul>
+                  <li><a href="#page">Performance</a></li>
+                  <li><a href="#page">Scaling</a></li>
+                </ul>
+              </details>
+            </nav>
+
+            <article class="docs-article">
+              <div class="doc-prose" data-component="Prose">
+                <h2>Introduction</h2>
+              </div>
+
+              <div class="doc-intro" data-component="Intro">
+                <p>
+                  <code>@react-three/fiber</code> is a React renderer for
+                  three.js. Build your scene declaratively with re-usable,
+                  self-contained components that react to state, are readily
+                  interactive and can participate in
+                  <a href="#page">React's ecosystem</a>.
+                </p>
+              </div>
+
+              <div
+                class="standin"
+                data-standin="Blurb Lockup"
+                data-standin-note="ten of these carry the article body — no contract component"
+              ></div>
+
+              <figure class="doc-img" data-component="Img">
+                <div class="doc-img-frame">
+                  <span class="doc-img-ratio">1138 × 325</span>
+                </div>
+                <figcaption>
+                  A scene rendered by the library, shown at its intrinsic size.
+                </figcaption>
+              </figure>
+
+              <figure class="doc-code-block" data-component="Code">
+                <figcaption>
+                  <span class="doc-code-lang">tsx</span>
+                  <button type="button" class="doc-code-copy" data-copy>
+                    Copy
+                  </button>
+                </figcaption>
+                <pre
+                  class="doc-code"
+                ><code><span class="ln"><span class="tok-kw">type</span> <span class="tok-type">Props</span> = {who: <span class="tok-type">string</span>}</span></code></pre>
+              </figure>
+
+              <pmndrs-gha keyword="WARNING"
+                >Critical content demanding immediate user attention due to
+                potential risks.</pmndrs-gha
+              >
+
+              <div class="doc-prose" data-component="Prose">
+                <h3>Does it have limitations?</h3>
+                <p>
+                  None. Everything that works in three.js will work here without
+                  exception.
+                </p>
+                <h3>Is it slower than plain three.js?</h3>
+                <p>
+                  No. There is no overhead. Components render outside of React.
+                  It outperforms three.js at scale, thanks to React's scheduling
+                  abilities.
+                </p>
+              </div>
+
+              <div
+                class="standin"
+                data-standin="Accordion"
+                data-standin-note="the FAQ disclosures — Figma's own component, not the contract's Details"
+              ></div>
+
+              <div class="doc-sandpack" data-component="Sandpack">
+                <div class="doc-sandpack-tabs" role="tablist" data-sandpack-tabs>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="docs-sp-app"
+                  >
+                    /App.tsx
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="docs-sp-styles"
+                  >
+                    /styles.css
+                  </button>
+                  <span class="doc-sandpack-template">react-ts</span>
+                </div>
+                <div class="doc-sandpack-body">
+                  <pre
+                    id="docs-sp-app"
+                    role="tabpanel"
+                    class="doc-code doc-code-numbered"
+                  ><code><span class="ln"><span class="tok-kw">import</span> { Canvas } <span class="tok-kw">from</span> <span class="tok-str">'@react-three/fiber'</span></span>
+<span class="ln"><span class="tok-kw">import</span> { Cloud, CameraControls } <span class="tok-kw">from</span> <span class="tok-str">'@react-three/drei'</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="tok-kw">export default function</span> <span class="tok-fn">App</span>() {</span>
+<span class="ln">  <span class="tok-kw">return</span> (</span>
+<span class="ln">    <span class="tok-punc">&lt;</span><span class="tok-tag">Canvas</span> camera={{position: [<span class="tok-num">0</span>,<span class="tok-num">-13</span>,<span class="tok-num">0</span>]}}<span class="tok-punc">&gt;</span></span>
+<span class="ln">      <span class="tok-punc">&lt;</span><span class="tok-tag">Cloud</span> speed={<span class="tok-num">.4</span>} growth={<span class="tok-num">6</span>} <span class="tok-punc">/&gt;</span></span>
+<span class="ln">    <span class="tok-punc">&lt;/</span><span class="tok-tag">Canvas</span><span class="tok-punc">&gt;</span></span>
+<span class="ln">  )</span>
+<span class="ln">}</span></code></pre>
+                  <pre
+                    id="docs-sp-styles"
+                    role="tabpanel"
+                    hidden
+                    class="doc-code doc-code-numbered"
+                  ><code><span class="ln"><span class="tok-tag">html</span>,<span class="tok-tag">body</span>,<span class="tok-punc">#</span><span class="tok-tag">root</span> {</span>
+<span class="ln">  <span class="tok-kw">height</span>: <span class="tok-num">100%</span>;</span>
+<span class="ln">  <span class="tok-kw">margin</span>: <span class="tok-str">unset</span>;</span>
+<span class="ln">}</span></code></pre>
+                  <div class="doc-sandpack-preview">
+                    <span class="doc-sandpack-cloud" aria-hidden="true"></span>
+                    <span class="doc-sandpack-status">
+                      <span class="doc-dot" aria-hidden="true"></span>
+                      Running
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="doc-prose" data-component="Prose">
+                <h3>First steps</h3>
+                <p>
+                  You need to be versed in both React and three.js before
+                  rushing into this. If you are unsure about React, consult the
+                  official React docs — especially
+                  <a href="#page">the section about hooks</a>.
+                </p>
+                <h3>Ecosystem</h3>
+                <p>
+                  There is a vibrant and extensive ecosystem around
+                  three-fiber, full of libraries, helpers and abstractions:
+                </p>
+                <ul>
+                  <li><code>@react-three/drei</code> — useful helpers</li>
+                  <li><code>@react-three/postprocessing</code> — effects</li>
+                  <li><code>@react-three/rapier</code> — physics</li>
+                </ul>
+              </div>
+
+              <div
+                class="standin"
+                data-standin="Widget"
+                data-standin-note="the floating helper on the right of the article"
+              ></div>
+
+              <div class="doc-prose" data-component="Prose">
+                <h3>How to contribute</h3>
+                <p>
+                  If you like this project, please consider helping out. All
+                  contributions are welcome, as well as donations to Open
+                  Collective.
+                </p>
+              </div>
+
+              <div class="doc-prose" data-component="Prose">
+                <h3>Backers</h3>
+                <p>Thank you to all our backers! 🙏🏽</p>
+              </div>
+              <div
+                class="doc-people doc-people-lg"
+                data-people="backers"
+                data-component="Backers"
+              ></div>
+              <p class="docs-cta">
+                <pmndrs-button variant="secondary">Become a backer</pmndrs-button>
+              </p>
+
+              <div class="doc-prose" data-component="Prose">
+                <h3>Contributors</h3>
+                <p>These people helped build it.</p>
+              </div>
+              <div
+                class="doc-people"
+                data-people="contributors"
+                data-component="Contributors"
+              ></div>
+            </article>
+
+            <nav class="doc-toc" data-component="Toc">
+              <p class="doc-toc-label">On this page</p>
+              <ul>
+                <li><a class="is-current" href="#page">Introduction</a></li>
+                <li class="is-nested"><a href="#page">Limitations</a></li>
+                <li class="is-nested"><a href="#page">Performance</a></li>
+                <li><a href="#page">First steps</a></li>
+                <li><a href="#page">Ecosystem</a></li>
+                <li><a href="#page">How to contribute</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div
+            class="standin"
+            data-standin="Footer"
+            data-standin-note="with Footer Navigation — previous / next, and the site links"
+          ></div>
+        </div>
+      </section>
+
+      <section id="standins">
+        <h2>What is standing in</h2>
+        <p class="section-note">
+          Four components exist in the Figma file and have no owner in
+          <code>src/components/contract.ts</code>, so they are drawn here as
+          labelled boxes rather than approximated. That is the same rule the
+          Figma push follows in the other direction: a block the contract does
+          not declare becomes a stand-in, never a lookalike, because a lookalike
+          is a design nobody owns and the audit has nothing to compare it
+          against.
+        </p>
+
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Stand-in</th>
+                <th>In Figma</th>
+                <th>To adopt it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Blurb Lockup</code></td>
+                <td>10 instances, the article body</td>
+                <td>Declare, record the id, mark the block</td>
+              </tr>
+              <tr>
+                <td><code>Accordion</code></td>
+                <td>2 instances, <code>State</code> variant</td>
+                <td>Decide whether it supersedes <code>Details</code></td>
+              </tr>
+              <tr>
+                <td><code>Widget</code></td>
+                <td>1 instance, 1 node</td>
+                <td>Probably page furniture, not vocabulary</td>
+              </tr>
+              <tr>
+                <td><code>Footer</code></td>
+                <td>1 instance, plus Footer Navigation ×2</td>
+                <td>Declare both, or fold the nav into the footer</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="section-note">
+          The masthead, sidebar and on-this-page rail are
+          <em>not</em> stand-ins: Figma draws them with its own Standard, Docs
+          and In-Page Navigation components, and the contract already has
+          <code>Header</code>, <code>Nav</code> and <code>Toc</code> doing those
+          three jobs. Reconciling the two sets is a decision for the next sync,
+          not something this page should quietly pick a winner for.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Styled entirely by <code>dist/tokens.css</code> ·
+        <a href="/">brand book</a> ·
+        <a href="/demo/sync.html">figma sync</a>
+      </p>
+    </footer>
+
+    <!--
+      `demo.js` is the brand book's script and reaches for elements only that
+      page has. The blocks this page shares with it live in `blocks.js`, which
+      both load.
+    -->
+    <script type="module" src="/demo/theme.js"></script>
+    <script type="module" src="/demo/elements.js"></script>
+    <script type="module" src="/demo/blocks.js"></script>
+  </body>
+</html>
